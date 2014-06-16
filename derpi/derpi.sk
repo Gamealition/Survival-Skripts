@@ -1,0 +1,127 @@
+# DERPI system by VanDerProtofsky
+
+# ########################################################################################
+# # INIT #################################################################################
+# ########################################################################################
+
+on load:
+    broadcast "&l*** &2DERPI system engaged" 
+    
+# ########################################################################################
+# # COMMANDS #############################################################################
+# ########################################################################################
+    
+command /shack:
+    description: Teleports a quarried player back to the shack
+    usage: /shack
+    permission: derpi.inmate
+    trigger:
+        player's world is "world_derpi"
+        execute console command "/mv tp %player% world_derpi"
+    
+# ########################################################################################
+    
+command /quarry <player> [<number=0>] <text>:
+    description: Casts a player to the DERPI quarry
+    usage: /quarry <who> [<money balance offset>] <reason>
+    permission: derpi.moderator
+    trigger:
+        set {_target} to arg 1
+        set {_offsetMoney} to arg 2
+        set {_reason} to arg 3
+        
+        if {derpi.%{_target}%.quarried} is set:
+            if {_target}'s world is not "world_derpi":
+                message "&c*** Oops, that player is not in the quarry world. Fixing..."
+                execute console command "/mv tp %{_target}% world_derpi"
+            else:
+                message "&c*** That player has already been quarried"
+                make the player execute command "/quarryinfo %{_target}%"
+            exit trigger
+            
+        message "*** Quarrying %{_target}%..."
+        
+        # Save metadata...
+        set {derpi.%{_target}%.quarried} to now
+        set {derpi.%{_target}%.quarried.by} to "%command sender%"
+        set {derpi.%{_target}%.quarried.because} to {_reason}
+        
+        # Handle the target...
+        set {_target}'s money to {_offsetMoney}
+        execute console command "/perms player %{_target}% removegroup player"
+        execute console command "/perms player %{_target}% removegroup default"
+        execute console command "/perms player %{_target}% addgroup inmate"
+        execute console command "/mv tp %{_target}% world_derpi"
+        
+        # Explain the basics to the target...
+        broadcast "&l*** &f%{_target}% &7has been &c&lcommitted to DERPI &7because: &f%{_reason}%"
+        
+        send "&4&l*** DEMEANOR ERADICATION & REHAB ***" to {_target}
+        send "&4&l***     PENITENTIARY INSTITUTE     ***" to {_target}
+        send "&cYou have been sent here because you have broken the rules. Consequently, you must earn back your freedom to play on this server." to {_target}
+        send "&cThis is done by mining enough cobblestone to buy freedom at the shack." to {_target}
+        send "&cUse &f/shack &cto teleport to the shack and &f/money &cto check your balance." to {_target}
+        send "&cPvP is enabled and you will be unable to hear or send chat." to {_target}
+        
+        # Good luck.
+        give a wooden pickaxe to {_target}
+        
+# ########################################################################################
+
+command /unquarry <player>:
+    description: Removes a player from the DERPI quarry
+    usage: /quarry <who>
+    permission: derpi.moderator
+    trigger:
+        set {_target} to arg 1
+        
+        if {derpi.%{_target}%.quarried} is not set:
+            message "&c*** That player is not quarried"
+            exit trigger
+            
+        message "*** Unquarrying %{_target}%..."
+        
+        delete {derpi.%{_target}%.quarried}
+        delete {derpi.%{_target}%.quarried.by}
+        delete {derpi.%{_target}%.quarried.because}
+        
+        # Only add player group to non-moderators/admins
+        if {_target} does not have permission "derpi.moderator":
+            execute console command "/perms player %{_target}% addgroup player"
+            
+        execute console command "/perms player %{_target}% removegroup inmate"
+        execute console command "/mv tp %{_target}% world_lobby"
+        
+        broadcast "&l*** &f%{_target}% &7has been &2&lreleased from DERPI!"
+        
+# ########################################################################################
+
+command /quarryinfo <player>:
+    description: Gets DERPI information on a player
+    usage: /quarryinfo <who>
+    permission: derpi.moderator
+    trigger:
+        set {_target} to arg 1
+        
+        if {derpi.%{_target}%.quarried} is set:
+            message "&7&l*** &7DERPI report of: &f%{_target}%"
+            message "  &7quarried by &f%{derpi.%{_target}%.quarried.by}%"
+            message "  &7on &f%{derpi.%{_target}%.quarried}%"
+            message "  &7because &f%{derpi.%{_target}%.quarried.because}%"
+        else:
+            message "&c*** That player is not quarried"
+        
+# ########################################################################################
+# # EVENTS ###############################################################################
+# ########################################################################################
+        
+on rightclick on a sign:
+    line 2 of the clicked block contains "[Freedom]"
+    world of the clicked block is "world_derpi"
+    
+    if player's money is more than 270:
+        execute console command "/unquarry %player%"
+    else:
+        message "&c&l*** &cYou cannot afford freedom! You only have &f%player's money%"
+    
+    

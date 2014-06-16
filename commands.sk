@@ -1,0 +1,16 @@
+# Commands and aliases
+
+command /lobby:
+    description: Takes you to the server's lobby
+    aliases: /hub
+    permission: multiverse.teleport.self.world_lobby
+    executable by: players
+    trigger:
+        execute console command "/mv tp %player% world_lobby"
+        
+command /spawn:
+    description: Takes you to the world's spawn
+    permission: multiverse.core.spawn.self
+    executable by: players
+    trigger:
+        execute player command "/mvs"
