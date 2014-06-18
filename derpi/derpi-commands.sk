@@ -1,14 +1,7 @@
 # DERPI system by VanDerProtofsky
-
-# ########################################################################################
-# # INIT #################################################################################
-# ########################################################################################
-
-on load:
-    broadcast "&l*** &2DERPI system engaged" 
     
 # ########################################################################################
-# # COMMANDS #############################################################################
+# # PUBLIC COMMANDS ######################################################################
 # ########################################################################################
     
 command /shack:
@@ -42,8 +35,12 @@ command /quarry <player> [<number=0>] <text>:
         message "*** Quarrying %{_target}%..."
         
         # Save metadata...
+        if command sender is the console:
+            set {derpi.%{_target}%.quarried.by} to "[Console]"
+        else:
+            set {derpi.%{_target}%.quarried.by} to "%command sender%"
+            
         set {derpi.%{_target}%.quarried} to now
-        set {derpi.%{_target}%.quarried.by} to "%command sender%"
         set {derpi.%{_target}%.quarried.because} to {_reason}
         
         # Handle the target...
@@ -110,18 +107,3 @@ command /quarryinfo <player>:
             message "  &7because &f%{derpi.%{_target}%.quarried.because}%"
         else:
             message "&c*** That player is not quarried"
-        
-# ########################################################################################
-# # EVENTS ###############################################################################
-# ########################################################################################
-        
-on rightclick on a sign:
-    line 2 of the clicked block contains "[Freedom]"
-    world of the clicked block is "world_derpi"
-    
-    if player's money is more than 270:
-        execute console command "/unquarry %player%"
-    else:
-        message "&c&l*** &cYou cannot afford freedom! You only have &f%player's money%"
-    
-    

@@ -1,0 +1,18 @@
+# DERPI system by VanDerProtofsky
+
+# ########################################################################################
+# # EVENTS ###############################################################################
+# ########################################################################################
+        
+on rightclick on a sign:
+    line 2 of the clicked block contains "[Freedom]"
+    world of the clicked block is "world_derpi"
+    
+    if player's money <= 270:
+        execute console command "/unquarry %player%"
+    else:
+        message "&c&l*** &cYou cannot afford freedom! You only have &f%player's money%"
+
+on respawn:
+    world of the player is "world_derpi"
+    give a wooden pickaxe to the player
