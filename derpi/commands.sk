@@ -20,10 +20,11 @@ command /quarry <player> [<number=0>] <text>:
     permission: derpi.moderator
     trigger:
         set {_target} to arg 1
+        set {_targetUUID} to uuid of arg 1
         set {_offsetMoney} to arg 2
         set {_reason} to arg 3
         
-        if {derpi.%{_target}%.quarried} is set:
+        if {derpi.%{_targetUUID}%.quarried} is set:
             if {_target}'s world is not "world_derpi":
                 message "&c*** Oops, that player is not in the quarry world. Fixing..."
                 execute console command "/mv tp %{_target}% world_derpi"
@@ -36,12 +37,12 @@ command /quarry <player> [<number=0>] <text>:
         
         # Save metadata...
         if command sender is the console:
-            set {derpi.%{_target}%.quarried.by} to "[Console]"
+            set {derpi.%{_targetUUID}%.quarried.by} to "[Console]"
         else:
-            set {derpi.%{_target}%.quarried.by} to "%command sender%"
+            set {derpi.%{_targetUUID}%.quarried.by} to "%command sender%"
             
-        set {derpi.%{_target}%.quarried} to now
-        set {derpi.%{_target}%.quarried.because} to {_reason}
+        set {derpi.%{_targetUUID}%.quarried} to now
+        set {derpi.%{_targetUUID}%.quarried.because} to {_reason}
         
         # Handle the target...
         set {_target}'s money to {_offsetMoney}
@@ -71,16 +72,17 @@ command /unquarry <player>:
     permission: derpi.moderator
     trigger:
         set {_target} to arg 1
+        set {_targetUUID} to uuid of arg 1
         
-        if {derpi.%{_target}%.quarried} is not set:
+        if {derpi.%{_targetUUID}%.quarried} is not set:
             message "&c*** That player is not quarried"
             exit trigger
             
         message "*** Unquarrying %{_target}%..."
         
-        delete {derpi.%{_target}%.quarried}
-        delete {derpi.%{_target}%.quarried.by}
-        delete {derpi.%{_target}%.quarried.because}
+        delete {derpi.%{_targetUUID}%.quarried}
+        delete {derpi.%{_targetUUID}%.quarried.by}
+        delete {derpi.%{_targetUUID}%.quarried.because}
         
         # Only add player group to non-moderators/admins
         if {_target} does not have permission "derpi.moderator":
@@ -99,11 +101,12 @@ command /quarryinfo <player>:
     permission: derpi.moderator
     trigger:
         set {_target} to arg 1
+        set {_targetUUID} to uuid of arg 1
         
-        if {derpi.%{_target}%.quarried} is set:
+        if {derpi.%{_targetUUID}%.quarried} is set:
             message "&7&l*** &7DERPI report of: &f%{_target}%"
-            message "  &7quarried by &f%{derpi.%{_target}%.quarried.by}%"
-            message "  &7on &f%{derpi.%{_target}%.quarried}%"
-            message "  &7because &f%{derpi.%{_target}%.quarried.because}%"
+            message "  &7quarried by &f%{derpi.%{_targetUUID}%.quarried.by}%"
+            message "  &7on &f%{derpi.%{_targetUUID}%.quarried}%"
+            message "  &7because &f%{derpi.%{_targetUUID}%.quarried.because}%"
         else:
             message "&c*** That player is not quarried"
