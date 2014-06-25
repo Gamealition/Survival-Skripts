@@ -1,5 +1,5 @@
 # DERPI system by VanDerProtofsky
-    
+
 # ########################################################################################
 # # PUBLIC COMMANDS ######################################################################
 # ########################################################################################
@@ -14,7 +14,7 @@ command /shack:
     
 # ########################################################################################
     
-command /quarry <player> [<number=0>] <text>:
+command /quarry <offline player> [<number=0>] <text>:
     description: Casts a player to the DERPI quarry
     usage: /quarry <who> [<money balance offset>] <reason>
     permission: derpi.moderator
@@ -23,6 +23,11 @@ command /quarry <player> [<number=0>] <text>:
         set {_targetUUID} to uuid of arg 1
         set {_offsetMoney} to arg 2
         set {_reason} to arg 3
+        
+        if {_target} is offline:
+            set {derpi.queuequarry.%{_target}%} to {_reason}
+            message "&7*** That player is offline. They will be quarried when they next join the server."
+            exit trigger
         
         if {derpi.%{_targetUUID}%.quarried} is set:
             if {_target}'s world is not "world_derpi":
@@ -44,12 +49,15 @@ command /quarry <player> [<number=0>] <text>:
         set {derpi.%{_targetUUID}%.quarried} to now
         set {derpi.%{_targetUUID}%.quarried.because} to {_reason}
         
+        # Logging
+        add "↳ &cCommited &7by &f%command sender% &7on &f%now%&7, with money set to &f%{_offsetMoney}% &7because &f%{_reason}%" to {derpi.%{_target}%.log::*}
+        
         # Handle the target...
-        set {_target}'s money to {_offsetMoney}
         execute console command "/perms player %{_target}% removegroup player"
         execute console command "/perms player %{_target}% removegroup default"
         execute console command "/perms player %{_target}% addgroup inmate"
         execute console command "/mv tp %{_target}% world_derpi"
+        set {_target}'s money to {_offsetMoney}
         
         # Explain the basics to the target...
         broadcast "&l*** &f%{_target}% &7has been &c&lcommitted to DERPI &7because: &f%{_reason}%"
@@ -66,7 +74,7 @@ command /quarry <player> [<number=0>] <text>:
         
 # ########################################################################################
 
-command /unquarry <player>:
+command /unquarry <offline player>:
     description: Removes a player from the DERPI quarry
     usage: /quarry <who>
     permission: derpi.moderator
@@ -74,10 +82,20 @@ command /unquarry <player>:
         set {_target} to arg 1
         set {_targetUUID} to uuid of arg 1
         
+        if {_target} is offline:
+            if {derpi.queuequarry.%{_target}%} exists:
+                delete {derpi.queuequarry.%{_target}%}
+                message "&7*** There was a quarry commit queued for this name. They will no longer be quarried on next join."
+            else:
+                set {derpi.queuerelease.%{_target}%} to true
+                message "&7*** That player is offline. They will be released when they next join the server."
+            exit trigger
+        
         if {derpi.%{_targetUUID}%.quarried} is not set:
             message "&c*** That player is not quarried"
             exit trigger
             
+        add "↳ &aReleased &7by &f%command sender% &7on &f%now%" to {derpi.%{_target}%.log::*}
         message "*** Unquarrying %{_target}%..."
         
         delete {derpi.%{_targetUUID}%.quarried}
@@ -95,7 +113,7 @@ command /unquarry <player>:
         
 # ########################################################################################
 
-command /quarryinfo <player>:
+command /quarryinfo <offline player>:
     description: Gets DERPI information on a player
     usage: /quarryinfo <who>
     permission: derpi.moderator
@@ -103,6 +121,15 @@ command /quarryinfo <player>:
         set {_target} to arg 1
         set {_targetUUID} to uuid of arg 1
         
+        if {_target} is offline:
+            if {derpi.queuequarry.%{_target}%} exists:
+                message "&7*** That player is offline. However, they are queued for quarrying when they next join."
+            else if {derpi.queuerelease.%{_target}%} exists:
+                message "&7*** That player is offline. However, they are queued for release when they next join the server."
+            else:
+                message "&c*** That player is offline; no information can be retrieved"
+            exit trigger
+            
         if {derpi.%{_targetUUID}%.quarried} is set:
             message "&7&l*** &7DERPI report of: &f%{_target}%"
             message "  &7quarried by &f%{derpi.%{_targetUUID}%.quarried.by}%"
@@ -110,3 +137,19 @@ command /quarryinfo <player>:
             message "  &7because &f%{derpi.%{_targetUUID}%.quarried.because}%"
         else:
             message "&c*** That player is not quarried"
+            
+# ########################################################################################
+
+command /quarrylog <offline player>:
+    description: Gets DERPI logs on a player name (not UUID!)
+    usage: /quarrylog <who>
+    permission: derpi.moderator
+    trigger:
+        set {_target} to arg 1
+        
+        if {derpi.%{_target}%.log::*} exists:
+            message "&7&l*** &7DERPI log of: &f%{_target}%"
+            loop {derpi.%{_target}%.log::*}:
+                message loop-value
+        else:
+            message "&c*** That player name has no log"

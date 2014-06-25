@@ -14,3 +14,18 @@ command /spawn:
     executable by: players
     trigger:
         execute player command "/mvs"
+        
+command //replacestair <text> <text>:
+    description: Assists with replacing stairs with the correct orientation
+    aliases: //replacestairs
+    permission: worldedit.region.replace
+    executable by: players
+    trigger:
+        execute player command "//replace %arg 1%:0 %arg 2%:0"
+        execute player command "//replace %arg 1%:1 %arg 2%:1"
+        execute player command "//replace %arg 1%:2 %arg 2%:2"
+        execute player command "//replace %arg 1%:3 %arg 2%:3"
+        execute player command "//replace %arg 1%:4 %arg 2%:4"
+        execute player command "//replace %arg 1%:5 %arg 2%:5"
+        execute player command "//replace %arg 1%:6 %arg 2%:6"
+        execute player command "//replace %arg 1%:7 %arg 2%:7"

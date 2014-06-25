@@ -5,14 +5,52 @@
 # ########################################################################################
         
 on rightclick on a sign:
-    line 2 of the clicked block contains "[Freedom]"
     world of the clicked block is "world_derpi"
-    
-    if player's money <= 270:
-        execute console command "/unquarry %player%"
-    else:
-        message "&c&l*** &cYou cannot afford freedom! You only have &f%player's money%"
+        
+    if line 2 of the clicked block contains "[Freedom]":
+        if player's money >= 270:
+            execute console command "/unquarry %player%"
+        else:
+            message "&c&l*** &cYou cannot afford freedom! You only have &f%player's money%"
+        exit trigger
+        
+    if line 2 of the clicked block contains "[Cobblestone]":
+        if player has 16 cobblestone:
+            add 2.50 to the player's account
+            remove 16 cobblestone from player's inventory
+            message "&7*** You have earned &f$2.50&7 for 16 cobblestone mined"
+        else:
+            message "&c&l*** &cYou don't have 16 cobblestone! Go mine some more!"
+        exit trigger
+        
+    if line 2 of the clicked block contains "[Food]":
+        if player has 8 cobblestone:
+            give 1 baked potato to the player
+            remove 8 cobblestone from player's inventory
+            message "&7*** You get a baked potato for 8 cobblestone mined"
+        else:
+            message "&c&l*** &cYou don't have 8 cobblestone! Go mine some more!"
+        exit trigger
+        
+    if line 2 of the clicked block contains "[Pickaxe]":
+        if player has 16 cobblestone:
+            give 1 wooden pickaxe to the player
+            remove 16 cobblestone from player's inventory
+            message "&7*** You get a wooden pickaxe for 16 cobblestone mined"
+        else:
+            message "&c&l*** &cYou don't have 16 cobblestone! Go mine some more!"
+        exit trigger
 
 on respawn:
     world of the player is "world_derpi"
     give a wooden pickaxe to the player
+    
+on player join:
+    wait for 2 seconds
+    if {derpi.queuequarry.%player%} exists:
+        execute console command "/quarry %player% %{derpi.queuequarry.%player%}%"
+        delete {derpi.queuequarry.%player%}
+    else if {derpi.queuerelease.%player%} exists:
+        execute console command "/unquarry %player%"
+        delete {derpi.queuerelease.%player%}
+    

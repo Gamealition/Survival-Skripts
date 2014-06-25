@@ -1,0 +1,17 @@
+# General events
+
+on player join:
+    player has permission "gamealition.newbie"
+    wait 5 seconds
+    message "&2&lWelcome, %player%! &fYou need to introduce yourself at the forums and be accepted by staff to play. Access to the server via the portals can only be granted this way."
+    message ""
+    message "Visit &3forums.gamealition.com &ffor more information."
+    
+on region exit:
+    # Hacky, but skript has poor region support
+    "%region%" is "lobby in world world_lobby"
+    player has permission "gamealition.newbie"
+    message "&2&lHaving trouble, %player%? &fYou need to introduce yourself at the forums and be accepted by staff into the server. Access to the server via the portals can only be granted this way."
+    message ""
+    message "Visit &3forums.gamealition.com &ffor more information."
+   
