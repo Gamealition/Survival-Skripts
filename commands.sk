@@ -1,19 +1,12 @@
 # Commands and aliases
 
-command /lobby:
-    description: Takes you to the server's lobby
-    aliases: /hub
-    permission: multiverse.teleport.self.world_lobby
-    executable by: players
-    trigger:
-        execute console command "/mv tp %player% world_lobby"
-        
 command /spawn:
     description: Takes you to the world's spawn
+    aliases: /hub, /lobby
     permission: multiverse.core.spawn.self
     executable by: players
     trigger:
-        execute player command "/mvs"
+        execute console command "/mv tp %player% world"
         
 command //replacestair <text> <text>:
     description: Assists with replacing stairs with the correct orientation
@@ -29,3 +22,30 @@ command //replacestair <text> <text>:
         execute player command "//replace %arg 1%:5 %arg 2%:5"
         execute player command "//replace %arg 1%:6 %arg 2%:6"
         execute player command "//replace %arg 1%:7 %arg 2%:7"
+        
+command /ride <player>:
+    description: Allows the riding of a player
+    permission: gamealition.moderator
+    executable by: players
+    trigger:
+        if arg 1 is the player:
+            message "&cYou cannot ride yourself!"
+            exit trigger
+        
+        make the player ride arg 1
+        
+command /approve <offline player>:
+    description: Adds given player to the "player" perm group
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        execute console command "/perms group player add %arg 1%"
+        message "&7*** Player &f%arg 1% &7has been &aapproved&7 for server play"
+        
+command /unapprove <offline player>:
+    description: Removes given player from the "player" perm group
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        execute console command "/perms group player remove %arg 1%"
+        message "&7*** Player &f%arg 1% &7has been &cunapproved&7 for server play"

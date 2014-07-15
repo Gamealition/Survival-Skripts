@@ -70,6 +70,8 @@ command /quarry <offline player> [<number=0>] <text>:
         send "&cPvP is enabled and you will be unable to hear or send chat." to {_target}
         
         # Good luck.
+        heal the player
+        clear the player's inventory
         give a wooden pickaxe to {_target}
         
 # ########################################################################################
@@ -107,7 +109,7 @@ command /unquarry <offline player>:
             execute console command "/perms player %{_target}% addgroup player"
             
         execute console command "/perms player %{_target}% removegroup inmate"
-        execute console command "/mv tp %{_target}% world_lobby"
+        execute console command "/mv tp %{_target}% world"
         
         broadcast "&l*** &f%{_target}% &7has been &2&lreleased from DERPI!"
         
