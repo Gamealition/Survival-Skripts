@@ -8,6 +8,13 @@ command /spawn:
     trigger:
         execute console command "/mv tp %player% world"
         
+command /servertime:
+    description: Get's the server's IRL time/date
+    aliases: /stime, /date
+    executable by: players and console
+    trigger:
+        message "&7*** Current server date/time: &f%now%"
+        
 command //replacestair <text> <text>:
     description: Assists with replacing stairs with the correct orientation
     aliases: //replacestairs
