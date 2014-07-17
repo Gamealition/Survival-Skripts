@@ -18,3 +18,7 @@ on player teleport:
     wait 5 seconds
     delete {guestwarning.%player%}
    
+every 8 seconds:
+    time in "world" is between 06:30 and 17:30
+    send "tick" to console
+    remove 4 seconds from "world"'s time
