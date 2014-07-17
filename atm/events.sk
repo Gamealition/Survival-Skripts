@@ -7,6 +7,13 @@
 on rightclick on a sign:
     line 1 contains "[ATM]"
     execute console command "/atmpay %player%"
+    
+on sign change:
+    line 1 contains "[ATM]"
+    
+    if player does not have permission "gamealition.atm":
+        send "&c*** You do not have permission to make an ATM sign"
+        cancel the event
 
 # Very hacky, but Skript is limited with IRL date/time...
 every minute:
