@@ -3,20 +3,59 @@
 on player join:
     player has permission "gamealition.newbie"
     wait 5 seconds
-    message "&2&lWelcome, %player%! &fYou need to introduce yourself at the forums and be accepted by staff to play. Access to the server via the portals and outside the spawn region can only be granted this way."
-    message ""
-    message "Visit &3forums.gamealition.com &ffor more information."
+    message "&2&lWelcome, %arg 1%! &fYou need to introduce yourself at the forums and be accepted by staff into the server. Read the rules at:" to arg 1
+    message " &3http://minecraft.gamealition.com/rules" to arg 1
+    message " to find out how!" to arg 1
     
 on player teleport:
     # Hacky, but skript has poor region support
     player has permission "gamealition.newbie"
     {guestwarning.%player%} is not set
     set {guestwarning.%player%} to true
-    message "&2&lHaving trouble, %player%? &fYou need to introduce yourself at the forums and be accepted by staff into the server. Access to the server via the portals and outside the spawn region can only be granted this way."
-    message ""
-    message "Visit &3forums.gamealition.com &ffor more information."
+    execute console command "/guest-error %player%"
     wait 5 seconds
     delete {guestwarning.%player%}
+    
+on mine:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+
+on break:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+
+on drop:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+    
+on pick up:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+    
+on place:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+    
+on vehicle destroy:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+    
+on click:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+    
+on damage:
+    attacker is a player
+    attacker has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %attacker%"
    
 every 8 seconds:
     time in "world" is between 06:30 and 17:30

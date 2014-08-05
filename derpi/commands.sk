@@ -70,8 +70,8 @@ command /quarry <offline player> [<number=0>] <text>:
         send "&cPvP is enabled and you will be unable to hear or send chat." to {_target}
         
         # Good luck.
-        heal the player
-        clear the player's inventory
+        heal {_target}
+        clear {_target}'s inventory
         give a wooden pickaxe to {_target}
         
 # ########################################################################################

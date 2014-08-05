@@ -56,3 +56,11 @@ command /unapprove <offline player>:
     trigger:
         execute console command "/perms group player remove %arg 1%"
         message "&7*** Player &f%arg 1% &7has been &cunapproved&7 for server play"
+        
+command /guest-error <player>:
+    description: Gives newbie error to guests who try to do restricted things
+    executable by: console
+    trigger:
+        message "&2&lHaving trouble, %arg 1%? &fYou need to introduce yourself at the forums and be accepted by staff into the server. Read the rules at:" to arg 1
+        message " &3http://minecraft.gamealition.com/rules" to arg 1
+        message " to find out how!" to arg 1
