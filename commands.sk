@@ -24,6 +24,16 @@ command /links:
         message "&f• &3forums.gamealition.com &f- Forums"
         message "&f• &3survival.gamealition.com/rules &f- Rules"
         message "&f• &3survival.gamealition.com/dynmap &f- Dynmap"
+
+command /fixtoggle:
+    aliases: /fixtoggles, /fixsign, /fixsigns, /fixtogglesigns, /reloadsignshop
+    trigger:
+        {fixtoggle.lastused} was less than a minute ago:
+            message "&7*** This command has a minute cooldown. Try again later."
+            stop
+        set {fixtoggle.lastused} to now
+        message "&7*** &fSignShop has been reloaded"
+        execute console command "/signshop reload"
         
 command //replacestair <text> <text>:
     description: Assists with replacing stairs with the correct orientation
@@ -40,16 +50,23 @@ command //replacestair <text> <text>:
         execute player command "//replace %arg 1%:6 %arg 2%:6"
         execute player command "//replace %arg 1%:7 %arg 2%:7"
         
-command /ride <player>:
+command /ride <player> <player>:
     description: Allows the riding of a player
     permission: gamealition.moderator
     executable by: players
     trigger:
         if arg 1 is the player:
+            arg 2 is the player
             message "&cYou cannot ride yourself!"
             exit trigger
         
-        make the player ride arg 1
+        make arg 1 ride arg 2
+
+command /stoplag:
+    aliases: /halt-activity, /stopfire, /allowfire
+    executable by: players and console
+    trigger:
+        message "&8&o*** The command you have dialed is not in service, please try again later"
         
 command /approve <offline player>:
     description: Adds given player to the "player" perm group
@@ -72,5 +89,5 @@ command /guest-error <player>:
     executable by: console
     trigger:
         message "&2&lHaving trouble, %arg 1%? &fYou need to introduce yourself at the forums and be accepted by staff into the server. Read the rules at:" to arg 1
-        message " &3http://minecraft.gamealition.com/rules" to arg 1
+        message " &3http://survival.gamealition.com/rules" to arg 1
         message " to find out how!" to arg 1

@@ -23,6 +23,11 @@ command /quarry <offline player> [<number=0>] <text>:
         set {_targetUUID} to uuid of arg 1
         set {_offsetMoney} to arg 2
         set {_reason} to arg 3
+
+        # Force negative offset
+        if {_offsetMoney} is more than 0:
+            message "&c*** Please specify a negative amount of money to set or leave it at 0"
+            exit trigger
         
         if {_target} is offline:
             set {derpi.queuequarry.%{_target}%} to {_reason}
@@ -37,7 +42,7 @@ command /quarry <offline player> [<number=0>] <text>:
                 message "&c*** That player has already been quarried"
                 make the player execute command "/quarryinfo %{_target}%"
             exit trigger
-            
+
         message "*** Quarrying %{_target}%..."
         
         # Save metadata...

@@ -37,8 +37,14 @@ on rightclick on a sign:
             give 1 wooden pickaxe to the player
             remove 16 cobblestone from player's inventory
             message "&7*** You get a wooden pickaxe for 16 cobblestone mined"
+        else if {derpi.freepickaxe.%player%} was less than a day ago:
+            message "&c&l*** &cYou don't have 16 cobblestone and you've already claimed a free pickaxe today!"
+            message "&c&l*** &cShould have managed your cobblestone better. Try again tomorrow."
         else:
-            message "&c&l*** &cYou don't have 16 cobblestone! Go mine some more!"
+            set {derpi.freepickaxe.%player%} to now
+            give 1 wooden pickaxe to the player
+            message "&c&l*** &cYou don't have 16 cobblestone! You've been given a free pickaxe for today"
+            message "&c&l*** &cManage your cobblestone better. If you can't pay for another pickaxe today, you will have to try again tomorrow!"
         exit trigger
 
 on respawn:
@@ -54,3 +60,8 @@ on player join:
         execute console command "/unquarry %player%"
         delete {derpi.queuerelease.%player%}
     
+on player join:
+    player has permission "derpi.inmate"
+    broadcast "&l*** &f%player% &7is in the &c&lDERPI&7! Their balance is: &f%player's money%"
+    message "You are in the &lDemeanor Eradication and Rehabilitation Penitentiary Institute &r(DERPI)"
+    message "&7Beware the inmates and use &2/shack &7if you are stuck."

@@ -1,1 +1,0 @@
-These scripts power the ATM signage/handout system for players. This works by allowing players to claim a set amount per day, reset at midnight.
