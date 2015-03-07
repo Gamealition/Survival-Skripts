@@ -1,0 +1,35 @@
+# Wither Grinder system by VanDerProtofsky
+    
+command /revokewither <offline player>:
+    description: Revokes wither grinder pass from a player
+    usage: /revokewither <who>
+    permission: gamealition.wither
+    trigger:
+        set {_target} to arg 1
+
+        if {uuid.%{_target}%} is not set:
+            message "&c&l*** &cNo UUID is known for that player"
+            exit trigger
+
+        set {_targetUUID} to {uuid.%{_target}%}
+        execute console command "rg removemember wither_grinder -w world_nether %{_targetUUID}%"
+        delete {wither.hour.%{_targetUUID}%}
+        delete {wither.lifetime.%{_targetUUID}%}
+        message "&7*** Wither passes revoked for %{_target}% (%{_targetUUID}%)"
+
+command /expirewither <offline player>:
+    description: Expires an hour wither pass for a player (debugging purposes only)
+    usage: /expirewither <who>
+    permission: gamealition.wither
+    trigger:
+        set {_target} to arg 1
+
+        if {uuid.%{_target}%} is not set:
+            message "&c&l*** &cNo UUID is known for that player"
+            exit trigger
+
+        set {_targetUUID} to {uuid.%{_target}%}
+        set {_yesterday} to now
+        subtract a day from {_yesterday}
+        set {wither.hour.%{_targetUUID}%} to {_yesterday}
+        message "&7*** Wither passes expired for %{_target}% (%{_targetUUID}%)"

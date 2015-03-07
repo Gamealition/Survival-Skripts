@@ -1,4 +1,6 @@
-# General events
+# ########################################################################################
+# # NEWBIES ##############################################################################
+# ########################################################################################
 
 on player join:
     player has permission "gamealition.newbie"
@@ -56,6 +58,10 @@ on damage:
     attacker has permission "gamealition.newbie"
     cancel the event
     execute console command "/guest-error %attacker%"
+
+# ########################################################################################
+# # WORLD ################################################################################
+# ########################################################################################
    
 every 8 seconds:
     time in "world" is between 06:30 and 17:30
@@ -86,7 +92,11 @@ on crafting of tnt:
     message "&7*** Crafting of TNT is disabled on this server"
     cancel the event
 
-# Dailt restarts
+# ########################################################################################
+# # SERVER ###############################################################################
+# ########################################################################################
+
+# Daily restarts
 # Very hacky, but Skript is limited with IRL date/time...
 every minute:
     if "%now%" contains "07:55":
@@ -95,3 +105,8 @@ every minute:
         broadcast "&l*** &7Server will perform its daily restart in &fone minute&7. &f&lPlease log off now."
     else if "%now%" contains "08:00":
         execute console command "/stop"
+
+# Keeps a database of player UUIDs
+on login:
+    set {uuid.%name of player%} to UUID of player
+    set {uuid.%uuid of player%} to name of player

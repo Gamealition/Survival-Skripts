@@ -1,7 +1,4 @@
-DEMEANOR ERADICATION & REHABILITATION PENITENTIARY INSTITUTE
-=====
-
-These are the commands and events that power the DERPI system. It handles moderator commands and processes for committing and releasing a player to the DERPI quarry. To get this system working, the following is required:
+These are the commands and events that power the DEMEANOR ERADICATION & REHABILITATION PENITENTIARY INSTITUTE (hereforth DERPI) system. It handles moderator commands and processes for committing and releasing a player to the DERPI quarry. To get this system working, the following is required:
 
 * [Skript](http://njol.ch/projects/skript/)
 * A world named "world_derpi", preferably administered by Multiverse with the following traits:

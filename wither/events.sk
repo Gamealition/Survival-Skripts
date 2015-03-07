@@ -1,0 +1,72 @@
+# Wither Grinder system by VanDerProtofsky
+
+# ########################################################################################
+# # SIGNS ################################################################################
+# ########################################################################################
+
+# rg addmember wither_grinder -w world_nether VanDerProtofsky
+on sign change:
+    line 1 contains "[Wither]"
+    
+    if player does not have permission "gamealition.wither":
+        send "&c*** You do not have permission to make a Wither sign"
+        cancel the event
+
+on rightclick on a sign:
+    line 1 of the clicked block contains "[Wither]"
+
+    # Enter sign failures
+    # ###################
+
+    if line 2 of the clicked block contains "Enter":
+        {wither.hour.%player's uuid%} is not set
+        {wither.lifetime.%player's uuid%} is not set
+
+        message "&c&l*** &cYou have neither a valid hour pass nor a lifetime pass"
+        exit trigger
+    
+    if line 2 of the clicked block contains "Enter":
+        {wither.hour.%player's uuid%} was more than 1 hour ago
+        {wither.lifetime.%player's uuid%} is not set
+
+        execute console command "rg removemember wither_grinder -w world_nether %player's uuid%"
+        delete {wither.hour.%player's uuid%}
+        message "&c&l*** &cYour hour pass has expired!"
+        exit trigger
+
+    # Enter sign success
+    # ##################
+
+    if line 2 of the clicked block contains "Enter":
+        execute console command "mvtp %player's name% a:wither_grinder"
+        exit trigger
+
+    # 60 minute pass
+    # ##############
+
+    if line 2 of the clicked block contains "60 Minutes":
+        if {wither.hour.%player's uuid%} is set:
+            message "&c&l*** &cYour hour pass is still in effect!"
+        else if {wither.lifetime.%player's uuid%} is set:
+            message "&c&l*** &cYou already own a lifetime pass!"
+        else if player's money >= 5000:
+            set {wither.hour.%player's uuid%} to now
+            execute console command "rg addmember wither_grinder -w world_nether %player's uuid%"
+            remove 5000 from player's balance
+            message "&2&l*** &2You have been granted an hour pass for &f$5000"
+        else:
+            message "&c&l*** &cYou cannot afford an hour pass! You only have &f%player's money%"
+        exit trigger
+        
+    if line 2 of the clicked block contains "Lifetime":
+        if {wither.lifetime.%player's uuid%} is set:
+            message "&c&l*** &cYou already own a lifetime pass!"
+        else if player's money >= 150000:
+            delete {wither.hour.%player's uuid%}
+            set {wither.lifetime.%player's uuid%} to now
+            execute console command "rg addmember wither_grinder -w world_nether %player's uuid%"
+            remove 150000 from player's balance
+            message "&2&l*** &2You have been granted a lifetime pass for &f$150000"
+        else:
+            message "&c&l*** &cYou cannot afford a lifetime pass! You only have &f%player's money%"
+        exit trigger
