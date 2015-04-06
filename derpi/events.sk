@@ -46,10 +46,6 @@ on rightclick on a sign:
             message "&c&l*** &cYou don't have 16 cobblestone! You've been given a free pickaxe for today"
             message "&c&l*** &cManage your cobblestone better. If you can't pay for another pickaxe today, you will have to try again tomorrow!"
         exit trigger
-
-on respawn:
-    world of the player is "world_derpi"
-    give a wooden pickaxe to the player
     
 on player join:
     wait for 2 seconds
@@ -61,7 +57,11 @@ on player join:
         delete {derpi.queuerelease.%player%}
     
 on player join:
-    player has permission "derpi.inmate"
+    {derpi.%player's uuid%.quarried} is set
     broadcast "&l*** &f%player% &7is in the &c&lDERPI&7! Their balance is: &f%player's money%"
     message "You are in the &lDemeanor Eradication and Rehabilitation Penitentiary Institute &r(DERPI)"
     message "&7Beware the inmates and use &2/shack &7if you are stuck."
+
+    # Extra layer of security; ensure player is firmly in the DERPI
+    execute console command "/perms player %player% setgroup inmate"
+    execute console command "/mv tp %player% world_derpi"

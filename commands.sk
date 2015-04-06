@@ -22,6 +22,7 @@ command /links:
     trigger:
         message "&f• &3gamealition.com &f- Official"
         message "&f• &3forums.gamealition.com &f- Forums"
+        message "&f• &3irc.gamealition.com &f- IRC"
         message "&f• &3survival.gamealition.com/rules &f- Rules"
         message "&f• &3survival.gamealition.com/dynmap &f- Dynmap"
 
@@ -73,6 +74,10 @@ command /approve <offline player>:
     permission: gamealition.moderator
     executable by: players and console
     trigger:
+        if arg 1 has the permission "derpi.inmate":
+            message "&c*** That player is in the DERPI; they will be approved when released"
+            exit trigger
+
         execute console command "/perms group player add %arg 1%"
         message "&7*** Player &f%arg 1% &7has been &aapproved&7 for server play"
         
@@ -81,6 +86,10 @@ command /unapprove <offline player>:
     permission: gamealition.moderator
     executable by: players and console
     trigger:
+        if arg 1 has the permission "derpi.inmate":
+            message "&c*** That player is in the DERPI; unapprove when released"
+            exit trigger
+
         execute console command "/perms group player remove %arg 1%"
         message "&7*** Player &f%arg 1% &7has been &cunapproved&7 for server play"
         
