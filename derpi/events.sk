@@ -65,3 +65,20 @@ on player join:
     # Extra layer of security; ensure player is firmly in the DERPI
     execute console command "/perms player %player% setgroup inmate"
     execute console command "/mv tp %player% world_derpi"
+
+# Blocks sending of money to quarried players
+on command:
+    command is "epay" or "pay" or "essentials:epay" or "essentials:pay"
+    set {_s::*} to arguments split at " "
+    set {_target} to {_s::1}
+
+    # Do not bother if paying to a player we don't have a UUID for;
+    # Safe to assume that they have not been quarried
+    if {uuid.%{_target}%} is not set:
+        exit trigger
+    else:
+        set {_targetUUID} to {uuid.%{_target}%}
+
+    if {derpi.%{_targetUUID}%.quarried} is set:
+        cancel the event
+        message "&c*** You cannot send money to quarried players"
