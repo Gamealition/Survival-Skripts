@@ -96,10 +96,14 @@ on crafting of tnt:
 # # SERVER ###############################################################################
 # ########################################################################################
 
-# Daily restarts
+# Daily restarts & PRISM purges
 # Very hacky, but Skript is limited with IRL date/time...
 every minute:
-    if "%now%" contains "07:55":
+    if "%now%" contains "06:00":
+        # Some of PRISM's purge rules seem to be broken, so we manually purge noisy events here
+        execute console command "/pr delete a:kill p:fire_tick e:skeleton e:zombie"
+        execute console command "/pr delete a:kill p:fire_tick e:guardian"
+    else if "%now%" contains "07:55":
         broadcast "&l*** &7Server will perform its daily restart in &ffive minutes&7."
     else if "%now%" contains "07:59":
         broadcast "&l*** &7Server will perform its daily restart in &fone minute&7. &f&lPlease log off now."
