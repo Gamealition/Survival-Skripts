@@ -93,6 +93,30 @@ on crafting of tnt:
     cancel the event
 
 # ########################################################################################
+# # COMMAND OVERRIDES ####################################################################
+# ########################################################################################
+
+# Multiverse's spawn points are buggy, so we rewire them to anchors
+on command:
+    command is "mvss" or "mvsetspawn"
+    make player execute command "/mv anchor %player's world%"
+    make player execute command "/setworldspawn"
+    cancel the event
+
+on command:
+    command is "mv" or "mvm"
+    arguments is "set spawn" or "setspawn"
+    make player execute command "/mv anchor %player's world%"
+    make player execute command "/setworldspawn"
+    cancel the event
+
+on command:
+    command is "mvs" or "mvspawn"
+    message "&7*** Teleporting you to spawn point of &f%player's world%"
+    execute console command "/mvtp %player% a:%player's world%"
+    cancel the event
+
+# ########################################################################################
 # # SERVER ###############################################################################
 # ########################################################################################
 

@@ -6,7 +6,7 @@ command /spawn:
     permission: multiverse.core.spawn.self
     executable by: players
     trigger:
-        execute console command "/mv tp %player% world"
+        execute console command "/mv tp %player% a:world"
         
 command /servertime:
     description: Get's the server's IRL time/date
