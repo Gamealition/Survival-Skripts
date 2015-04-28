@@ -79,7 +79,7 @@ command /approve <offline player>:
             exit trigger
 
         execute console command "/perms group player add %arg 1%"
-        message "&7*** Player &f%arg 1% &7has been &aapproved&7 for server play"
+        broadcast "&7*** Player &f%arg 1% &7has been &aapproved&7 for server play"
         
 command /unapprove <offline player>:
     description: Removes given player from the "player" perm group
@@ -91,7 +91,7 @@ command /unapprove <offline player>:
             exit trigger
 
         execute console command "/perms group player remove %arg 1%"
-        message "&7*** Player &f%arg 1% &7has been &cunapproved&7 for server play"
+        broadcast "&7*** Player &f%arg 1% &7has been &cunapproved&7 for server play"
         
 command /guest-error <player>:
     description: Gives newbie error to guests who try to do restricted things

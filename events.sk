@@ -82,10 +82,22 @@ on rightclick on a sign:
         execute console command "/mv tp %player% world"
 
 # Horse immunity
-on damage:
-    victim is horse or donkey or mule
+on damage of horse or donkey or mule:
     damage cause is suffocation
     cancel the event
+
+# Wolf monitoring
+on damage of wolf:
+    send "WOOF WOOF, %damage cause%, %location of victim%, %attacker%. Nearby players:" to console
+    loop all players within 25 meters of location of victim:
+        send "--> %loop-player%" to console
+
+# Mob riding
+on rightclick on a creature:
+    player is sneaking
+    player is op
+    wait 0.2 second
+    make player ride creature
 
 # Block TNT crafting
 on crafting of tnt:
