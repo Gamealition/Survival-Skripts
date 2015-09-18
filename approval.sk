@@ -6,9 +6,7 @@
 on player join:
     player has permission "gamealition.newbie"
     wait 5 seconds
-    message "&2&lWelcome, %player%! &fYou need to introduce yourself at the forums and be accepted by staff into the server. Read the rules at:"
-    message " &3http://survival.gamealition.com/rules"
-    message " to find out how!"
+    message "&2&lWelcome, %player%! &fYou can look around freely. To join our community and build, do &3/approve-me &fto begin the approval process!"
 
 on pick up:
     # No message, due to spam
@@ -29,7 +27,7 @@ on place:
     cancel the event
     execute console command "/guest-error %player%"
     
-on right click on a chest or a hopper or a trapped chest:
+on right click on a chest or a hopper or a trapped chest or a trapdoor:
     player has permission "gamealition.newbie"
     cancel the event
     execute console command "/guest-error %player%"
@@ -75,11 +73,19 @@ command /unapprove <offline player>:
         execute console command "/perms player %arg 1% setgroup default"
         execute console command "/say &f%arg 1% &7has been &cunapproved&7 for server play"
 
+command /approve-me:
+    description: Allows a new (unapproved) player to go through the approval process
+    permission: gamealition.newbie
+    executable by: players
+    trigger:
+        execute console command "/mvtp %player% a:newbie_part1"
+        # Wait for region messages
+        wait 1 second
+        message "&f*** Please follow the lights and read the signs carefully"
+
 command /guest-error <player>:
     description: Gives newbie error to guests who try to do restricted things
     executable by: console
     trigger:
         message "&2&lYou can look but not touch, %arg 1%!" to arg 1
-        message "&fYou need to introduce yourself at the forums and be accepted by staff into the server. Read the rules at:" to arg 1
-        message " &3http://survival.gamealition.com/rules" to arg 1
-        message " to find out how!" to arg 1
+        message "&fDo th command &3/approve-me &fto begin the approval process!" to arg 1
