@@ -1,0 +1,71 @@
+# ########################
+# PVP system by Roy Curtis
+# ########################
+
+# Global variables:
+# pvp.%uuid%.enabled - boolean; if unset, assume PVP command never used before
+
+# ### Commands
+
+command /clearpvp <player>:
+    description: Clear PVP data for player
+    permission: gamealition.admin
+    trigger:
+        delete {pvp.%uuid of player%.enabled}
+        message "&7*** Cleared PVP state for %player%"
+
+command /pvp:
+    description: Toggles whether you are in PVP mode or not
+    permission: gamealition.player
+    executable by: players
+    trigger:
+        # First time message
+        if {pvp.%uuid of player%.enabled} is not set:
+            message "*** This command will &lenable player-versus-player&r for"
+            message "  you, allowing other players to hurt and kill you."
+            message "If you are sure you want to enable this, type &3/pvp&r again."
+            message "&7You will only get this message once."
+            set {pvp.%uuid of player%.enabled} to false
+            exit trigger
+
+        if {pvp.%uuid of player%.enabled} is false:
+            message "*** PVP mode is now &cenabled&r. Use &3/pvp&r again to disable."
+            set {pvp.%uuid of player%.enabled} to true
+        else:
+            message "*** PVP mode is now &adisabled&r. Use &3/pvp&r again to enable."
+            set {pvp.%uuid of player%.enabled} to false
+
+on damage of player:
+    attacker is player
+
+    # Bugfix for enderpearls
+    if attacker is victim:
+        exit trigger
+
+    # If either player are quarried, let DERPI handle
+    if {derpi.%attacker's uuid%.quarried} is set:
+        exit trigger
+        
+    if {derpi.%victim's uuid%.quarried} is set:
+        exit trigger
+    
+    # Allow if both have PvP flags are set
+    if {pvp.%uuid of victim%.enabled} is true:
+        {pvp.%uuid of attacker%.enabled} is true
+        exit trigger
+
+    if {pvp.%uuid of victim%.enabled} is false:
+        message "&c*** That player is not in PvP mode" to attacker
+    else if {pvp.%uuid of victim%.enabled} is not set:
+        message "&c*** That player is not in PvP mode" to attacker
+    else if {pvp.%uuid of attacker%.enabled} is false:
+        message "&c*** You are not in PvP mode. Use &f/pvp&c to enable." to attacker
+    else if {pvp.%uuid of attacker%.enabled} is not set:
+        message "&c*** You are not in PvP mode. Use &f/pvp&c to enable." to attacker
+
+    cancel the event
+
+on player join:
+    {pvp.%uuid of player%.enabled} is true
+    wait 1 second
+    message "&c*** You are still in PvP mode. Use &3/pvp&c to disable."

@@ -1,0 +1,85 @@
+# ### Approval Q&A system by Roy Curtis
+# ### Licensed under MIT, 2015
+
+# ### Events
+
+on player join:
+    player has permission "gamealition.newbie"
+    wait 5 seconds
+    message "&2&lWelcome, %player%! &fYou need to introduce yourself at the forums and be accepted by staff into the server. Read the rules at:"
+    message " &3http://survival.gamealition.com/rules"
+    message " to find out how!"
+
+on pick up:
+    # No message, due to spam
+    player has permission "gamealition.newbie"
+    cancel the event
+
+on hunger level change:
+    player has permission "gamealition.newbie"
+    set player's hunger level to 10
+
+on break:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+    
+on place:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+    
+on right click on a chest or a hopper or a trapped chest:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+
+on vehicle destroy:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+
+on damage:
+    attacker is a player
+    attacker has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %attacker%"
+
+# ### Global functions
+
+command /approve <offline player>:
+    description: Adds given player to the "player" perm group
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        if arg 1 has the permission "derpi.inmate":
+            message "&c*** %arg 1%r is in the DERPI; they will be approved when released"
+            exit trigger
+
+        if arg 1 has the permission "gamealition.player":
+            message "&c*** %arg 1% is already approved"
+            exit trigger
+
+        execute console command "/perms player %arg 1% setgroup player"
+        execute console command "/say &f%arg 1% &7has been &aapproved&7 for server play"
+        
+command /unapprove <offline player>:
+    description: Removes given player from the "player" perm group
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        if arg 1 has the permission "derpi.inmate":
+            message "&c*** %arg 1% is in the DERPI; unapprove when released"
+            exit trigger
+
+        execute console command "/perms player %arg 1% setgroup default"
+        execute console command "/say &f%arg 1% &7has been &cunapproved&7 for server play"
+
+command /guest-error <player>:
+    description: Gives newbie error to guests who try to do restricted things
+    executable by: console
+    trigger:
+        message "&2&lYou can look but not touch, %arg 1%!" to arg 1
+        message "&fYou need to introduce yourself at the forums and be accepted by staff into the server. Read the rules at:" to arg 1
+        message " &3http://survival.gamealition.com/rules" to arg 1
+        message " to find out how!" to arg 1

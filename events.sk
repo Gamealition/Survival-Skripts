@@ -1,65 +1,4 @@
 # ########################################################################################
-# # NEWBIES ##############################################################################
-# ########################################################################################
-
-on player join:
-    player has permission "gamealition.newbie"
-    wait 5 seconds
-    message "&2&lWelcome, %arg 1%! &fYou need to introduce yourself at the forums and be accepted by staff into the server. Read the rules at:" to arg 1
-    message " &3http://survival.gamealition.com/rules" to arg 1
-    message " to find out how!" to arg 1
-    
-on player teleport:
-    # Hacky, but skript has poor region support
-    player has permission "gamealition.newbie"
-    {guestwarning.%player%} is not set
-    set {guestwarning.%player%} to true
-    execute console command "/guest-error %player%"
-    wait 5 seconds
-    delete {guestwarning.%player%}
-    
-on mine:
-    player has permission "gamealition.newbie"
-    cancel the event
-    execute console command "/guest-error %player%"
-
-on break:
-    player has permission "gamealition.newbie"
-    cancel the event
-    execute console command "/guest-error %player%"
-
-on drop:
-    player has permission "gamealition.newbie"
-    cancel the event
-    execute console command "/guest-error %player%"
-    
-on pick up:
-    player has permission "gamealition.newbie"
-    cancel the event
-    execute console command "/guest-error %player%"
-    
-on place:
-    player has permission "gamealition.newbie"
-    cancel the event
-    execute console command "/guest-error %player%"
-    
-on vehicle destroy:
-    player has permission "gamealition.newbie"
-    cancel the event
-    execute console command "/guest-error %player%"
-    
-on click:
-    player has permission "gamealition.newbie"
-    cancel the event
-    execute console command "/guest-error %player%"
-    
-on damage:
-    attacker is a player
-    attacker has permission "gamealition.newbie"
-    cancel the event
-    execute console command "/guest-error %attacker%"
-
-# ########################################################################################
 # # WORLD ################################################################################
 # ########################################################################################
    
@@ -113,19 +52,24 @@ on command:
     command is "mvss" or "mvsetspawn"
     make player execute command "/mv anchor %player's world%"
     make player execute command "/setworldspawn"
-    cancel the event
 
 on command:
     command is "mv" or "mvm"
     arguments is "set spawn" or "setspawn"
     make player execute command "/mv anchor %player's world%"
     make player execute command "/setworldspawn"
-    cancel the event
 
 on command:
     command is "mvs" or "mvspawn"
+    player has permission "multiverse.core.spawn.self"
     message "&7*** Teleporting you to spawn point of &f%player's world%"
     execute console command "/mvtp %player% a:%player's world%"
+    cancel the event
+
+on command:
+    command is "op"
+    player doesn't have permission "gamealition.admin"
+    kick the player because "*taps with wand* you are now an OP, %player%"
     cancel the event
 
 # ########################################################################################

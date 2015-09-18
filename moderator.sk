@@ -1,0 +1,30 @@
+# ### Moderator self rank system by Roy Curtis
+# ### Licensed under MIT, 2015
+
+# ### Commands
+
+command /mod:
+    description: Elevates yourself to full moderator role
+    permission: gamealition.moderator
+    executable by: players
+    aliases: /moderate, /moderator
+    trigger:
+        if player has permission "gamealition.mod-high":
+            message "&c*** You are already in elevated privileges! Did you mean &f/demod&c?"
+            exit trigger
+
+        execute console command "/promote %player% moderator"
+        message "&7*** You are now in &felevated &7moderator privileges"
+        
+command /demod:
+    description: Demotes yourself to normal player role
+    permission: gamealition.moderator
+    executable by: players
+    aliases: /demoderate, /demoderator
+    trigger:
+        if player has permission "gamealition.mod-low":
+            message "&c*** You are not in elevated privileges! Did you mean &f/mod&c?"
+            exit trigger
+
+        execute console command "/demote %player% moderator"
+        message "&7*** You are now in &fnormal &7player privileges"

@@ -82,3 +82,18 @@ on command:
     if {derpi.%{_targetUUID}%.quarried} is set:
         cancel the event
         message "&c*** You cannot send money to quarried players"
+
+# Prevent PVP
+on damage of player:
+    attacker is player
+    {derpi.%attacker's uuid%.quarried} is set
+    {derpi.%victim's uuid%.quarried} is not set
+    message "&c*** You cannot attack DERPI spectators" to attacker
+    cancel the event
+
+on damage of player:
+    attacker is player
+    {derpi.%attacker's uuid%.quarried} is not set
+    {derpi.%victim's uuid%.quarried} is set
+    message "&c*** You cannot attack DERPI inmates as a spectator" to attacker
+    cancel the event
