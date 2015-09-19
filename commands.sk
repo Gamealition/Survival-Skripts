@@ -44,6 +44,7 @@ command /links:
     aliases: /www
     executable by: players and console
     trigger:
+        message "&2&LGamealition &f&lSurvival &fofficial links:"
         message "&f• &3gamealition.com &f- Official"
         message "&f• &3forums.gamealition.com &f- Forums"
         message "&f• &3irc.gamealition.com &f- IRC"

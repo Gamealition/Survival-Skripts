@@ -106,16 +106,14 @@ command /unquarry <offline player>:
         delete {derpi.%{_targetUUID}%.quarried}
         delete {derpi.%{_targetUUID}%.quarried.by}
         delete {derpi.%{_targetUUID}%.quarried.because}
-        
-        # Only add player group to non-moderators/admins
-        if {_target} does not have permission "derpi.moderator":
-            execute console command "/perms player %{_target}% addgroup player"
-            
+                    
         remove 270 from {_target}'s money 
-        execute console command "/perms player %{_target}% removegroup inmate"
-        execute console command "/mv tp %{_target}% world"
+        execute console command "/perms player %{_target}% setgroup default"
+        execute console command "/mvtp %{_target}% a:newbie_part1"
         
         broadcast "&l*** &f%{_target}% &7has been &2&lreleased from DERPI!"
+        wait 1 second
+        send "&c*** As part of your release, you must go through the approval process again and accept the rules." to {_target}
         
 # ########################################################################################
 
