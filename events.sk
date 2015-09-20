@@ -90,7 +90,17 @@ every minute:
     else if "%now%" contains "08:00":
         execute console command "/stop"
 
-# Keeps a database of player UUIDs
+# Keeps a database of player UUIDs and ages
 on login:
     set {uuid.%name of player%} to UUID of player
     set {uuid.%uuid of player%} to name of player
+
+    if {age.%uuid of player%} is not set:
+        if player has permission "gamealition.player":
+            set {_lastyear} to now
+            subtract 365 days from {_lastyear}
+            set {age.%name of player%} to {_lastyear}
+            set {age.%uuid of player%} to {_lastyear}
+        else:
+            set {age.%name of player%} to now
+            set {age.%uuid of player%} to now

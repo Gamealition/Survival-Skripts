@@ -67,10 +67,12 @@ command /quarry <offline player> [<number=0>] <text>:
         
         send "&4&l*** DEMEANOR ERADICATION & REHAB ***" to {_target}
         send "&4&l***     PENITENTIARY INSTITUTE     ***" to {_target}
-        send "&cYou have been sent here because you have broken the rules. Consequently, you must earn back your freedom to play on this server." to {_target}
-        send "&cThis is done by mining enough cobblestone to buy freedom at the shack." to {_target}
-        send "&cUse &f/shack &cto teleport to the shack and &f/money &cto check your balance." to {_target}
-        send "&cPvP is enabled and you will be unable to hear or send chat." to {_target}
+        send "&cYou have been sent here because you have broken the rules." to {_target}
+        send " &cConsequently, you must earn back your freedom to play." to {_target}
+        send " &cThis is done by mining enough cobblestone to buy freedom." to {_target}
+        send " &cUse &f/shack &cto teleport to the shack." to {_target}
+        send " &cUse &f/money &cto check your balance." to {_target}
+        send " &cPvP is enabled and you will be unable to hear or send chat." to {_target}
         
         # Good luck.
         heal {_target}

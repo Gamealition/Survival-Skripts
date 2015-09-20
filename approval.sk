@@ -6,7 +6,8 @@
 on player join:
     player has permission "gamealition.newbie"
     wait 5 seconds
-    message "&2&lWelcome, %player%! &fYou can look around freely. To join our community and build, do &3/approve-me &fto begin the approval process!"
+    message "&2&LHello, %player%! &fYou can look around freely."
+    message " To join our community, do the command &3/approve-me"
 
 on pick up:
     # No message, due to spam
