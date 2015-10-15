@@ -23,6 +23,11 @@ on break:
     cancel the event
     execute console command "/guest-error %player%"
     
+on craft:
+    player has permission "gamealition.newbie"
+    cancel the event
+    execute console command "/guest-error %player%"
+
 on place:
     player has permission "gamealition.newbie"
     cancel the event

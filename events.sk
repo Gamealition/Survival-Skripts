@@ -18,7 +18,7 @@ on rightclick on a sign:
     if bed of player exists:
         teleport player to player's bed
     else:
-        execute console command "/mv tp %player% world"
+        execute console command "/mv tp %player% a:world"
 
 # Horse immunity
 on damage of horse or donkey or mule:
@@ -66,8 +66,7 @@ on command:
     execute console command "/mvtp %player% a:%player's world%"
     cancel the event
 
-on command:
-    command is "op"
+on command "op":
     player doesn't have permission "gamealition.admin"
     kick the player because "*taps with wand* you are now an OP, %player%"
     cancel the event
@@ -97,10 +96,15 @@ on login:
 
     if {age.%uuid of player%} is not set:
         if player has permission "gamealition.player":
+            # Back-date existing players
             set {_lastyear} to now
             subtract 365 days from {_lastyear}
             set {age.%name of player%} to {_lastyear}
             set {age.%uuid of player%} to {_lastyear}
         else:
+            # First time players
             set {age.%name of player%} to now
             set {age.%uuid of player%} to now
+
+            # Fix bug where treeassist is on for first time players
+            execute console command "/treeassist toggle %player%"

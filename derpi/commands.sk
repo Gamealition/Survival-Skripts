@@ -126,23 +126,28 @@ command /quarryinfo <offline player>:
     trigger:
         set {_target} to arg 1
         set {_targetUUID} to uuid of arg 1
+
+        # Try to fetch UUID from global cache if target is offline
+        if {_targetUUID} is not set:
+            set {_targetUUID} to {uuid.%{_target}%}
         
-        if {_target} is offline:
+        # Handle unresolvable offline targets
+        if {_targetUUID} is not set:
             if {derpi.queuequarry.%{_target}%} exists:
                 message "&7*** That player is offline. However, they are queued for quarrying when they next join."
             else if {derpi.queuerelease.%{_target}%} exists:
                 message "&7*** That player is offline. However, they are queued for release when they next join the server."
             else:
-                message "&c*** That player is offline; no information can be retrieved"
+                message "&7*** That player has no DERPI record"
             exit trigger
             
         if {derpi.%{_targetUUID}%.quarried} is set:
-            message "&7&l*** &7DERPI report of: &f%{_target}%"
-            message "  &7quarried by &f%{derpi.%{_targetUUID}%.quarried.by}%"
-            message "  &7on &f%{derpi.%{_targetUUID}%.quarried}%"
-            message "  &7because &f%{derpi.%{_targetUUID}%.quarried.because}%"
+            message "&7*** DERPI report of: &f%{_target}%"
+            message "&7• quarried by &f%{derpi.%{_targetUUID}%.quarried.by}%"
+            message "&7• on &f%{derpi.%{_targetUUID}%.quarried}%"
+            message "&7• because &f%{derpi.%{_targetUUID}%.quarried.because}%"
         else:
-            message "&c*** That player is not quarried"
+            message "&7*** That player is not quarried"
             
 # ########################################################################################
 
@@ -158,4 +163,4 @@ command /quarrylog <offline player>:
             loop {derpi.%{_target}%.log::*}:
                 message loop-value
         else:
-            message "&c*** That player name has no log"
+            message "&7*** That player has no prior quarries"

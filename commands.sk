@@ -86,7 +86,7 @@ command /ride <player> <player>:
     trigger:
         if arg 1 is the player:
             arg 2 is the player
-            message "&cYou cannot ride yourself!"
+            message "&c*** You cannot ride yourself!"
             exit trigger
         
         make arg 1 ride arg 2
@@ -100,8 +100,34 @@ command /age <offline player>:
         message "&7• UUID &f%{age.%uuid of arg 1%}%"
         message "&7• For &f%difference between {age.%arg 1%} and now%"
 
+command /clearhistory <player>:
+    description: Clears internal Skript history for player
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        delete {age.%name of arg 1%}
+        delete {age.%uuid of arg 1%}
+        delete {uuid.%name of arg 1%}
+        delete {uuid.%uuid of arg 1%}
+        message "&7*** Cleared history for %arg 1%"
+
 command /stoplag:
     aliases: /halt-activity, /stopfire, /allowfire
     executable by: players and console
     trigger:
         message "&8&o*** The command you have dialed is not in service, please try again later"
+
+command /arm-armorstands:
+    description: Replaces all armor stands in inventory with ones that have arms
+    executable by: players
+    permission: gamealition.player
+    trigger:
+        set {_stands} to number of armor stand in the player's inventory
+
+        if {_stands} is 0:
+            message "&7*** You do not have any armor stands to arm"
+            exit trigger
+
+        remove all armor stand from the player
+        execute console command "/minecraft:give %player% minecraft:armor_stand %{_stands}% 0 {EntityTag:{ShowArms:1}}"
+        message "&7*** Your armor stands have been replaced with armed ones"
