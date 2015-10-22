@@ -4,15 +4,17 @@
 
 # Global variables:
 # pvp.%uuid%.enabled - boolean; if unset, assume PVP command never used before
+# laser.%uuid%.enabled - boolean; if unset, assume lasertag command never used before
 
 # ### Commands
 
 command /clearpvp <player>:
-    description: Clear PVP data for player
+    description: Clear PVP & lasertag data for player
     permission: gamealition.admin
     trigger:
         delete {pvp.%uuid of player%.enabled}
-        message "&7*** Cleared PVP state for %player%"
+        delete {laser.%uuid of player%.enabled}
+        message "&7*** Cleared PVP & laser tag state for %player%"
 
 command /pvp:
     description: Toggles whether you are in PVP mode or not
@@ -28,12 +30,41 @@ command /pvp:
             set {pvp.%uuid of player%.enabled} to false
             exit trigger
 
+        if {laser.%uuid of player%.enabled} is true:
+            message "&7*** Disabled laser tag mode for PVP"
+            set {laser.%uuid of player%.enabled} to false
+
         if {pvp.%uuid of player%.enabled} is false:
-            message "*** PVP mode is now &cenabled&r. Use &3/pvp&r again to disable."
+            message "*** PVP mode is &cenabled&r. Use &3/pvp&r again to disable."
             set {pvp.%uuid of player%.enabled} to true
         else:
-            message "*** PVP mode is now &adisabled&r. Use &3/pvp&r again to enable."
+            message "*** PVP mode is &adisabled&r. Use &3/pvp&r again to enable."
             set {pvp.%uuid of player%.enabled} to false
+
+command /lasertag:
+    description: Toggles whether you are in laser tag mode or not
+    permission: gamealition.player
+    executable by: players
+    trigger:
+        # First time message
+        if {laser.%uuid of player%.enabled} is not set:
+            message "*** This command will &lenable laser tag&r for you, allowing"
+            message "  other players to distance hit you (without damage)."
+            message "If you are sure you want to enable this, type &3/lasertag&r again."
+            message "&7You will only get this message once."
+            set {laser.%uuid of player%.enabled} to false
+            exit trigger
+
+        if {pvp.%uuid of player%.enabled} is true:
+            message "&7*** Disabled PVP mode for laser tag"
+            set {pvp.%uuid of player%.enabled} to false
+
+        if {laser.%uuid of player%.enabled} is false:
+            message "*** Laser tag mode is &cenabled&r. Use &3/lasertag&r again to disable."
+            set {laser.%uuid of player%.enabled} to true
+        else:
+            message "*** Laser tag mode is &adisabled&r. Use &3/lasertag&r again to enable."
+            set {laser.%uuid of player%.enabled} to false
 
 on damage of player:
     attacker is player
@@ -48,10 +79,25 @@ on damage of player:
         
     if {derpi.%victim's uuid%.quarried} is set:
         exit trigger
+
+    # Handle laser tag first
+    if {laser.%uuid of attacker%.enabled} is true:
+        if {laser.%uuid of victim%.enabled} is false:
+            message "&c*** That player is not in lasertag mode" to attacker
+        else:
+            attacker's weapon is a bow or egg or snowball or enderpearl or fishing rod
+            play ender signal on the victim
+            message "*** You hit &a%victim%&f!" to attacker
+            message "*** &c%attacker%&f hit you with &c%type of attacker's weapon%&f!" to victim
+            execute console command "/playsound mob.villager.hit %victim% ~ ~ ~ 1 1 1"
+            execute console command "/playsound random.levelup %attacker% ~ ~ ~ 1 1 1"
+
+        cancel the event
+        exit trigger
     
-    # Allow if both have PvP flags are set
-    if {pvp.%uuid of victim%.enabled} is true:
-        {pvp.%uuid of attacker%.enabled} is true
+    # Allow PVP if both have PvP flags are set
+    if {pvp.%uuid of attacker%.enabled} is true:
+        {pvp.%uuid of victim%.enabled} is true
         exit trigger
 
     if {pvp.%uuid of victim%.enabled} is false:

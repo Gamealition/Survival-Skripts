@@ -105,6 +105,3 @@ on login:
             # First time players
             set {age.%name of player%} to now
             set {age.%uuid of player%} to now
-
-            # Fix bug where treeassist is on for first time players
-            execute console command "/treeassist toggle %player%"
