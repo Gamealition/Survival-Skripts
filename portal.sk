@@ -1,0 +1,22 @@
+# ### Portal calculator command by Roy Curtis
+# ### Licensed under MIT, 2015
+
+# ### Commands
+
+command /portal:
+    description: Calculates where to build a nether/overworld portal
+    executable by: players
+    aliases: /nportal, /netherportal
+    trigger:
+
+        if world is "world_nether" or "resource_nether":
+            set {_scale} to 8
+        else:
+            set {_scale} to 0.125
+
+        set {_x} to rounded down (player's x-coordinate * {_scale})
+        set {_y} to rounded down (player's y-coordinate)
+        set {_z} to rounded down (player's z-coordinate * {_scale})
+
+        message "&f*** From your position, other side's portal should be at:"
+        message " &cX &f%{_x}% &aY &f%{_y}% &9Z &f%{_z}%"

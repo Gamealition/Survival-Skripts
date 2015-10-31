@@ -115,3 +115,8 @@ on player join:
     {pvp.%uuid of player%.enabled} is true
     wait 1 second
     message "&c*** You are still in PvP mode. Use &3/pvp&c to disable."
+
+on player join:
+    {laser.%uuid of player%.enabled} is true
+    wait 1 second
+    message "&c*** You are still in laser tag mode. Use &3/lasertag&c to disable."
