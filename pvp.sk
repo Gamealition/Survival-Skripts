@@ -1,8 +1,7 @@
-# ########################
-# PVP system by Roy Curtis
-# ########################
+# ### PVP system by Roy Curtis
+# ### Licensed under MIT, 2015
 
-# Global variables:
+# ### Global variables
 # pvp.%uuid%.enabled - boolean; if unset, assume PVP command never used before
 # laser.%uuid%.enabled - boolean; if unset, assume lasertag command never used before
 

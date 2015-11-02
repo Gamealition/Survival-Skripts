@@ -1,13 +1,13 @@
-# ###
-# Zero-tolerance censor system by Roy Curtis
-# ###
+# ### Censor system by Roy Curtis
+# ### Licensed under MIT, 2015
 
-# References:
+# ### References
 # age.%player% - date; from events.sk, server age of a player
 
-# Global variables:
+# ### Global variables
 # lastmessage.%player% - date; records when a new player's last message was
 
+# ### Configuration
 options:
   censor message : [AUTOMATIC] Cursing; zero tolerance for players less than 24 hours old
   spam message   : [AUTOMATIC] Chatting too fast; zero tolerance for players less than 24 hours old
