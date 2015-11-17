@@ -1,0 +1,11 @@
+# ### Pigmen angering monitor by Roy Curtis
+# ### Licensed under MIT, 2015
+
+# ### Events
+
+on damage of a zombie pigman:
+    if victim's target is set:
+        exit trigger
+
+    broadcast "*** &c%attacker%&r has angered pigmen in &c%attacker's world%&r!"
+    execute console command "/irc send *** %attacker% has angered pigmen in %attacker's world%!"

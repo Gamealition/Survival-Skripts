@@ -23,30 +23,30 @@
 
 # Commands and aliases
 
-# command /rainbow <text>:
-#     description: Rainbow text
-#     permission: gamealition.player
-#     executable by: players
-#     trigger:
-#         set {_colors} to "123456789abcdef"
-#         set {_msg}    to arg 1
-#         set {_len}    to length of {_msg}
-#         set {_clen}   to length of {_colors}
-#         set {_pos}    to 1
-#         set {_cpos}   to 1
-#         set {_newMsg} to ""
-# 
-#         while {_pos} is less than or equal to {_len}:
-#             set {_letter} to subtext of {_msg}    from {_pos}  to {_pos}
-#             set {_color}  to subtext of {_colors} from {_cpos} to {_cpos}
-#             set {_newMsg} to "%{_newMsg}%§%{_color}%%{_letter}%"
-#             add 1 to {_pos}
-#             add 1 to {_cpos}
-# 
-#             if {_cpos} is more than {_clen}:
-#                 set {_cpos} to 1
-# 
-#         console command "/broadcast §f<%player%> %{_newMsg}%"
+command /rainbow <text>:
+    description: Rainbow text
+    permission: gamealition.player
+    executable by: players
+    trigger:
+        set {_colors} to "123456789abcdef"
+        set {_msg}    to "<%player%> %arg 1%"
+        set {_len}    to length of {_msg}
+        set {_clen}   to length of {_colors}
+        set {_pos}    to 1
+        set {_cpos}   to 1
+        set {_newMsg} to ""
+
+        while {_pos} is less than or equal to {_len}:
+            set {_letter} to subtext of {_msg}    from {_pos}  to {_pos}
+            set {_color}  to subtext of {_colors} from {_cpos} to {_cpos}
+            set {_newMsg} to "%{_newMsg}%§%{_color}%%{_letter}%"
+            add 1 to {_pos}
+            add 1 to {_cpos}
+
+            if {_cpos} is more than {_clen}:
+                set {_cpos} to 1
+
+        console command "/broadcast %{_newMsg}%"
 
 command /spawn:
     description: Takes you to the server's spawn
