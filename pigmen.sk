@@ -4,8 +4,17 @@
 # ### Events
 
 on damage of a zombie pigman:
+    attacker is a player
+    attacker's world is "world_nether" or "resource_nether"
+    
     if victim's target is set:
         exit trigger
 
+    # Avoid spam
+    if {pigmen.%attacker's world%} is set:
+        difference between {pigmen.%attacker's world%} and now is less than 5 minutes
+        exit trigger
+
+    set {pigmen.%attacker's world%} to now
     broadcast "*** &c%attacker%&r has angered pigmen in &c%attacker's world%&r!"
     execute console command "/irc send *** %attacker% has angered pigmen in %attacker's world%!"
