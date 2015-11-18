@@ -83,8 +83,8 @@ on damage of player:
     if {laser.%uuid of attacker%.enabled} is true:
         if {laser.%uuid of victim%.enabled} is false:
             message "&c*** That player is not in lasertag mode" to attacker
-        else:
-            attacker's weapon is a bow or egg or snowball or enderpearl or fishing rod
+        else if projectile exists:
+            delete the projectile
             play ender signal on the victim
             message "*** You hit &a%victim%&f!" to attacker
             message "*** &c%attacker%&f hit you with &c%type of attacker's weapon%&f!" to victim

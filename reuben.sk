@@ -108,6 +108,10 @@ on load:
     add "dodges your attack" to {reuben::attacked::*}
     add "snaps at you" to {reuben::attacked::*}
     add "bites your ankle" to {reuben::attacked::*}
+    add "ducks, oinks quackingly" to {reuben::attacked-proj::*}
+    add "sausage-rolls out of the way" to {reuben::attacked-proj::*}
+    add "dives into the mud" to {reuben::attacked-proj::*}
+    add "yelps despondently" to {reuben::attacked-proj::*}
 
 on unload:
     clear {reuben::*}
@@ -118,9 +122,15 @@ on damage of a pig:
     cancel the event
 
     attacker is a player
+
+    if projectile exists:
+        set {_msg} to random element of {reuben::attacked-proj::*}
+        delete the projectile
+    else:
+        set {_msg} to random element of {reuben::attacked::*}
+
     show mobspawner flames on victim
     execute console command "/playsound mob.zombiepig.zpighurt %attacker% ~ ~ ~ 1 1 1"
-    set {_msg} to random element of {reuben::attacked::*}
     send "&5* Reuben %{_msg}%" to attacker
 
 on rightclick on a pig:
