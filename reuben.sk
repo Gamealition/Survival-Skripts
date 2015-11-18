@@ -1,0 +1,216 @@
+# ### Reuben NPC by Roy Curtis
+# ### Licensed under MIT, 2015
+
+# ### Events
+
+on load:
+    set {reuben.last} to now
+
+    # Normal responses
+    add "oinks despondently" to {reuben::normal::*}
+    add "gives you a curious look" to {reuben::normal::*}
+    add "carefully considers life" to {reuben::normal::*}
+    add "wallows in self-pity" to {reuben::normal::*}
+    add "ignores you" to {reuben::normal::*}
+    add "misses his enderdragon suit" to {reuben::normal::*}
+    add "looks around nervously for British prime ministers" to {reuben::normal::*}
+
+    # Thundering
+    add "shivers nervously" to {reuben::thunder::*}
+    add "cowers in the mud" to {reuben::thunder::*}
+    add "startles" to {reuben::thunder::*}
+
+    # Flying
+    add "is jealous" to {reuben::flying::*}
+    add "hops in a pathetic attempt to fly" to {reuben::flying::*}
+    add "stares at you in disbelief" to {reuben::flying::*}
+    add "oinks begrudgingly" to {reuben::flying::*}
+
+    # Wearing leather
+    add "frowns at your choice of clothing" to {reuben::leather::*}
+    add "attempts to moo at you condescendingly" to {reuben::leather::*}
+
+    # Poisoned
+    add "eyes you wearily" to {reuben::poison::*}
+    add "shies away from you" to {reuben::poison::*}
+    add "hopes you are not contagious" to {reuben::poison::*}
+
+    # Burning (not working)
+    # add "smells the good kind of bacon" to {reuben::burning::*}
+    # add "oinks appreciatively" to {reuben::burning::*}
+    # add "is blinded by your bright 'personality'" to {reuben::burning::*}
+
+    # Holding leash
+    add "snaps at the leash" to {reuben::lead::*}
+    add "shies away from the leash" to {reuben::lead::*}
+    add "exercises self-restraint" to {reuben::lead::*}
+    add "isn't into that" to {reuben::lead::*}
+
+    # Holding saddle
+    add "dashes from under the saddle" to {reuben::saddle::*}
+    add "tries to neigh at you sarcastically" to {reuben::saddle::*}
+    add "squeals and bucks the saddle off" to {reuben::saddle::*}
+
+    # Holding pork
+    add "frowns at your choice of food" to {reuben::pork::*}
+    add "mourns his tasty bretheren" to {reuben::pork::*}
+    add "hopes you hold human flesh" to {reuben::pork::*}
+    add "disapproves of your offering" to {reuben::pork::*}
+
+    # Holding other meat
+    add "looks away from your offering" to {reuben::meat::*}
+    add "prefers something palatable" to {reuben::meat::*}
+    add "looks uninterested" to {reuben::meat::*}
+
+    # Holding veggies
+    add "appreciates your good taste" to {reuben::veggie::*}
+    add "feels healthy" to {reuben::veggie::*}
+    add "om-noms happily" to {reuben::veggie::*}
+
+    # Holding carrot
+    add "appreciates your offering" to {reuben::carrot::*}
+    add "feels warm and fuzzy inside" to {reuben::carrot::*}
+    add "has a sudden urge to cuddle your leg aggressively" to {reuben::carrot::*}
+
+    # Holding carrot on a stick
+    add "attempts to follow" to {reuben::carrotstick::*}
+    add "gives you a bitter stare" to {reuben::carrotstick::*}
+    add "thinks it's bad luck to go fishing for pigs" to {reuben::carrotstick::*}
+
+    # Holding apple
+    add "appreciates the apple, but will not heal your warts" to {reuben::apple::*}
+    add "finds your taste in food pretentious" to {reuben::apple::*}
+    add "dislikes rich foods" to {reuben::apple::*}
+
+    # Holding wheat
+    add "senses a storm brewing" to {reuben::wheat::*}
+    add "feels positively bovine" to {reuben::wheat::*}
+
+    # Holding weapon
+    add "thinks you can do better than that" to {reuben::weapon::*}
+    add "eyes your weapon wearily" to {reuben::weapon::*}
+    add "frowns at your blade" to {reuben::weapon::*}
+    add "feels a little triggered" to {reuben::weapon::*}
+
+    # Holding fiery stuff
+    add "squeals painfully" to {reuben::lighter::*}
+    add "did not appreciate that" to {reuben::lighter::*}
+    add "does not go well with hot sauce" to {reuben::lighter::*}
+    add "emits a sudden bacony waft" to {reuben::lighter::*}
+
+    # Holding explosive stuff
+    add "experiences a critical acceleration of anti-gravity" to {reuben::explode::*}
+    add "yelps explosively" to {reuben::explode::*}
+    add "goes flying" to {reuben::explode::*}
+
+    # Attack responses
+    add "does not respond to your aggression" to {reuben::attacked::*}
+    add "dodges your attack" to {reuben::attacked::*}
+    add "snaps at you" to {reuben::attacked::*}
+    add "bites your ankle" to {reuben::attacked::*}
+
+on unload:
+    clear {reuben::*}
+    clear {reuben.last}
+
+on damage of a pig:
+    victim's name is "Reuben"
+    cancel the event
+
+    attacker is a player
+    show mobspawner flames on victim
+    execute console command "/playsound mob.zombiepig.zpighurt %attacker% ~ ~ ~ 1 1 1"
+    set {_msg} to random element of {reuben::attacked::*}
+    send "&5* Reuben %{_msg}%" to attacker
+
+on rightclick on a pig:
+    # Conditions
+    pig's name is "Reuben"
+    {reuben.last} was more than 1 second ago
+
+    # State
+    set {reuben.last} to now
+    set {_type}  to "normal"
+    set {_sound} to "mob.pig.say"
+    set {_hold}  to player's held item
+
+    # Decide action based on player or world conditions
+    if is thundering in pig's world:
+        chance of 10%
+        set {_type} to "thunder"
+    if player is flying:
+        chance of 50%
+        set {_type} to "flying"
+    if player is wearing leather armour:
+        chance of 50%
+        set {_type} to "leather"
+    if player is poisoned:
+        chance of 50%
+        set {_type} to "poison"
+    if {_hold} is lead:
+        set {_type} to "lead"
+        cancel the event
+    if {_hold} is saddle:
+        set {_type} to "saddle"
+        cancel the event
+    if {_hold} is any porkchop:
+        set {_type} to "pork"  
+    if {_hold} is any beef or any chicken or any mutton or any rabbit:
+        chance of 75%
+        set {_type} to "meat"
+    if {_hold} is any fish or any pufferfish or any clownfish or any salmon:
+        chance of 75%
+        set {_type} to "meat"
+    if {_hold} is any potato or any carrot or any apple or bread or cookie:
+        chance of 75%
+        set {_type} to "veggie"
+    if {_hold} is melon slice or pumpkin pie:
+        chance of 75%
+        set {_type} to "veggie"
+    if {_hold} is any carrot:
+        chance of 90%
+        set {_type} to "carrot"
+    if {_hold} is carrot on a stick:
+        chance of 50%
+        set {_type} to "carrotstick"
+    if {_hold} is any apple:
+        chance of 50%
+        set {_type} to "apple"
+    if {_hold} is wheat:
+        chance of 50%
+        set {_type} to "wheat"
+    if {_hold} is sword or axe:
+        chance of 50%
+        set {_type} to "weapon"
+    if {_hold} is flint'n'steel or blaze rod or blaze powder or lava bucket:
+        set {_type} to "lighter"
+    if {_hold} is gunpowder or TNT or firework:
+        set {_type} to "explode"
+
+    # Apply special effects
+    if {_type} is "thunder":
+        strike lightning effect at the pig
+        set {_sound} to "mob.zombiepig.zpighurt"
+        show hurt on pig
+    if {_type} is "pork" or "meat" or "lead" or "saddle":
+        set {_sound} to "mob.zombiepig.zpighurt"
+        show mobspawner flames on pig
+    if {_type} is "veggie" or "carrot":
+        apply potion of regeneration to pig for 5 seconds
+    if {_type} is "weapon":
+        apply potion of nausea to pig for 5 seconds
+    if {_type} is "lighter":
+        set {_sound} to "mob.zombiepig.zpighurt"
+        ignite pig for 5 seconds
+    if {_type} is "explode":
+        set {_sound} to "mob.zombiepig.zpighurt"#
+        show mobspawner flames on pig
+        create a fake explosion at pig
+        push the pig upwards at speed 1
+
+    push the pig upwards at speed 0.3
+    execute console command "/playsound %{_sound}% %player% ~ ~ ~ 1 1 1"
+
+    # Create and send message
+    set {_msg} to random element of {reuben::%{_type}%::*}
+    send "&5* Reuben %{_msg}%" to player
