@@ -94,4 +94,4 @@ command /guest-error <player>:
     executable by: console
     trigger:
         message "&2&lYou can look but not touch, %arg 1%!" to arg 1
-        message "&fDo th command &3/approve-me &fto begin the approval process!" to arg 1
+        message "&fDo the command &3/approve-me &fto begin the approval process!" to arg 1

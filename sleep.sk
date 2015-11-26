@@ -43,4 +43,5 @@ command /calculatesleepvote <world>:
         if {_perc} is greater than or equal to {@sleep percent}:
             wait 20 ticks
             set time in {_world} to 6:00
+            set weather in {_world} to clear
             broadcast "&6*** {@wake message} It is now morning in %{_world}%" to {_world}
