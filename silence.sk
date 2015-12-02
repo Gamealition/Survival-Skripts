@@ -1,0 +1,46 @@
+# ### Chat total silence system by Roy Curtis
+# ### Licensed under MIT, 2015
+
+# ### Global variables
+# silence - boolean; if set, chat is in silence mode
+
+# ### Commands
+
+command /silence:
+    description: Toggles public chat
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        if {silence} is not set:
+            # We're going into silence mode
+            set {silence} to true
+            broadcast "*** &c%command sender%&r has silenced all chat"
+            execute console command "/irc send *** %command sender% has silenced all chat"
+            execute console command "/irc sendraw PRIVMSG ChanServ@Services.GameSurge.net :mode ##Gamealition +m"
+        else:
+            # We're going out of silence mode
+            delete {silence}
+            execute console command "/irc sendraw PRIVMSG ChanServ@Services.GameSurge.net :mode ##Gamealition -m"
+            broadcast "*** &c%command sender%&r has un-silenced all chat"
+            execute console command "/irc send *** %command sender% has un-silenced all chat"
+
+# ### Events
+
+on chat:
+    # Conditions
+    {silence} is set
+    player doesn't have permission "gamealition.moderator"
+    
+    # Logic
+    send "&7*** Only staff may speak in silence mode" to player
+    cancel the event
+
+on command:
+    # Conditions
+    command is "me" or "minecraft:me" or "essentials:me"
+    {silence} is set
+    player doesn't have permission "gamealition.moderator"
+
+    # Logic
+    send "&7*** Only staff may speak in silence mode" to player
+    cancel the event

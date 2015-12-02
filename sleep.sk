@@ -9,11 +9,16 @@ options:
 # ### Events
 
 on bed enter:
-    time in world is not between 6:00 and 18:00
+    if {sleep.handling} is set:
+        exit trigger
+
     wait 1 tick
     execute console command "/calculatesleepvote %world%"
 
 on bed leave:
+    if {sleep.handling} is set:
+        exit trigger
+
     time in world is not between 6:00 and 18:00
     wait 1 tick
     execute console command "/calculatesleepvote %world%"
@@ -41,7 +46,9 @@ command /calculatesleepvote <world>:
         broadcast "*** &a%rounded {_perc}%%%&f of players in &a%{_world}%&f are sleeping ({@sleep percent}%% required)" to {_world}
 
         if {_perc} is greater than or equal to {@sleep percent}:
+            set {sleep.handling} to true
             wait 20 ticks
+            delete {sleep.handling}
             set time in {_world} to 6:00
             set weather in {_world} to clear
             broadcast "&6*** {@wake message} It is now morning in %{_world}%" to {_world}

@@ -2,19 +2,16 @@
 # # WORLD ################################################################################
 # ########################################################################################
    
+# Prolong daytime in world by 2x
 every 8 seconds:
     time in "world" is between 06:30 and 17:30
     remove 4 seconds from "world"'s time
 
 # Bed signs
 on rightclick on a sign:
-    line 1 contains "Bed"
-    line 1 contains "["
-    line 1 contains "]"
-    if player's world is not "world_the_end":
-        player's world is not "resource_the_end"
-        exit trigger
-    
+    line 1 contains "[" and "Bed" and "]"
+    player's world is "world_the_end" or "resource_the_end"
+
     if bed of player exists:
         teleport player to player's bed
     else:
