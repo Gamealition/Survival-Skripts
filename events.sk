@@ -40,6 +40,12 @@ on crafting of tnt:
     message "&7*** Crafting of TNT is disabled on this server"
     cancel the event
 
+# Track creative items
+on drop:
+    player's gamemode is creative
+    set the 1st line of the item's lore to "&4&lSPAWNED IN"
+    set the 2nd line of the item's lore to "&4&lCREATIVE MODE"
+
 # ########################################################################################
 # # COMMAND OVERRIDES ####################################################################
 # ########################################################################################
@@ -80,9 +86,9 @@ every minute:
         execute console command "/pr delete a:kill p:fire_tick e:skeleton e:zombie"
         execute console command "/pr delete a:kill p:fire_tick e:guardian"
     else if "%now%" contains "07:55":
-        broadcast "&l*** &7Server will perform its daily restart in &ffive minutes&7."
+        broadcast "&l*** &7Server will perform its daily restart in &ffive minutes&7"
     else if "%now%" contains "07:59":
-        broadcast "&l*** &7Server will perform its daily restart in &fone minute&7. &f&lPlease log off now."
+        broadcast "&l*** &7Server will perform its daily restart in &fone minute&7"
     else if "%now%" contains "08:00":
         execute console command "/stop"
 
