@@ -5,14 +5,21 @@
 
 on player join:
     player has permission "gamealition.newbie"
-    wait 5 seconds
-    message "&2&LHello, %player%! &fYou can look around freely."
-    message " To join our community, do the command &3/approve-me"
+    message "Sending approval messages to %player%" to console
+    set {approval.pickup.%player%} to now
+
+    loop 3 times:
+        wait 10 seconds
+        message "&2&LHello, %player%! &fYou can look around freely."
+        message " To join our community, do the command &3/approve-me"
 
 on pick up:
-    # No message, due to spam
     player has permission "gamealition.newbie"
     cancel the event
+    # Do message only every 6 seconds
+    {approval.pickup.%player%} was more than 6 seconds ago
+    set {approval.pickup.%player%} to now
+    execute console command "/guest-error %player% Can't pick that up!"
 
 on hunger level change:
     player has permission "gamealition.newbie"
@@ -21,33 +28,33 @@ on hunger level change:
 on break:
     player has permission "gamealition.newbie"
     cancel the event
-    execute console command "/guest-error %player%"
+    execute console command "/guest-error %player% Can't break that!"
     
 on craft:
     player has permission "gamealition.newbie"
     cancel the event
-    execute console command "/guest-error %player%"
+    execute console command "/guest-error %player% Can't craft that!"
 
 on place:
     player has permission "gamealition.newbie"
     cancel the event
-    execute console command "/guest-error %player%"
+    execute console command "/guest-error %player% Can't place that!"
     
 on right click on a chest or a hopper or a trapped chest or a trapdoor:
     player has permission "gamealition.newbie"
     cancel the event
-    execute console command "/guest-error %player%"
+    execute console command "/guest-error %player% Can't open that!"
 
 on vehicle destroy:
     player has permission "gamealition.newbie"
     cancel the event
-    execute console command "/guest-error %player%"
+    execute console command "/guest-error %player% Can't destroy that!"
 
 on damage:
     attacker is a player
     attacker has permission "gamealition.newbie"
     cancel the event
-    execute console command "/guest-error %attacker%"
+    execute console command "/guest-error %attacker% Can't hurt that!"
 
 # ### Global functions
 
@@ -89,9 +96,13 @@ command /approve-me:
         wait 1 second
         message "&f*** Please follow the lights and read the signs carefully"
 
-command /guest-error <player>:
+command /guest-error <player> <text=Can't do that!>:
     description: Gives newbie error to guests who try to do restricted things
     executable by: console
     trigger:
         message "&2&lYou can look but not touch, %arg 1%!" to arg 1
         message "&fDo the command &3/approve-me &fto begin the approval process!" to arg 1
+        execute console command "/title %arg 1% times 10 60 40"
+        execute console command "/title %arg 1% subtitle [""Want to join? Do "",{color:dark_aqua,text:""/approve-me!""}]"
+        execute console command "/title %arg 1% title {color:red,text:""%arg 2%""}"
+        message "Sent approval message to %arg 1%" to console

@@ -14,8 +14,7 @@ options:
 
 on chat:
     # Conditions
-    message contains "fuck" or "shit" or "bitch" or "nigga" or "nigger" or "cunt"
-    first character of message is not equal to "/"
+    message contains "fuck" or "shit" or "bitch" or "nigga" or "nigger" or "cunt" or "asshole" or "assholes"
 
     if {lastmessage.%player%} is set:
         message is equal to {lastmessage.%player%}

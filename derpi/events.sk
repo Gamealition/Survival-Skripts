@@ -71,6 +71,7 @@ on command:
     command is "epay" or "pay" or "essentials:epay" or "essentials:pay"
     set {_s::*} to arguments split at " "
     set {_target} to {_s::1}
+    set {_amount} to {_s::2}
 
     # Do not bother if paying to a player we don't have a UUID for;
     # Safe to assume that they have not been quarried
@@ -82,6 +83,7 @@ on command:
     if {derpi.%{_targetUUID}%.quarried} is set:
         cancel the event
         message "&c*** You cannot send money to quarried players"
+        message "Blocked a payment of %{_amount}% from %command sender% to quarried player %{_target}%" to console
 
 # Prevent PVP
 on damage of player:

@@ -1,0 +1,57 @@
+# ### Wash hardened clays by Roy Curtis
+# ### Licensed under MIT, 2016
+
+# ### Configuration
+options:
+  cost of non-mesa   : 0
+  amount of non-mesa : 64
+  cost of mesa       : 16
+  amount of mesa     : 16
+
+# ### Events
+
+on rightclick on a sign:
+    line 1 contains "[" and "WashClay" and "]"
+    set {_held} to player's held item
+
+    if {_held} is magenta clay or light blue clay or light green clay or pink clay or gray clay or cyan clay or purple clay or blue clay or green clay or black clay:
+        
+        if amount of {_held} in player's inventory < {@amount of non-mesa}:
+            message "&c*** You need at least {@amount of non-mesa} of that clay to wash!"
+            exit trigger
+
+        if player's money < {@cost of non-mesa}:
+            message "&c*** You cannot afford to wash this clay!"
+            exit trigger
+
+        remove {@amount of non-mesa} of {_held} from player's inventory
+        remove {@cost of non-mesa} from the player's balance
+        give player {@amount of non-mesa} hardened clay
+        message "*** You have washed {@amount of non-mesa} clay into hardened clay for &2G{@cost of non-mesa}&F!"
+    else:
+        message "*** Hold {@amount of non-mesa} of these stained clay to wash to hardened clay:"
+        message " &5Magenta, &9Light Blue, &aLime, &dPink, &8Gray, &bCyan, &5Purple, &1Blue, &2Green, &0Black"
+        exit trigger
+
+on rightclick on a sign:
+    line 1 contains "[" and "WashMesaClay" and "]"
+    set {_held} to player's held item
+
+    if {_held} is red clay or orange clay or yellow clay or brown clay or white clay or light gray clay:
+
+        if amount of {_held} in player's inventory < {@amount of mesa}:
+            message "&c*** You need at least {@amount of mesa} of that clay to wash!"
+            exit trigger
+
+        if player's money < {@cost of mesa}:
+            message "&c*** You cannot afford to wash this clay!"
+            exit trigger
+
+        remove {@amount of mesa} of {_held} from player's inventory
+        remove {@cost of mesa} from the player's balance
+        give player {@amount of mesa} hardened clay
+        message "*** You have washed {@amount of mesa} clay into hardened clay for &2G{@cost of mesa}&F!"
+    else:
+        message "*** Hold {@amount of mesa} of these stained clay to wash to hardened clay:"
+        message " &cRed, &6Orange, &eYellow, &4Brown, &fWhite, &7Light Gray"
+        exit trigger

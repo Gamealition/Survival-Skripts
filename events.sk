@@ -30,6 +30,7 @@ on damage of wolf:
 
 # Mob riding
 on rightclick on a creature:
+    creature is not a horse
     player is sneaking
     player is op
     wait 0.2 second
