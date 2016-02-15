@@ -8,10 +8,9 @@ on player join:
     message "Sending approval messages to %player%" to console
     set {approval.pickup.%player%} to now
 
-    loop 3 times:
-        wait 10 seconds
-        message "&2&LHello, %player%! &fYou can look around freely."
-        message " To join our community, do the command &3/approve-me"
+    wait 10 seconds
+    message "&2&LHello, %player%! &fYou can look around freely."
+    message " To join our community, do the command &3/approve-me"
 
 on pick up:
     player has permission "gamealition.newbie"
