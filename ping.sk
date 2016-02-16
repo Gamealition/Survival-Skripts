@@ -1,0 +1,30 @@
+# ### Pinger by Roy Curtis
+# ### Licensed under MIT, 2016
+
+# ### Global variables
+# pinger.%player% - boolean; if set, pinger is enabled for player
+
+# ### Commands
+
+command /ping:
+    description: Toggles the ping clock to check network stability
+    executable by: players
+    aliases: /pinger
+    trigger:
+
+        if {pinger.%player%} is set:
+            message "*** Pinger is now turned OFF for you"
+            delete {pinger.%player%}
+        else:
+            message "*** Pinger is now turned ON for you"
+            set {pinger.%player%} to true
+
+# ### Events
+
+every 2 seconds:
+    loop all players:
+        {pinger.%loop-player%} is set
+        execute console command "/playsound random.orb %loop-player% ~ ~ ~ 0.05 1 0.05"
+        execute console command "/title %loop-player% times 0 0 30"
+        execute console command "/title %loop-player% subtitle {text:""Ping!"",color:red}"
+        execute console command "/title %loop-player% title ''"
