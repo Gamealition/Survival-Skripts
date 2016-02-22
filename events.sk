@@ -91,6 +91,7 @@ every minute:
     else if "%now%" contains "07:59":
         broadcast "&l*** &7Server will perform its daily restart in &fone minute&7"
     else if "%now%" contains "08:00":
+        kick all players because "Daily restart; come back in 20 seconds"
         execute console command "/stop"
 
 # Keeps a database of player UUIDs and ages
@@ -99,13 +100,10 @@ on login:
     set {uuid.%uuid of player%} to name of player
 
     if {age.%uuid of player%} is not set:
-        if player has permission "gamealition.player":
-            # Back-date existing players
-            set {_lastyear} to now
-            subtract 365 days from {_lastyear}
-            set {age.%name of player%} to {_lastyear}
-            set {age.%uuid of player%} to {_lastyear}
-        else:
-            # First time players
-            set {age.%name of player%} to now
-            set {age.%uuid of player%} to now
+        # First time players
+        set {age.%name of player%} to now
+        set {age.%uuid of player%} to now
+
+        wait 3 seconds
+        broadcast "*** Welcome to &B&LGamealition&f, new player &b%player%&f!"
+        execute console command "/irc send *** Welcome to Gamealition, new player %player%!"
