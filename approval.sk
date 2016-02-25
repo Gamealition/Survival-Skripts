@@ -71,6 +71,7 @@ command /approve <offline player>:
             exit trigger
 
         execute console command "/perms player %arg 1% setgroup player"
+        execute console command "/perms player %arg 1% set gamealition.flatland false"
         execute console command "/say &f%arg 1% &7has been &aapproved&7 for server play"
         
 command /unapprove <offline player>:

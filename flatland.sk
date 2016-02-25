@@ -1,0 +1,79 @@
+# ### Flatland whitelist system by Roy Curtis
+# ### Licensed under MIT, 2015
+
+# ### Events
+
+on break:
+    player is in "world_creative" or "world_chaos"
+    player doesn't have permission "gamealition.flatland"
+    cancel the event
+    execute console command "/flatland-error %player% Can't break that!"
+
+on place:
+    player is in "world_creative" or "world_chaos"
+    player doesn't have permission "gamealition.flatland"
+    cancel the event
+    execute console command "/flatland-error %player% Can't place that!"
+    
+on right click on a chest or a hopper or a trapped chest or a trapdoor:
+    player is in "world_creative" or "world_chaos"
+    player doesn't have permission "gamealition.flatland"
+    cancel the event
+    execute console command "/flatland-error %player% Can't open that!"
+
+on vehicle destroy:
+    player is in "world_creative" or "world_chaos"
+    player doesn't have permission "gamealition.flatland"
+    cancel the event
+    execute console command "/flatland-error %player% Can't destroy that!"
+
+on bucket empty:
+    player is in "world_creative" or "world_chaos"
+    player doesn't have permission "gamealition.flatland"
+    cancel the event
+    execute console command "/flatland-error %player% Can't empty that!"
+
+on bucket fill:
+    player is in "world_creative" or "world_chaos"
+    player doesn't have permission "gamealition.flatland"
+    cancel the event
+    execute console command "/flatland-error %player% Can't bucket that!"
+
+# ### Global functions
+
+command /approve-flatland <offline player>:
+    description: Allows given player to build in flatland worlds
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        if arg 1 has permission "gamealition.flatland":
+            message "&c*** %arg 1% is already approved for flatland worlds"
+            exit trigger
+
+        execute console command "/perms player %arg 1% unset gamealition.flatland"
+        message "*** %arg 1% can now build in flatland worlds"
+
+        if arg 1 is online:
+            message "*** You can now build in flatland worlds" to arg 1
+        
+command /unapprove-flatland <offline player>:
+    description: Denies given player to build in flatland worlds
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        execute console command "/perms player %arg 1% set gamealition.flatland false"
+        message "*** %arg 1% can no longer build in flatland worlds"
+
+        if arg 1 is online:
+            message "*** You can no longer build in flatland worlds" to arg 1
+
+command /flatland-error <player> <text=Can't do that!>:
+    description: Gives error to players who try to modify flatland worlds without rights
+    executable by: console
+    trigger:
+        message "&2&lCreative is restricted, %arg 1%!" to arg 1
+        message "&fIf you want build rights in flatland, do:" to arg 1
+        message "  &3/modreq I'd like flatland rights; please /approve-flatland me" to arg 1
+        execute console command "/title %arg 1% times 10 60 40"
+        execute console command "/title %arg 1% subtitle [""Modifying creative worlds is restricted!""]"
+        execute console command "/title %arg 1% title {color:red,text:""%arg 2%""}"
