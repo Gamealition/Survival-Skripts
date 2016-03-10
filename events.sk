@@ -36,6 +36,11 @@ on rightclick on a creature:
     wait 0.2 second
     make player ride creature
 
+on rightclick on a mob spawner:
+    player is holding a spawn egg
+    message "&7*** Adjustment of spawners is disabled on this server"
+    cancel the event
+
 # Block TNT crafting
 on crafting of tnt:
     message "&7*** Crafting of TNT is disabled on this server"
