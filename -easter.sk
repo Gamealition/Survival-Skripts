@@ -1,0 +1,35 @@
+# ### Easter wool race by Roy Curtis
+# ### Licensed under MIT, 2016
+
+
+# ### Events
+on player teleport:
+    player has permission "gamealition.woolrace.player"
+    wait 5 ticks
+    set player's gamemode to adventure
+
+on player respawn:
+    player has permission "gamealition.woolrace.player"
+    wait 5 ticks
+    set player's gamemode to adventure
+
+on hunger level change:
+    player has permission "gamealition.woolrace.player"
+    set player's hunger level to 10
+
+# ### Commands
+command /woolrace-items:
+    permission: gamealition.woolrace
+    executable by: players
+    trigger:
+        give player 3 red wool named "Team Gold's Red"
+        give player 3 red wool named "Team Emerald's Red"
+        give player 3 orange wool named "Team Gold's Orange"
+        give player 3 orange wool named "Team Emerald's Orange"
+        give player 3 yellow wool named "Team Gold's Yellow"
+        give player 3 yellow wool named "Team Emerald's Yellow"
+        give player 3 green wool named "Team Gold's Green"
+        give player 3 green wool named "Team Emerald's Green"
+        give player 3 blue wool named "Team Gold's Blue"
+        give player 3 blue wool named "Team Emerald's Blue"
+

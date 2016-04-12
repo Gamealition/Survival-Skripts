@@ -1,0 +1,171 @@
+# ### April fools script by Roy Curtis
+# ### Licensed under MIT, 2016
+
+# ### References
+# fools2016.join.%player%   - boolean; whether a player got the flight ticket prank
+# fools2016.spawn.%player%  - boolean; whether a player got the spawn prank
+# fools2016.home.%player%   - boolean; whether a player got the home prank
+# fools2016.gas.%player%    - boolean; whether a player got the gas prank
+# fools2016.tree.%player%   - boolean; whether a player got the tree prank
+# fools2016.mob.%player%    - boolean; whether a player got the mob prank
+# fools2016.bed.%player%    - boolean; whether a player got the bed prank
+# fools2016.sprint.%player% - boolean; whether a player got the sprint prank
+
+# ### Configuration
+options:
+  chance : 10%
+
+# ### Commands
+command /reset-fools2016 <player>:
+    description: Reset April Fools 2016 for a player (debugging purposes)
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        delete {fools2016.join.%arg 1%}
+        delete {fools2016.spawn.%arg 1%}
+        delete {fools2016.home.%arg 1%}
+        delete {fools2016.gas.%arg 1%}
+        delete {fools2016.tree.%arg 1%}
+        delete {fools2016.mob.%arg 1%}
+        delete {fools2016.bed.%arg 1%}
+        delete {fools2016.sprint.%arg 1%}
+        message "*** April Fools 2016 reset for %arg 1%"
+
+# ### Events
+on join:
+    # Conditions
+    player can hold a paper
+    {fools2016.join.%player%} is not set
+
+    # Logic
+    wait 5 seconds
+    message "*** &c&lCONGRATULATIONS! &rYou're the &c1,000,000th&r visitor to the server! Check your inventory for a &cFREE GIFT&r!"
+    message "*** Performed join prank to %player%" to console
+    set {fools2016.join.%player%} to true
+    set {_gift} to a paper named "&7&oAirline ticket"
+    set the 1st line of {_gift}'s lore to "It's a free ticket for Vander Airlines!"
+    set the 2st line of {_gift}'s lore to "Give it to VanDerProtofsky for a free flight to anywhere you wish!"
+    give {_gift} to player
+    play wolf hearts on player
+    execute console command "/playsound random.levelup %player% ~ ~ ~ 1 1 1"
+
+on command "spawn" or "mvs":
+    # Conditions
+    player's gamemode is survival
+    {fools2016.spawn.%player%} is not set
+    chance of {@chance}
+
+    # Logic
+    wait 1 second
+    play hurt on player
+    message "&c*** Eek! You tumble headfirst into spawn!"
+    message "*** Performed spawn prank to %player%" to console
+    set {fools2016.spawn.%player%} to true
+    set {_gift} to a stick named "&7&oTwiggy twig"
+    set the 1st line of {_gift}'s lore to "You got this after falling into spawn!"
+    set the 2st line of {_gift}'s lore to "Will it remind you to be more careful?"
+    give {_gift} to player
+
+on command "home":
+    # Conditions
+    {fools2016.home.%player%} is not set
+    chance of {@chance}
+
+    # Logic
+    cancel the event
+    execute console command "/mvtp %player% e:world:-4175,153,-1977"
+    message "&c*** Whoops! You got lost on the way to your home!"
+    message "*** Performed home prank to %player%" to console
+    set {fools2016.home.%player%} to true
+
+on mine:
+    # Conditions
+    player's gamemode is survival
+    block is ore
+    {fools2016.gas.%player%} is not set
+    chance of {@chance}
+
+    # Logic
+    loop (random number between 3 and 6) times:
+        create a fake explosion at a random block out of blocks in radius 2 around the block
+
+    message "&c*** Oops! You hit a gas pocket and got showered with stones!"
+    message "*** Performed mine prank to %player%" to console
+    set {fools2016.gas.%player%} to true
+    set {_gift} to a bonemeal named "&7&oUseless debris"
+    set the 1st line of {_gift}'s lore to "You got this after mining into a gas pocket!"
+    set the 2st line of {_gift}'s lore to "Maybe it'll be useful for something?"
+    give {_gift} to player
+    play hurt on player
+
+on mine:
+    # Conditions
+    player's gamemode is survival
+    block is log
+    is raining or thundering in player's world
+    {fools2016.tree.%player%} is not set
+    chance of {@chance}
+
+    # Logic
+    strike lightning effect at the player
+    message "&c*** Woah! Freak lightning hit you whilst chopping a tree!"
+    message "*** Performed tree prank to %player%" to console
+    set {fools2016.tree.%player%} to true
+    set {_gift} to a rotten flesh named "&7&oSinged flesh"
+    set the 1st line of {_gift}'s lore to "This came off you after being struck by lightning!"
+    set the 2st line of {_gift}'s lore to "Is it worth something to someone?"
+    give {_gift} to player
+
+on damage of a living entity:
+    # Conditions
+    attacker's gamemode is survival
+    victim is not a player
+    victim's name is not set
+    {fools2016.mob.%attacker%} is not set
+    chance of {@chance}
+
+    # Logic
+    play hurt on attacker
+    show mobspawner flames on victim
+    apply fire resistance 1 to the victim for 10 seconds
+    message "&c*** Ouch! That %victim's type% did not appreciate your aggression!" to attacker
+    message "*** Performed hurt prank to %attacker%" to console
+    set the victim's name to "Very angry %victim's type%"
+    set {fools2016.mob.%attacker%} to true
+    set {_gift} to a sugar named "&7&oSalt of %victim's type%"
+    set the 1st line of {_gift}'s lore to "You took this from a %victim's type% you angered!"
+    set the 2st line of {_gift}'s lore to "Does it make a nice gift to somebody?"
+    give {_gift} to attacker
+
+on bed leave:
+    # Conditions
+    player's gamemode is survival
+    {fools2016.bed.%player%} is not set
+    chance of {@chance}
+
+    # Logic
+    play hurt on player
+    show mobspawner flames on player
+    message "&c*** You fell off the bed! Today is not going to be a good day!"
+    message "*** Performed bed prank to %player%" to console
+    set {fools2016.bed.%player%} to true
+    set {_gift} to a nether wart named "&7&oBruise"
+    set the 1st line of {_gift}'s lore to "You got this from falling off a bed!"
+    set the 2st line of {_gift}'s lore to "Will you treasure this forever?"
+    give {_gift} to player
+
+on sprint toggle:
+    # Conditions
+    player's gamemode is survival
+    {fools2016.sprint.%player%} is not set
+    chance of {@chance}
+
+    # Logic
+    play hurt on player
+    message "&c*** Clumsy! You tripped as you started sprinting!"
+    message "*** Performed sprint prank to %player%" to console
+    set {fools2016.sprint.%player%} to true
+    set {_gift} to a gold nugget named "&7&oChipped tooth"
+    set the 1st line of {_gift}'s lore to "You got this from tripping whilst running!"
+    set the 2st line of {_gift}'s lore to "Can this make you rich?"
+    give {_gift} to player

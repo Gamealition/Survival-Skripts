@@ -107,6 +107,24 @@ command /ride <player> <player>:
         
         make arg 1 ride arg 2
 
+command /item-rename <text>:
+    description: Renames held item to the given text
+    permission: gamealition.moderator
+    executable by: players
+    trigger:
+        player is holding anything
+        set name of player's held item to colored arg 1
+        message "*** Renamed %player's held item% to ""%colored arg 1%&r"""
+
+command /item-lore <text>:
+    description: Sets lore tagline of held item
+    permission: gamealition.moderator
+    executable by: players
+    trigger:
+        player is holding anything
+        set 1st line of (player's held item)'s lore to colored arg 1
+        message "*** Set 1st lore line of %player's held item% to ""%colored arg 1%&r"""
+
 # Courtesy of http://heads.freshcoal.com/maincollection.php
 command /tea <player=%player%>:
     permission: gamealition.moderator

@@ -213,7 +213,7 @@ on rightclick on a pig:
         set {_sound} to "mob.zombiepig.zpighurt"
         ignite pig for 5 seconds
     if {_type} is "explode":
-        set {_sound} to "mob.zombiepig.zpighurt"#
+        set {_sound} to "mob.zombiepig.zpighurt"
         show mobspawner flames on pig
         create a fake explosion at pig
         push the pig upwards at speed 1

@@ -1,7 +1,7 @@
 # ########################################################################################
 # # WORLD ################################################################################
 # ########################################################################################
-   
+
 # Prolong daytime in world by 2x
 every 8 seconds:
     time in "world" is between 06:30 and 17:30
@@ -89,8 +89,7 @@ on command "op":
 every minute:
     if "%now%" contains "06:00":
         # Some of PRISM's purge rules seem to be broken, so we manually purge noisy events here
-        execute console command "/pr delete a:kill p:fire_tick e:skeleton e:zombie"
-        execute console command "/pr delete a:kill p:fire_tick e:guardian"
+        execute console command "/pr delete a:kill p:fire_tick e:guardian e:skeleton e:zombie"
     else if "%now%" contains "07:55":
         broadcast "&l*** &7Server will perform its daily restart in &ffive minutes&7"
     else if "%now%" contains "07:59":
