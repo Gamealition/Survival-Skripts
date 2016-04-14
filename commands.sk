@@ -94,6 +94,13 @@ command /dmap-enable <text> <boolean>:
         execute player command "/dynmap pause all"
         execute player command "/dmap worldset %arg 1% enabled:%arg 2%"
         execute player command "/dynmap pause none"
+
+command /dynmap-here:
+    description: Generates a link to Dynmap zoomed to your location
+    executable by: players
+    trigger:
+        message "*** Dynmap URL for your location:"
+        message "&f• &3survival.gamealition.com/dynmap/%player's world%/%rounded player's x-coordinate%/%rounded player's y-coordinate%/%rounded player's z-coordinate%"
         
 command /ride <player> <player>:
     description: Allows the riding of a player
