@@ -1,6 +1,16 @@
 # ### Approval Q&A system by Roy Curtis
 # ### Licensed under MIT, 2015
 
+# ### Global variables
+# approval.await.%player% - boolean; if a player is awaiting approval
+# approval.wrong.%player% - number; how many wrong answers by player
+
+# ### Configuration
+
+options:
+  max wrong answers    : 5
+  wrong answer message : [AUTOMATIC] Too many wrong answers; gamealition@gmail.com
+
 # ### Events
 
 on player join:
@@ -55,7 +65,27 @@ on damage:
     cancel the event
     execute console command "/guest-error %attacker% Can't hurt that!"
 
-# ### Global functions
+# ### Newbie island functions
+
+command /ni-wrong <text> <player>:
+    executable by: console
+    trigger:
+        # Logic
+        set {_dest} to arg 1
+        set {_player} to arg 2
+        execute console command "/mvtp %{_player}% %{_dest}%"
+        message "&c*** Wrong answer! Please try again" to {_player}
+
+        {_player} has permission "gamealition.newbie"
+        add 1 to {approval.wrong.%{_player}%}
+
+        if {approval.wrong.%{_player}%} >= {@max wrong answers}:
+            delete {approval.wrong.%{_player}%}
+            execute console command "/ban %{_player}% {@wrong answer message}"
+        else:
+            message "*** Wrong newbie island answer by %{_player}%, total %{approval.wrong.%{_player}%}%" to console
+
+# ### Approval functions
 
 command /approve <offline player>:
     description: Adds given player to the "player" perm group
@@ -70,6 +100,8 @@ command /approve <offline player>:
             message "&c*** %arg 1% is already approved"
             exit trigger
 
+        delete {approval.await.%arg 1%}
+        delete {approval.wrong.%arg 1%}
         execute console command "/perms player %arg 1% setgroup player"
         execute console command "/perms player %arg 1% set gamealition.flatland false"
         execute console command "/say &f%arg 1% &7has been &aapproved&7 for server play"
@@ -83,6 +115,8 @@ command /unapprove <offline player>:
             message "&c*** %arg 1% is in the DERPI; unapprove when released"
             exit trigger
 
+        delete {approval.await.%arg 1%}
+        delete {approval.wrong.%arg 1%}
         execute console command "/perms player %arg 1% setgroup default"
         execute console command "/say &f%arg 1% &7has been &cunapproved&7 for server play"
 
@@ -91,10 +125,31 @@ command /approve-me:
     permission: gamealition.newbie
     executable by: players
     trigger:
+        if {approval.await.%player%} is set:
+            message "&f*** &3You've already gone through approval! &fPlease wait for staff to approve you"
+            exit trigger
+
         execute console command "/mvtp %player% a:newbie_part1"
         # Wait for region messages
         wait 1 second
         message "&f*** Please follow the lights and read the signs carefully"
+
+command /approve-manual <player>:
+    description: Notify staff that a player is awaiting approval
+    executable by: console
+    trigger:
+        arg 1 has permission "gamealition.newbie"
+
+        if {approval.await.%arg 1%} is set:
+            message "&f*** &3You've already gone through approval! &fPlease wait for staff to approve you" to arg 1
+            exit trigger
+        else:
+            set {approval.await.%arg 1%} to true
+            delete {approval.wrong.%arg 1%}
+            message "&f*** &3Thanks for reading our rules! &fYou will need to wait for staff to approve you manually. Feel free to explore in the meantime!" to arg 1
+            execute console command "/perms player %arg 1% set ticketmaster.user.basic"
+            execute arg 1 command "/modreq Player %arg 1% has gone through newbie island and would like approval. Use `/approve %arg 1%` (IRC whilst opped: `.approve %arg 1%`) to approve at your own discretion"
+            execute console command "/perms player %arg 1% unset ticketmaster.user.basic"
 
 command /guest-error <player> <text=Can't do that!>:
     description: Gives newbie error to guests who try to do restricted things
