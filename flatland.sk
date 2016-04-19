@@ -14,6 +14,12 @@ on place:
     player doesn't have permission "gamealition.flatland"
     cancel the event
     execute console command "/flatland-error %player% Can't place that!"
+
+on craft:
+    player is in "world_creative" or "world_chaos"
+    player doesn't have permission "gamealition.flatland"
+    cancel the event
+    execute console command "/flatland-error %player% Can't craft that!"
     
 on right click on a chest or a hopper or a trapped chest or a trapdoor:
     player is in "world_creative" or "world_chaos"
@@ -50,7 +56,7 @@ command /approve-flatland <offline player>:
             message "&c*** %arg 1% is already approved for flatland worlds"
             exit trigger
 
-        execute console command "/perms player %arg 1% unset gamealition.flatland"
+        execute console command "/perms player %arg 1% addgroup flatland"
         message "*** %arg 1% can now build in flatland worlds"
 
         if arg 1 is online:
@@ -61,7 +67,7 @@ command /unapprove-flatland <offline player>:
     permission: gamealition.moderator
     executable by: players and console
     trigger:
-        execute console command "/perms player %arg 1% set gamealition.flatland false"
+        execute console command "/perms player %arg 1% removegroup flatland"
         message "*** %arg 1% can no longer build in flatland worlds"
 
         if arg 1 is online:

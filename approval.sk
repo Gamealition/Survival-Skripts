@@ -1,73 +1,136 @@
-# ### Approval Q&A system by Roy Curtis
+# ### Newbie island & approval system by Roy Curtis
 # ### Licensed under MIT, 2015
 
 # ### Global variables
-# approval.await.%player% - boolean; if a player is awaiting approval
+# approval.await.%player% - boolean; if a player is awaiting manual approval
 # approval.wrong.%player% - number; how many wrong answers by player
+# approval.pickup.%player% - date; last time player attempted to pick item up
+# approval.playtime.%player% - timespan; amount of playtime by player
 
 # ### Configuration
 
 options:
+  # Newbie island
   max wrong answers    : 5
-  wrong answer message : [AUTOMATIC] Too many wrong answers; gamealition@gmail.com
+  wrong answer message : [AUTO] Too many wrong answers; gamealition@gmail.com
+  # Newbie rank
+  max time newbie rank : 90 minutes
+  # Untrusted rank
+  max time untrusted rank : 24 hours
 
 # ### Events
 
-on player join:
-    player has permission "gamealition.newbie"
-    message "Sending approval messages to %player%" to console
-    set {approval.pickup.%player%} to now
+every minute:
+    loop all players:
+        loop-player has permission "gamealition.group.newbie" or "gamealition.group.untrusted"
+        add 1 minute to {approval.playtime.%loop-player%}
 
+        # Handle auto-promote to untrusted rank
+        if loop-player has permission "gamealition.group.newbie":
+            {approval.playtime.%loop-player%} >= {@max time newbie rank}
+            execute console command "/approve-untrusted %loop-player%"
+        # Handle auto-promote to player rank
+        else if loop-player has permission "gamealition.group.untrusted":
+            {approval.playtime.%loop-player%} >= {@max time untrusted rank}
+            execute console command "/approve %loop-player%"
+
+on player join:
+    player has permission "gamealition.group.default" or "gamealition.group.newbie"
+    message "*** Sending approval messages to %player%" to console
+    set {approval.pickup.%player%} to now
     wait 10 seconds
-    message "&2&LHello, %player%! &fYou can look around freely."
-    message " To join our community, do the command &3/approve-me"
+
+    if player has permission "gamealition.group.default":
+        set {approval.playtime.%player%} to 0 minutes
+        message "&2&LHello, %player%! &fYou can look around freely."
+        message " To join our community, do the command &3/approve-me"
+    else if player has permission "gamealition.group.newbie":
+        set {_remaining} to difference between {@max time newbie rank} and {approval.playtime.%player%}
+        message "&2&LWelcome back, %player%! &fYou still have &a%{_remaining}%&f of playtime until you're fully approved. Meanwhile, you can gather resources in the resource world, or explore!"
 
 on pick up:
-    player has permission "gamealition.newbie"
+    player has permission "gamealition.group.default"
     cancel the event
     # Do message only every 6 seconds
     {approval.pickup.%player%} was more than 6 seconds ago
     set {approval.pickup.%player%} to now
-    execute console command "/guest-error %player% Can't pick that up!"
+    execute console command "/approve-error %player% Can't pick that up!"
 
 on hunger level change:
-    player has permission "gamealition.newbie"
+    player has permission "gamealition.group.default"
     set player's hunger level to 10
 
 on break:
-    player has permission "gamealition.newbie"
+    player has permission "gamealition.group.default" or "gamealition.group.newbie"
+
+    # For newbie rank, only cancel if outside resource world
+    if player has permission "gamealition.group.newbie":
+        player's world is "resource" or "resource_nether" or "resource_the_end"
+        exit trigger
+
     cancel the event
-    execute console command "/guest-error %player% Can't break that!"
+    execute console command "/approve-error %player% Can't break that!"
     
 on craft:
-    player has permission "gamealition.newbie"
+    player has permission "gamealition.group.default" or "gamealition.group.newbie"
+
+    # For newbie rank, only cancel if outside resource world
+    if player has permission "gamealition.group.newbie":
+        player's world is "resource" or "resource_nether" or "resource_the_end"
+        exit trigger
+
     cancel the event
-    execute console command "/guest-error %player% Can't craft that!"
+    execute console command "/approve-error %player% Can't craft that!"
 
 on place:
-    player has permission "gamealition.newbie"
-    cancel the event
-    execute console command "/guest-error %player% Can't place that!"
+    player has permission "gamealition.group.default" or "gamealition.group.newbie"
     
-on right click on a chest or a hopper or a trapped chest or a trapdoor:
-    player has permission "gamealition.newbie"
+    # For newbie rank, only cancel if outside resource world
+    if player has permission "gamealition.group.newbie":
+        player's world is "resource" or "resource_nether" or "resource_the_end"
+        exit trigger
+
     cancel the event
-    execute console command "/guest-error %player% Can't open that!"
+    execute console command "/approve-error %player% Can't place that!"
+    
+on right click on a chest or a hopper or a trapped chest or a trapdoor or a furnace or an anvil:
+    player has permission "gamealition.group.default" or "gamealition.group.newbie"
+    
+    # For newbie rank, only cancel if outside resource world
+    if player has permission "gamealition.group.newbie":
+        player's world is "resource" or "resource_nether" or "resource_the_end"
+        exit trigger
+
+    cancel the event
+    execute console command "/approve-error %player% Can't open that!"
 
 on vehicle destroy:
-    player has permission "gamealition.newbie"
+    player has permission "gamealition.group.default" or "gamealition.group.newbie"
+    
+    # For newbie rank, only cancel if outside resource world
+    if player has permission "gamealition.group.newbie":
+        player's world is "resource" or "resource_nether" or "resource_the_end"
+        exit trigger
+
     cancel the event
-    execute console command "/guest-error %player% Can't destroy that!"
+    execute console command "/approve-error %player% Can't destroy that!"
 
 on damage:
     attacker is a player
-    attacker has permission "gamealition.newbie"
+    attacker has permission "gamealition.group.default" or "gamealition.group.newbie"
+    
+    # For newbie rank, only cancel if outside resource world
+    if attacker has permission "gamealition.group.newbie":
+        attacker's world is "resource" or "resource_nether" or "resource_the_end"
+        exit trigger
+
     cancel the event
-    execute console command "/guest-error %attacker% Can't hurt that!"
+    execute console command "/approve-error %attacker% Can't hurt that!"
 
 # ### Newbie island functions
 
 command /ni-wrong <text> <player>:
+    permission: gamealition.admin
     executable by: console
     trigger:
         # Logic
@@ -76,7 +139,7 @@ command /ni-wrong <text> <player>:
         execute console command "/mvtp %{_player}% %{_dest}%"
         message "&c*** Wrong answer! Please try again" to {_player}
 
-        {_player} has permission "gamealition.newbie"
+        {_player} has permission "gamealition.group.default"
         add 1 to {approval.wrong.%{_player}%}
 
         if {approval.wrong.%{_player}%} >= {@max wrong answers}:
@@ -87,24 +150,90 @@ command /ni-wrong <text> <player>:
 
 # ### Approval functions
 
-command /approve <offline player>:
-    description: Adds given player to the "player" perm group
+command /approve-info <offline player>:
+    description: Debugs approval information of a player
+    permission: gamealition.group.player
+    executable by: players and console
+    trigger:
+        player command "/age %arg 1%"
+        message "&7*** &2%arg 1%&f's approval info..."
+        message "&7• Playtime: &f%{approval.playtime.%arg 1%}%"
+        if arg 1 has permission "gamealition.group.default":
+            message "&7• Default rank; no approval"
+        else if arg 1 has permission "gamealition.group.newbie":
+            set {_remaining} to difference between {@max time newbie rank} and {approval.playtime.%arg 1%}
+            message "&7• Newbie rank; resource world only"
+            message "&7• Remaining until untrusted: &f%{_remaining}%"
+        else if arg 1 has permission "gamealition.group.untrusted":
+            set {_remaining} to difference between {@max time untrusted rank} and {approval.playtime.%arg 1%}
+            message "&7• Untrusted rank; NoCheatPlus checks active"
+            message "&7• Remaining until full: &f%{_remaining}%"
+        else if arg 1 has permission "gamealition.group.player":
+            message "&7• Fully approved player"
+
+command /approve-newbie <player>:
+    description: Adds given player to the "newbie" perm group (first tier)
     permission: gamealition.moderator
     executable by: players and console
     trigger:
         if arg 1 has the permission "derpi.inmate":
-            message "&c*** %arg 1%r is in the DERPI; they will be approved when released"
+            message "&c*** %arg 1% is in the DERPI"
             exit trigger
 
-        if arg 1 has the permission "gamealition.player":
-            message "&c*** %arg 1% is already approved"
+        if arg 1 has the permission "gamealition.group.newbie":
+            message "&c*** %arg 1% is already approved at newbie tier"
+            exit trigger
+
+        if arg 1 has the permission "gamealition.group.untrusted":
+            message "&c*** %arg 1% is already approved at untrusted tier; use /unapprove instead"
             exit trigger
 
         delete {approval.await.%arg 1%}
         delete {approval.wrong.%arg 1%}
-        execute console command "/perms player %arg 1% setgroup player"
-        execute console command "/perms player %arg 1% set gamealition.flatland false"
-        execute console command "/say &f%arg 1% &7has been &aapproved&7 for server play"
+        console command "/perms player %arg 1% setgroup newbie"
+        console command "/say &f%arg 1% &7has been &aapproved&7 for resource world play"
+        console command "/playsound random.levelup %arg 1% ~ ~ ~ 1 1 1"
+        message "&a*** Thanks for reading our rules! &fFor your first" to arg 1
+        message " &a{@max time newbie rank}&f of playtime, &ayou can only mine/build in resource world&f. Use the time to gather stuff in resource world for your survival adventure!" to arg 1
+
+command /approve-untrusted <player>:
+    description: Adds given player to the "untrusted" perm group (second tier)
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        if arg 1 has the permission "derpi.inmate":
+            message "&c*** %arg 1% is in the DERPI"
+            exit trigger
+
+        if arg 1 has the permission "gamealition.group.untrusted":
+            message "&c*** %arg 1% is already approved at untrusted tier"
+            exit trigger
+
+        delete {approval.await.%arg 1%}
+        delete {approval.wrong.%arg 1%}
+        console command "/perms player %arg 1% setgroup untrusted"
+        console command "/say &f%arg 1% &7has been &aapproved&7 for full server play"
+        console command "/playsound random.levelup %arg 1% ~ ~ ~ 1 1 1"
+        message "&a*** Since you have completed enough play time, &ayou are now a full player&f! You can now build anywhere in the Survival worlds. Be aware; until you have &a{@max time untrusted rank}&f of playtime, you will still be subject to NoCheatPlus checks" to arg 1
+
+command /approve <offline player>:
+    description: Adds given player to the "player" perm group (final tier)
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        if arg 1 has the permission "derpi.inmate":
+            message "&c*** %arg 1% is in the DERPI"
+            exit trigger
+
+        if arg 1 has the permission "gamealition.group.player":
+            message "&c*** %arg 1% is already fully approved"
+            exit trigger
+
+        delete {approval.await.%arg 1%}
+        delete {approval.wrong.%arg 1%}
+        console command "/perms player %arg 1% setgroup player"
+        console command "/say &f%arg 1% &7has been &aapproved&7 for full & trusted server play"
+        console command "/playsound random.levelup %arg 1% ~ ~ ~ 1 1 1"
         
 command /unapprove <offline player>:
     description: Removes given player from the "player" perm group
@@ -117,12 +246,13 @@ command /unapprove <offline player>:
 
         delete {approval.await.%arg 1%}
         delete {approval.wrong.%arg 1%}
-        execute console command "/perms player %arg 1% setgroup default"
-        execute console command "/say &f%arg 1% &7has been &cunapproved&7 for server play"
+        set {approval.playtime.%arg 1%} to 0 seconds
+        console command "/perms player %arg 1% setgroup default"
+        console command "/say &f%arg 1% &7has been &cunapproved&7 for server play"
 
 command /approve-me:
     description: Allows a new (unapproved) player to go through the approval process
-    permission: gamealition.newbie
+    permission: gamealition.group.default
     executable by: players
     trigger:
         if {approval.await.%player%} is set:
@@ -136,9 +266,10 @@ command /approve-me:
 
 command /approve-manual <player>:
     description: Notify staff that a player is awaiting approval
+    permission: gamealition.admin
     executable by: console
     trigger:
-        arg 1 has permission "gamealition.newbie"
+        arg 1 has permission "gamealition.group.default"
 
         if {approval.await.%arg 1%} is set:
             message "&f*** &3You've already gone through approval! &fPlease wait for staff to approve you" to arg 1
@@ -151,13 +282,24 @@ command /approve-manual <player>:
             execute arg 1 command "/modreq Player %arg 1% has gone through newbie island and would like approval. Use `/approve %arg 1%` (IRC whilst opped: `.approve %arg 1%`) to approve at your own discretion"
             execute console command "/perms player %arg 1% unset ticketmaster.user.basic"
 
-command /guest-error <player> <text=Can't do that!>:
+# Approval skript functions
+
+command /approve-error <player> <text=Can't do that!>:
     description: Gives newbie error to guests who try to do restricted things
     executable by: console
     trigger:
-        message "&2&lYou can look but not touch, %arg 1%!" to arg 1
-        message "&fDo the command &3/approve-me &fto begin the approval process!" to arg 1
-        execute console command "/title %arg 1% times 10 60 40"
-        execute console command "/title %arg 1% subtitle [""Want to join? Do "",{color:dark_aqua,text:""/approve-me!""}]"
-        execute console command "/title %arg 1% title {color:red,text:""%arg 2%""}"
-        message "Sent approval message to %arg 1%" to console
+        message "*** Sending approval message to %arg 1%" to console
+
+        if arg 1 has permission "gamealition.group.default":
+            message "&2&lYou can look but not touch, %arg 1%!" to arg 1
+            message "&fDo the command &3/approve-me &fto begin the approval process!" to arg 1
+            execute console command "/title %arg 1% times 10 60 40"
+            execute console command "/title %arg 1% subtitle [""Want to join? Do "",{color:dark_aqua,text:""/approve-me!""}]"
+            execute console command "/title %arg 1% title {color:red,text:""%arg 2%""}"
+        else if arg 1 has permission "gamealition.group.newbie":
+            set {_remaining} to difference between {@max time newbie rank} and {approval.playtime.%arg 1%}
+            message "&2&lYou can't do much here yet, %arg 1%!" to arg 1
+            message "You still have &a%{_remaining}%&f of playtime left until you can change stuff outside of resource world! To go to resource world, do &3/spawn&f and look for the portal!" to arg 1
+            execute console command "/title %arg 1% times 10 60 40"
+            execute console command "/title %arg 1% subtitle [{color:green,text:""%{_remaining}% ""},""playtime remaining!""]"
+            execute console command "/title %arg 1% title {color:red,text:""%arg 2%""}"

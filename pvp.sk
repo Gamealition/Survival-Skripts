@@ -17,7 +17,7 @@ command /clearpvp <player>:
 
 command /pvp:
     description: Toggles whether you are in PVP mode or not
-    permission: gamealition.player
+    permission: gamealition.group.player
     executable by: players
     trigger:
         # First time message
@@ -42,7 +42,7 @@ command /pvp:
 
 command /lasertag:
     description: Toggles whether you are in laser tag mode or not
-    permission: gamealition.player
+    permission: gamealition.group.player
     executable by: players
     trigger:
         # First time message

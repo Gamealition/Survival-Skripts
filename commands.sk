@@ -162,7 +162,7 @@ command /age <offline player>:
     description: Gets the server age of a player
     executable by: players and console
     trigger:
-        message "&7*** &f%arg 1% has been on the server..."
+        message "&7*** &2%arg 1%&f has been on the server..."
         message "&7• Since &f%{age.%arg 1%}%"
         message "&7• UUID &f%{age.%uuid of arg 1%}%"
         message "&7• For &f%difference between {age.%arg 1%} and now%"
@@ -193,7 +193,7 @@ command /reload:
 command /arm-armorstands:
     description: Replaces all armor stands in inventory with ones that have arms
     executable by: players
-    permission: gamealition.player
+    permission: gamealition.approved
     trigger:
         set {_stands} to number of armor stand in the player's inventory
 
