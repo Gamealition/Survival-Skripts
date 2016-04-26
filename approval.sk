@@ -37,7 +37,7 @@ on player join:
     player has permission "gamealition.group.default" or "gamealition.group.newbie"
     message "*** Sending approval messages to %player%" to console
     set {approval.pickup.%player%} to now
-    wait 10 seconds
+    wait 5 seconds
 
     if player has permission "gamealition.group.default":
         set {approval.playtime.%player%} to 0 minutes
