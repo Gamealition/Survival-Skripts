@@ -63,7 +63,7 @@ command /quarry <offline player> [<number=0>] <text>:
         set {_target}'s money to {_offsetMoney}
         
         # Explain the basics to the target...
-        broadcast "&l*** &f%{_target}% &7has been &c&lcommitted to DERPI &7because: &f%{_reason}%"
+        console command "/broadcast-irc &l*** &f%{_target}% &7has been &c&lcommitted to DERPI &7because: &f%{_reason}%"
         
         send "&4&l*** DEMEANOR ERADICATION & REHAB ***" to {_target}
         send "&4&l***     PENITENTIARY INSTITUTE     ***" to {_target}

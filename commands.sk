@@ -61,6 +61,14 @@ command /modreq <text>:
     trigger:
         make player execute command "/ticket new %arg 1%"
 
+command /broadcast-irc <text>:
+    description: Broadcasts a message to both in-game and IRC (needed due to Skript/PurpleIRC bugs)
+    executable by: players and console
+    permission: gamealition.moderator
+    trigger:
+        broadcast colored arg 1
+        console command "/irc send %colored arg 1%"
+
 command /fixtoggle:
     aliases: /fixtoggles, /fixsign, /fixsigns, /fixtogglesigns, /reloadsignshop
     trigger:

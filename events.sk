@@ -95,8 +95,9 @@ every minute:
     else if "%now%" contains "07:59":
         broadcast "&l*** &7Server will perform its daily restart in &fone minute&7"
     else if "%now%" contains "08:00":
+        console command "/save-all"
         kick all players because "Daily restart; come back in 20 seconds"
-        execute console command "/stop"
+        console command "/stop"
 
 # Keeps a database of player UUIDs and ages
 on login:

@@ -55,16 +55,15 @@ on player join:
     else if {derpi.queuerelease.%player%} exists:
         execute console command "/unquarry %player%"
         delete {derpi.queuerelease.%player%}
-    
-on player join:
-    {derpi.%player's uuid%.quarried} is set
-    broadcast "&l*** &f%player% &7is in the &c&lDERPI&7! Their balance is: &f%player's money%"
-    message "You are in the &lDemeanor Eradication and Rehabilitation Penitentiary Institute &r(DERPI)"
-    message "&7Beware the inmates and use &2/shack &7if you are stuck."
+    else if {derpi.%player's uuid%.quarried} is set:
+        wait for 2 seconds
+        console command "/broadcast-irc &l*** &f%player% &7is in the &c&lDERPI&7! Their balance is: &f%player's money%"
+        message "You are in the &lDemeanor Eradication and Rehabilitation Penitentiary Institute &r(DERPI)"
+        message "&7Beware the inmates and use &2/shack &7if you are stuck."
 
-    # Extra layer of security; ensure player is firmly in the DERPI
-    execute console command "/perms player %player% setgroup inmate"
-    execute console command "/mv tp %player% world_derpi"
+        # Extra layer of security; ensure player is firmly in the DERPI
+        execute console command "/perms player %player% setgroup inmate"
+        execute console command "/mv tp %player% world_derpi"
 
 # Blocks sending of money to quarried players
 on command:
@@ -99,3 +98,9 @@ on damage of player:
     {derpi.%victim's uuid%.quarried} is set
     message "&c*** You cannot attack DERPI inmates as a spectator" to attacker
     cancel the event
+
+# Prevent death messages
+on death:
+    {derpi.%player's uuid%.quarried} is set
+    message "*** DERPI death: %death message%" to console
+    set death message to ""

@@ -16,5 +16,4 @@ on damage of a zombie pigman:
         exit trigger
 
     set {pigmen.%attacker's world%} to now
-    broadcast "*** &c%attacker%&r has angered pigmen in &c%attacker's world%&r!"
-    execute console command "/irc send *** %attacker% has angered pigmen in %attacker's world%!"
+    console command "/broadcast-irc *** &c%attacker%&r has angered pigmen in &c%attacker's world%&r!"
