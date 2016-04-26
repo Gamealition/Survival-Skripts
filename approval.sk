@@ -2,7 +2,6 @@
 # ### Licensed under MIT, 2015
 
 # ### Global variables
-# approval.await.%player% - boolean; if a player is awaiting manual approval
 # approval.wrong.%player% - number; how many wrong answers by player
 # approval.pickup.%player% - date; last time player attempted to pick item up
 # approval.playtime.%player% - timespan; amount of playtime by player
@@ -156,6 +155,7 @@ command /approve-info <offline player>:
     executable by: players and console
     trigger:
         player command "/age %arg 1%"
+        player command "/isbanned %arg 1%"
         message "&7*** &2%arg 1%&f's approval info..."
         message "&7• Playtime: &f%{approval.playtime.%arg 1%}%"
         if arg 1 has permission "gamealition.group.default":
@@ -173,7 +173,7 @@ command /approve-info <offline player>:
 
 command /approve-newbie <player>:
     description: Adds given player to the "newbie" perm group (first tier)
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players and console
     trigger:
         if arg 1 has the permission "derpi.inmate":
@@ -188,7 +188,10 @@ command /approve-newbie <player>:
             message "&c*** %arg 1% is already approved at untrusted tier; use /unapprove instead"
             exit trigger
 
-        delete {approval.await.%arg 1%}
+        if arg 1 has the permission "gamealition.group.player":
+            message "&c*** %arg 1% is already approved at player tier; use /unapprove instead"
+            exit trigger
+
         delete {approval.wrong.%arg 1%}
         console command "/broadcast-irc *** &f%arg 1% &7has been &aapproved&7 for resource world play!"
         console command "/perms player %arg 1% setgroup newbie"
@@ -198,7 +201,7 @@ command /approve-newbie <player>:
 
 command /approve-untrusted <player>:
     description: Adds given player to the "untrusted" perm group (second tier)
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players and console
     trigger:
         if arg 1 has the permission "derpi.inmate":
@@ -209,7 +212,10 @@ command /approve-untrusted <player>:
             message "&c*** %arg 1% is already approved at untrusted tier"
             exit trigger
 
-        delete {approval.await.%arg 1%}
+        if arg 1 has the permission "gamealition.group.player":
+            message "&c*** %arg 1% is already approved at player tier; use /unapprove instead"
+            exit trigger
+
         delete {approval.wrong.%arg 1%}
         console command "/broadcast-irc *** &f%arg 1% &7has been &aapproved&7 for full server play"
         console command "/perms player %arg 1% setgroup untrusted"
@@ -218,7 +224,7 @@ command /approve-untrusted <player>:
 
 command /approve <offline player>:
     description: Adds given player to the "player" perm group (final tier)
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players and console
     trigger:
         if arg 1 has the permission "derpi.inmate":
@@ -229,7 +235,6 @@ command /approve <offline player>:
             message "&c*** %arg 1% is already fully approved"
             exit trigger
 
-        delete {approval.await.%arg 1%}
         delete {approval.wrong.%arg 1%}
         console command "/broadcast-irc *** &f%arg 1% &7has been &aapproved&7 for full & trusted server play"
         console command "/perms player %arg 1% setgroup player"
@@ -237,14 +242,13 @@ command /approve <offline player>:
         
 command /unapprove <offline player>:
     description: Removes given player from the "player" perm group
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players and console
     trigger:
         if arg 1 has the permission "derpi.inmate":
             message "&c*** %arg 1% is in the DERPI; unapprove when released"
             exit trigger
 
-        delete {approval.await.%arg 1%}
         delete {approval.wrong.%arg 1%}
         set {approval.playtime.%arg 1%} to 0 seconds
         console command "/broadcast-irc *** &f%arg 1% &7has been &cunapproved&7 for server play"
@@ -255,32 +259,10 @@ command /approve-me:
     permission: gamealition.group.default
     executable by: players
     trigger:
-        if {approval.await.%player%} is set:
-            message "&f*** &3You've already gone through approval! &fPlease wait for staff to approve you"
-            exit trigger
-
         execute console command "/mvtp %player% a:newbie_part1"
         # Wait for region messages
         wait 1 second
         message "&f*** Please follow the lights and read the signs carefully"
-
-command /approve-manual <player>:
-    description: Notify staff that a player is awaiting approval
-    permission: gamealition.admin
-    executable by: console
-    trigger:
-        arg 1 has permission "gamealition.group.default"
-
-        if {approval.await.%arg 1%} is set:
-            message "&f*** &3You've already gone through approval! &fPlease wait for staff to approve you" to arg 1
-            exit trigger
-        else:
-            set {approval.await.%arg 1%} to true
-            delete {approval.wrong.%arg 1%}
-            message "&f*** &3Thanks for reading our rules! &fYou will need to wait for staff to approve you manually. Feel free to explore in the meantime!" to arg 1
-            execute console command "/perms player %arg 1% set ticketmaster.user.basic"
-            execute arg 1 command "/modreq Player %arg 1% has gone through newbie island and would like approval. Use `/approve %arg 1%` (IRC whilst opped: `.approve %arg 1%`) to approve at your own discretion"
-            execute console command "/perms player %arg 1% unset ticketmaster.user.basic"
 
 # Approval skript functions
 

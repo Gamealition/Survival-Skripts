@@ -21,7 +21,7 @@ on craft:
     cancel the event
     execute console command "/flatland-error %player% Can't craft that!"
     
-on right click on a chest or a hopper or a trapped chest or a trapdoor:
+on right click on a chest or a hopper or a trapped chest or a trapdoor or an anvil or a furnace:
     player is in "world_creative" or "world_chaos"
     player doesn't have permission "gamealition.flatland"
     cancel the event
@@ -49,7 +49,7 @@ on bucket fill:
 
 command /approve-flatland <offline player>:
     description: Allows given player to build in flatland worlds
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players and console
     trigger:
         if arg 1 has permission "gamealition.flatland":
@@ -64,7 +64,7 @@ command /approve-flatland <offline player>:
         
 command /unapprove-flatland <offline player>:
     description: Denies given player to build in flatland worlds
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players and console
     trigger:
         execute console command "/perms player %arg 1% removegroup flatland"
@@ -77,9 +77,10 @@ command /flatland-error <player> <text=Can't do that!>:
     description: Gives error to players who try to modify flatland worlds without rights
     executable by: console
     trigger:
+        message "*** Sending flatland approval message to %arg 1%" to console
         message "&2&lCreative is restricted, %arg 1%!" to arg 1
         message "&fIf you want build rights in flatland, do:" to arg 1
         message "  &3/modreq I'd like flatland rights; please /approve-flatland me" to arg 1
-        execute console command "/title %arg 1% times 10 60 40"
-        execute console command "/title %arg 1% subtitle [""Modifying creative worlds is restricted!""]"
-        execute console command "/title %arg 1% title {color:red,text:""%arg 2%""}"
+        console command "/title %arg 1% times 10 60 40"
+        console command "/title %arg 1% subtitle [""Modifying creative worlds is restricted!""]"
+        console command "/title %arg 1% title {color:red,text:""%arg 2%""}"

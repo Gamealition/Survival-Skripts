@@ -6,9 +6,11 @@
         
 on rightclick on a sign:
     world of the clicked block is "world_derpi"
+    {derpi.%player's uuid%.quarried} is set
         
     if line 2 of the clicked block contains "[Freedom]":
         if player's money >= 270:
+            remove 270 from {_target}'s money 
             execute console command "/unquarry %player%"
         else:
             message "&c&l*** &cYou cannot afford freedom! You only have &f%player's money%"
@@ -84,7 +86,7 @@ on command:
         message "&c*** You cannot send money to quarried players"
         message "Blocked a payment of %{_amount}% from %command sender% to quarried player %{_target}%" to console
 
-# Prevent PVP
+# Prevent PVP for spectators
 on damage of player:
     attacker is player
     {derpi.%attacker's uuid%.quarried} is set

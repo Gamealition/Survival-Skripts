@@ -92,7 +92,7 @@ command /unquarry <offline player>:
         if {_target} is offline:
             if {derpi.queuequarry.%{_target}%} exists:
                 delete {derpi.queuequarry.%{_target}%}
-                message "&7*** There was a quarry commit queued for this name. They will no longer be quarried on next join."
+                message "&7*** There was a quarry queued for this name. They will no longer be quarried on next join."
             else:
                 set {derpi.queuerelease.%{_target}%} to true
                 message "&7*** That player is offline. They will be released when they next join the server."
@@ -109,7 +109,6 @@ command /unquarry <offline player>:
         delete {derpi.%{_targetUUID}%.quarried.by}
         delete {derpi.%{_targetUUID}%.quarried.because}
                     
-        remove 270 from {_target}'s money 
         execute console command "/perms player %{_target}% setgroup default"
         execute console command "/mvtp %{_target}% a:newbie_part1"
         

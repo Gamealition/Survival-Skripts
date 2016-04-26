@@ -18,7 +18,7 @@ options:
 # ### Commands
 command /reset-fools2016 <player>:
     description: Reset April Fools 2016 for a player (debugging purposes)
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players and console
     trigger:
         delete {fools2016.join.%arg 1%}

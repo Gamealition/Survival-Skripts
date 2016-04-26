@@ -1,16 +1,8 @@
 # ### Censor system by Roy Curtis
 # ### Licensed under MIT, 2015
 
-# ### References
-# age.%player% - date; from events.sk, server age of a player
-
 # ### Global variables
 # lastmessage.%player% - date; records when a new player's last message was
-
-# ### Configuration
-options:
-  censor message : [AUTOMATIC] Cursing; zero tolerance for players less than 24 hours old
-  spam message   : [AUTOMATIC] Chatting too fast; zero tolerance for players less than 24 hours old
 
 on chat:
     # Conditions
@@ -22,32 +14,6 @@ on chat:
 
     # Code
     send "&c*** Are you sure you meant to say that?"
-    send "Blocked message '%message%' from %player%" to console
+    send "*** Blocked message '%message%' from %player%" to console
     set {lastmessage.%player%} to message
     cancel the event
-
-# Censor chat from new players with permanent ban
-# on chat:
-#     # Conditions
-#     message contains "fuck" or "shit" or "bitch" or "nigga" or "nigger" or "cunt"
-#     difference between {age.%player%} and now is less than 24 hours
-# 
-#     # Code
-#     execute console command "/ban %player% {@censor message}"
-#     send "Banned newbie %player% (%ip of player%) for saying '%message%'" to console
-#     cancel the event
-
-# Kick new players who send more than one message per second
-# on chat:
-#     # Conditions
-#     difference between {age.%player%} and now is less than 24 hours
-# 
-#     # Code
-#     if {lastmessage.%player%} is set:
-#         difference between {lastmessage.%player%} and now is less than 1 second
-#         kick player because "{@spam message}"
-#         send "Kicked newbie %player% (%ip of player%) for spamming chat" to console
-#         cancel the event
-#         exit trigger
-# 
-#     set {lastmessage.%player%} to now

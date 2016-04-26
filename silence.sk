@@ -8,7 +8,7 @@
 
 command /silence:
     description: Toggles public chat
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players and console
     trigger:
         if {silence} is not set:
@@ -29,7 +29,7 @@ command /silence:
 on chat:
     # Conditions
     {silence} is set
-    player doesn't have permission "gamealition.moderator"
+    player doesn't have permission "gamealition.mod-high"
     
     # Logic
     send "&7*** Only staff may speak in silence mode" to player
@@ -39,7 +39,7 @@ on command:
     # Conditions
     command is "me" or "minecraft:me" or "essentials:me"
     {silence} is set
-    player doesn't have permission "gamealition.moderator"
+    player doesn't have permission "gamealition.mod-high"
 
     # Logic
     send "&7*** Only staff may speak in silence mode" to player

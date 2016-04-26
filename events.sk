@@ -23,8 +23,8 @@ on damage of horse or donkey or mule:
     cancel the event
 
 # Wolf monitoring
-on damage of wolf:
-    send "WOOF WOOF, %damage cause%, %location of victim%, %attacker%. Nearby players:" to console
+on damage of tamed wolf or tamed cat:
+    send "*** Pet damage: %damage cause%, %location of victim%, %attacker%. Nearby players:" to console
     loop all players within 25 meters of location of victim:
         send "--> %loop-player%" to console
 
@@ -41,11 +41,6 @@ on rightclick on a mob spawner:
     message "&7*** Adjustment of spawners is disabled on this server"
     cancel the event
 
-# Block TNT crafting
-on crafting of tnt:
-    message "&7*** Crafting of TNT is disabled on this server"
-    cancel the event
-
 # Track creative items
 on drop:
     player's gamemode is creative
@@ -59,20 +54,20 @@ on drop:
 # Multiverse's spawn points are buggy, so we rewire them to anchors
 on command:
     command is "mvss" or "mvsetspawn"
-    make player execute command "/mv anchor %player's world%"
-    make player execute command "/setworldspawn"
+    player command "/mv anchor %player's world%"
+    player command "/setworldspawn"
 
 on command:
     command is "mv" or "mvm"
     arguments is "set spawn" or "setspawn"
-    make player execute command "/mv anchor %player's world%"
-    make player execute command "/setworldspawn"
+    player command "/mv anchor %player's world%"
+    player command "/setworldspawn"
 
 on command:
     command is "mvs" or "mvspawn"
     player has permission "multiverse.core.spawn.self"
     message "&7*** Teleporting you to spawn point of &f%player's world%"
-    execute console command "/mvtp %player% a:%player's world%"
+    console command "/mvtp %player% a:%player's world%"
     cancel the event
 
 on command "op":
@@ -89,7 +84,7 @@ on command "op":
 every minute:
     if "%now%" contains "06:00":
         # Some of PRISM's purge rules seem to be broken, so we manually purge noisy events here
-        execute console command "/pr delete a:kill p:fire_tick e:guardian e:skeleton e:zombie"
+        console command "/pr delete a:kill p:fire_tick e:guardian e:skeleton e:zombie"
     else if "%now%" contains "07:55":
         broadcast "&l*** &7Server will perform its daily restart in &ffive minutes&7"
     else if "%now%" contains "07:59":
@@ -110,5 +105,4 @@ on login:
         set {age.%uuid of player%} to now
 
         wait 3 seconds
-        broadcast "*** Welcome to &B&LGamealition&f, new player &b%player%&f!"
-        execute console command "/irc send *** Welcome to Gamealition, new player %player%!"
+        console command "/broadcast-irc *** Welcome to &B&LGamealition&f, new player &b%player%&f!"

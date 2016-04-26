@@ -1,3 +1,6 @@
+# ### General commands & aliases by Roy Curtis
+# ### Licensed under MIT, 2014
+
 #              uuuuuuuuuuuuuuuuuuuu               
 #            u" uuuuuuuuuuuuuuuuuu "u            
 #          u" u$$$$$$$$$$$$$$$$$$$$u "u          
@@ -20,8 +23,6 @@
 #          "u "$$$$$$$$$$$$$$$$$$$$" u"          
 #            "u """""""""""""""""" u"            
 #              """"""""""""""""""""               
-
-# Commands and aliases
 
 command /spawn:
     description: Takes you to the server's spawn
@@ -64,16 +65,17 @@ command /modreq <text>:
 command /broadcast-irc <text>:
     description: Broadcasts a message to both in-game and IRC (needed due to Skript/PurpleIRC bugs)
     executable by: players and console
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     trigger:
         broadcast colored arg 1
         console command "/irc send %colored arg 1%"
 
 command /fixtoggle:
     aliases: /fixtoggles, /fixsign, /fixsigns, /fixtogglesigns, /reloadsignshop
+    permission: gamealition.approved
     trigger:
         {fixtoggle.lastused} was less than a minute ago:
-            message "&7*** This command has a minute cooldown. Try again later."
+            message "&7*** This command has a minute cooldown. Try again later"
             stop
         set {fixtoggle.lastused} to now
         message "&7*** &fSignShop has been reloaded"
@@ -112,7 +114,7 @@ command /dynmap-here:
         
 command /ride <player> <player>:
     description: Allows the riding of a player
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players
     trigger:
         if arg 1 is the player:
@@ -124,7 +126,7 @@ command /ride <player> <player>:
 
 command /item-rename <text>:
     description: Renames held item to the given text
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players
     trigger:
         player is holding anything
@@ -133,7 +135,7 @@ command /item-rename <text>:
 
 command /item-lore <text>:
     description: Sets lore tagline of held item
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players
     trigger:
         player is holding anything
@@ -142,7 +144,7 @@ command /item-lore <text>:
 
 # Courtesy of http://heads.freshcoal.com/maincollection.php
 command /tea <player=%player%>:
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players
     trigger:
         message "*** Tea, earl grey, hot" to arg 1
@@ -150,7 +152,7 @@ command /tea <player=%player%>:
 
 # Courtesy of http://heads.freshcoal.com/maincollection.php
 command /coffee <player=%player%>:
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players
     trigger:
         message "*** Coffee, black" to arg 1
@@ -171,13 +173,14 @@ command /age <offline player>:
     executable by: players and console
     trigger:
         message "&7*** &2%arg 1%&f has been on the server..."
+        message "&7• UUID &f%{uuid.%arg 1%}%"
         message "&7• Since &f%{age.%arg 1%}%"
-        message "&7• UUID &f%{age.%uuid of arg 1%}%"
+        message "&7• Since (UUID) &f%{age.%uuid of arg 1%}%"
         message "&7• For &f%difference between {age.%arg 1%} and now%"
 
 command /clearhistory <player>:
     description: Clears internal Skript history for player
-    permission: gamealition.moderator
+    permission: gamealition.mod-high
     executable by: players and console
     trigger:
         delete {age.%name of arg 1%}
