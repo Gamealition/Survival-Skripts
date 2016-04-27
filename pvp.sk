@@ -88,8 +88,8 @@ on damage of player:
             play ender signal on the victim
             message "*** You hit &a%victim%&f!" to attacker
             message "*** &c%attacker%&f hit you with &c%type of attacker's weapon%&f!" to victim
-            execute console command "/playsound mob.villager.hit %victim% ~ ~ ~ 1 1 1"
-            execute console command "/playsound random.levelup %attacker% ~ ~ ~ 1 1 1"
+            execute console command "/playsound entity.villager.hurt neutral %victim% ~ ~ ~ 1 1 1"
+            execute console command "/playsound entity.player.levelup neutral %attacker% ~ ~ ~ 1 1 1"
 
         cancel the event
         exit trigger

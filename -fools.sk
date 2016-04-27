@@ -47,7 +47,7 @@ on join:
     set the 2st line of {_gift}'s lore to "Give it to VanDerProtofsky for a free flight to anywhere you wish!"
     give {_gift} to player
     play wolf hearts on player
-    execute console command "/playsound random.levelup %player% ~ ~ ~ 1 1 1"
+    execute console command "/playsound entity.player.levelup neutral %player% ~ ~ ~ 1 1 1"
 
 on command "spawn" or "mvs":
     # Conditions

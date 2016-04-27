@@ -195,7 +195,7 @@ command /approve-newbie <player>:
         delete {approval.wrong.%arg 1%}
         console command "/broadcast-irc *** &f%arg 1% &7has been &aapproved&7 for resource world play!"
         console command "/perms player %arg 1% setgroup newbie"
-        console command "/playsound random.levelup %arg 1% ~ ~ ~ 1 1 1"
+        console command "/playsound entity.player.levelup neutral %arg 1% ~ ~ ~ 1 1 1"
         message "&a*** Thanks for reading our rules! &fFor your first" to arg 1
         message " &a{@max time newbie rank}&f of playtime, &ayou can only mine/build in resource world&f. Use the time to gather stuff in resource world for your survival adventure!" to arg 1
 
@@ -219,7 +219,7 @@ command /approve-untrusted <player>:
         delete {approval.wrong.%arg 1%}
         console command "/broadcast-irc *** &f%arg 1% &7has been &aapproved&7 for full server play"
         console command "/perms player %arg 1% setgroup untrusted"
-        console command "/playsound random.levelup %arg 1% ~ ~ ~ 1 1 1"
+        console command "/playsound entity.player.levelup neutral %arg 1% ~ ~ ~ 1 1 1"
         message "&a*** Since you have completed enough play time, &ayou are now a full player&f! You can now build anywhere in the Survival worlds. Be aware; until you have &a{@max time untrusted rank}&f of playtime, you will still be subject to NoCheatPlus checks" to arg 1
 
 command /approve <offline player>:
@@ -238,7 +238,7 @@ command /approve <offline player>:
         delete {approval.wrong.%arg 1%}
         console command "/broadcast-irc *** &f%arg 1% &7has been &aapproved&7 for full & trusted server play"
         console command "/perms player %arg 1% setgroup player"
-        console command "/playsound random.levelup %arg 1% ~ ~ ~ 1 1 1"
+        console command "/playsound entity.player.levelup neutral %arg 1% ~ ~ ~ 1 1 1"
         
 command /unapprove <offline player>:
     description: Removes given player from the "player" perm group

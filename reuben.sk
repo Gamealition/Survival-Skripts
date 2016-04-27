@@ -130,7 +130,7 @@ on damage of a pig:
         set {_msg} to random element of {reuben::attacked::*}
 
     show mobspawner flames on victim
-    execute console command "/playsound mob.zombiepig.zpighurt %attacker% ~ ~ ~ 1 1 1"
+    console command "/playsound entity.zombie_pig.hurt neutral %attacker% ~ ~ ~ 1 1 1"
     send "&5* Reuben %{_msg}%" to attacker
 
 on rightclick on a pig:
@@ -200,26 +200,26 @@ on rightclick on a pig:
     # Apply special effects
     if {_type} is "thunder":
         strike lightning effect at the pig
-        set {_sound} to "mob.zombiepig.zpighurt"
+        set {_sound} to "entity.zombie_pig.hurt"
         show hurt on pig
     if {_type} is "pork" or "meat" or "lead" or "saddle":
-        set {_sound} to "mob.zombiepig.zpighurt"
+        set {_sound} to "entity.zombie_pig.hurt"
         show mobspawner flames on pig
     if {_type} is "veggie" or "carrot":
         apply potion of regeneration to pig for 5 seconds
     if {_type} is "weapon":
         apply potion of nausea to pig for 5 seconds
     if {_type} is "lighter":
-        set {_sound} to "mob.zombiepig.zpighurt"
+        set {_sound} to "entity.zombie_pig.hurt"
         ignite pig for 5 seconds
     if {_type} is "explode":
-        set {_sound} to "mob.zombiepig.zpighurt"
+        set {_sound} to "entity.zombie_pig.hurt"
         show mobspawner flames on pig
         create a fake explosion at pig
         push the pig upwards at speed 1
 
     push the pig upwards at speed 0.3
-    execute console command "/playsound %{_sound}% %player% ~ ~ ~ 1 1 1"
+    console command "/playsound %{_sound}% neutral %player% ~ ~ ~ 1 1 1"
 
     # Create and send message
     set {_msg} to random element of {reuben::%{_type}%::*}
