@@ -141,7 +141,7 @@ on rightclick on a pig:
     # State
     set {reuben.last} to now
     set {_type}  to "normal"
-    set {_sound} to "mob.pig.say"
+    set {_sound} to "entity.pig.ambient"
     set {_hold}  to player's held item
 
     # Decide action based on player or world conditions
