@@ -83,4 +83,4 @@ command /flatland-error <player> <text=Can't do that!>:
         message "  &3/modreq I'd like flatland rights; please /approve-flatland me" to arg 1
         console command "/title %arg 1% times 10 60 40"
         console command "/title %arg 1% subtitle [""Modifying creative worlds is restricted!""]"
-        console command "/title %arg 1% title {color:red,text:""%arg 2%""}"
+        console command "/title %arg 1% title {""color"":""red"",""text"":""%arg 2%""}"

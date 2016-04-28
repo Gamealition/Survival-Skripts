@@ -26,5 +26,5 @@ every 2 seconds:
         {pinger.%loop-player%} is set
         execute console command "/playsound entity.experience_orb.pickup neutral %loop-player% ~ ~ ~ 0.05 1 0.05"
         execute console command "/title %loop-player% times 0 0 30"
-        execute console command "/title %loop-player% subtitle {text:""Ping!"",color:red}"
+        execute console command "/title %loop-player% subtitle {""text"":""Ping!"",""color"":""red""}"
         execute console command "/title %loop-player% title ''"

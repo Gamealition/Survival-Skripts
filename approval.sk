@@ -276,12 +276,12 @@ command /approve-error <player> <text=Can't do that!>:
             message "&2&lYou can look but not touch, %arg 1%!" to arg 1
             message "&fDo the command &3/approve-me &fto begin the approval process!" to arg 1
             execute console command "/title %arg 1% times 10 60 40"
-            execute console command "/title %arg 1% subtitle [""Want to join? Do "",{color:dark_aqua,text:""/approve-me!""}]"
-            execute console command "/title %arg 1% title {color:red,text:""%arg 2%""}"
+            execute console command "/title %arg 1% subtitle [""Want to join? Do "",{""color"":""dark_aqua"",""text"":""/approve-me!""}]"
+            execute console command "/title %arg 1% title {""color"":""red"",""text"":""%arg 2%""}"
         else if arg 1 has permission "gamealition.group.newbie":
             set {_remaining} to difference between {@max time newbie rank} and {approval.playtime.%arg 1%}
             message "&2&lYou can't do much here yet, %arg 1%!" to arg 1
             message "You still have &a%{_remaining}%&f of playtime left until you can change stuff outside of resource world! To go to resource world, do &3/spawn&f and look for the portal!" to arg 1
             execute console command "/title %arg 1% times 10 60 40"
-            execute console command "/title %arg 1% subtitle [{color:green,text:""%{_remaining}% ""},""playtime remaining!""]"
-            execute console command "/title %arg 1% title {color:red,text:""%arg 2%""}"
+            execute console command "/title %arg 1% subtitle [{""color"":""green"",""text"":""%{_remaining}% ""},""playtime remaining!""]"
+            execute console command "/title %arg 1% title {""color"":""red"",""text"":""%arg 2%""}"

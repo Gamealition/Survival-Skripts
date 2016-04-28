@@ -118,11 +118,16 @@ on unload:
     clear {reuben.last}
 
 on damage of a pig:
+    # Conditions
     victim's name is "Reuben"
     cancel the event
-
+    {reuben.last} was more than 1 second ago
     attacker is a player
 
+    # State
+    set {reuben.last} to now
+
+    # Logic
     if projectile exists:
         set {_msg} to random element of {reuben::attacked-proj::*}
         delete the projectile
@@ -136,6 +141,7 @@ on damage of a pig:
 on rightclick on a pig:
     # Conditions
     pig's name is "Reuben"
+    cancel the event
     {reuben.last} was more than 1 second ago
 
     # State
@@ -159,10 +165,8 @@ on rightclick on a pig:
         set {_type} to "poison"
     if {_hold} is lead:
         set {_type} to "lead"
-        cancel the event
     if {_hold} is saddle:
         set {_type} to "saddle"
-        cancel the event
     if {_hold} is any porkchop:
         set {_type} to "pork"  
     if {_hold} is any beef or any chicken or any mutton or any rabbit:
@@ -194,6 +198,7 @@ on rightclick on a pig:
         set {_type} to "weapon"
     if {_hold} is flint'n'steel or blaze rod or blaze powder or lava bucket:
         set {_type} to "lighter"
+    # 1.9 BUG: Not triggering for firework
     if {_hold} is gunpowder or TNT or firework:
         set {_type} to "explode"
 

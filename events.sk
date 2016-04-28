@@ -7,16 +7,6 @@ every 8 seconds:
     time in "world" is between 06:30 and 17:30
     remove 4 seconds from "world"'s time
 
-# Bed signs
-on rightclick on a sign:
-    line 1 contains "[" and "Bed" and "]"
-    player's world is "world_the_end" or "resource_the_end"
-
-    if bed of player exists:
-        teleport player to player's bed
-    else:
-        execute console command "/mv tp %player% a:world"
-
 # Horse immunity
 on damage of horse or donkey or mule:
     damage cause is suffocation
