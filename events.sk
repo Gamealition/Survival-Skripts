@@ -47,6 +47,19 @@ on drop:
     set the 1st line of the item's lore to "&4&lSPAWNED IN"
     set the 2nd line of the item's lore to "&4&lCREATIVE MODE"
 
+# /lock tutorial
+on place of chest or trapped chest:
+    {lwctutorial.%player%} is not set
+    set {lwctutorial.%player%} to true
+    console command "/playsound random.levelup %player% ~ ~ ~ 1 1 1"
+    message "*** Just so you know, you can lock that chest! That will protect its contents from theft. To do so, type. . ."
+    message "* &3/lock&f and punch a chest to lock it"
+    message "* &3/unlock&f to remove the lock"
+    message "* &3/cmodify name&f to allow someone else to access it"
+    message "* &3/chopper on&f to allow hoppers to work with the chest"
+    message "* &3/lwc mode persist&f and then &3/lock&f to lock many chests without needing to repeat the command"
+    message "&7*** You will only see this tutorial once"
+
 # ########################################################################################
 # # COMMAND OVERRIDES ####################################################################
 # ########################################################################################
