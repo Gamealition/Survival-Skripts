@@ -41,7 +41,7 @@ on drop:
 on place of chest or trapped chest:
     {lwctutorial.%player%} is not set
     set {lwctutorial.%player%} to true
-    console command "/playsound random.levelup %player% ~ ~ ~ 1 1 1"
+    console command "/playsound entity.player.levelup neutral %player% ~ ~ ~ 1 1 1"
     message "*** Just so you know, you can lock that chest! That will protect its contents from theft. To do so, type. . ."
     message "* &3/lock&f and punch a chest to lock it"
     message "* &3/unlock&f to remove the lock"
