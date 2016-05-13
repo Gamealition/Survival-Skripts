@@ -68,7 +68,7 @@ command /broadcast-irc <text>:
     permission: gamealition.mod-high
     trigger:
         broadcast colored arg 1
-        console command "/irc send %colored arg 1%"
+        console command "/irc send GamealitionMC ##Gamealition %colored arg 1%"
 
 command /fixtoggle:
     aliases: /fixtoggles, /fixsign, /fixsigns, /fixtogglesigns, /reloadsignshop

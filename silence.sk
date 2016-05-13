@@ -15,14 +15,14 @@ command /silence:
             # We're going into silence mode
             set {silence} to true
             broadcast "*** &c%command sender%&r has silenced all chat"
-            execute console command "/irc send *** %command sender% has silenced all chat"
-            execute console command "/irc sendraw PRIVMSG ChanServ@Services.GameSurge.net :mode ##Gamealition +m"
+            execute console command "/irc send GamealitionMC ##Gamealition *** %command sender% has silenced all chat"
+            execute console command "/irc sendraw GamealitionMC PRIVMSG ChanServ@Services.GameSurge.net :mode ##Gamealition +m"
         else:
             # We're going out of silence mode
             delete {silence}
-            execute console command "/irc sendraw PRIVMSG ChanServ@Services.GameSurge.net :mode ##Gamealition -m"
+            execute console command "/irc sendraw GamealitionMC PRIVMSG ChanServ@Services.GameSurge.net :mode ##Gamealition -m"
             broadcast "*** &c%command sender%&r has un-silenced all chat"
-            execute console command "/irc send *** %command sender% has un-silenced all chat"
+            execute console command "/irc send GamealitionMC ##Gamealition *** %command sender% has un-silenced all chat"
 
 # ### Events
 
