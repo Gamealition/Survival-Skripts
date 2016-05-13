@@ -10,7 +10,7 @@ on rightclick on a sign:
         
     if line 2 of the clicked block contains "[Freedom]":
         if player's money >= 270:
-            remove 270 from {_target}'s money 
+            remove 270 from player's money 
             execute console command "/unquarry %player%"
         else:
             message "&c&l*** &cYou cannot afford freedom! You only have &f%player's money%"
@@ -52,8 +52,9 @@ on rightclick on a sign:
 on player join:
     wait for 2 seconds
     if {derpi.queuequarry.%player%} exists:
-        execute console command "/quarry %player% %{derpi.queuequarry.%player%}%"
+        execute console command "/quarry %player% %{derpi.queuequarry.%player%.offset}% %{derpi.queuequarry.%player%}%"
         delete {derpi.queuequarry.%player%}
+        delete {derpi.queuequarry.%player%.offset}
     else if {derpi.queuerelease.%player%} exists:
         execute console command "/unquarry %player%"
         delete {derpi.queuerelease.%player%}

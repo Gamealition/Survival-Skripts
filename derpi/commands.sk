@@ -20,18 +20,13 @@ command /quarry <offline player> [<number=0>] <text>:
     permission: derpi.moderator
     trigger:
         set {_target} to arg 1
-        set {_targetUUID} to uuid of arg 1
+        set {_targetUUID} to {uuid.%arg 1%}
         set {_offsetMoney} to arg 2
         set {_reason} to arg 3
 
         # Force negative offset
         if {_offsetMoney} is more than 0:
             message "&c*** Please specify a negative amount of money to set or leave it at 0"
-            exit trigger
-        
-        if {_target} is offline:
-            set {derpi.queuequarry.%{_target}%} to {_reason}
-            message "&7*** That player is offline. They will be quarried when they next join the server."
             exit trigger
         
         if {derpi.%{_targetUUID}%.quarried} is set:
@@ -41,6 +36,15 @@ command /quarry <offline player> [<number=0>] <text>:
             else:
                 message "&c*** That player has already been quarried"
                 make the player execute command "/quarryinfo %{_target}%"
+            exit trigger
+
+        if {_target} is offline:
+            if {derpi.queuequarry.%{_target}%} is set:
+                message "&c*** That player is already queued for quarry"
+            else:
+                set {derpi.queuequarry.%{_target}%} to {_reason}
+                set {derpi.queuequarry.%{_target}%.offset} to {_offsetMoney}
+                message "&7*** That player is offline. They will be quarried when they next join the server."
             exit trigger
 
         message "*** Quarrying %{_target}%..."
@@ -87,21 +91,29 @@ command /unquarry <offline player>:
     permission: derpi.moderator
     trigger:
         set {_target} to arg 1
-        set {_targetUUID} to uuid of arg 1
-        
+        set {_targetUUID} to {uuid.%arg 1%}
+
         if {_target} is offline:
-            if {derpi.queuequarry.%{_target}%} exists:
-                delete {derpi.queuequarry.%{_target}%}
-                message "&7*** There was a quarry queued for this name. They will no longer be quarried on next join."
+            {derpi.%{_targetUUID}%.quarried} is set
+
+            if {derpi.queuerelease.%{_target}%} exists:
+                delete {derpi.queuerelease.%{_target}%}
+                message "&7*** There was a release queued for this name. They will no longer be released on next join."
             else:
                 set {derpi.queuerelease.%{_target}%} to true
                 message "&7*** That player is offline. They will be released when they next join the server."
             exit trigger
-        
+
         if {derpi.%{_targetUUID}%.quarried} is not set:
-            message "&c*** That player is not quarried"
+            if {derpi.queuequarry.%{_target}%} exists:
+                {_target} is offline
+                delete {derpi.queuequarry.%{_target}%}
+                delete {derpi.queuequarry.%{_target}%.offset}
+                message "&7*** There was a quarry queued for this name. They will no longer be quarried on next join."
+            else:
+                message "&c*** That player is not quarried"
             exit trigger
-            
+
         add "↳ &aReleased &7by &f%command sender% &7on &f%now%" to {derpi.%{_target}%.log::*}
         message "*** Unquarrying %{_target}%..."
         
@@ -112,7 +124,7 @@ command /unquarry <offline player>:
         execute console command "/perms player %{_target}% setgroup default"
         execute console command "/mvtp %{_target}% a:newbie_part1"
         
-        broadcast "&l*** &f%{_target}% &7has been &2&lreleased from DERPI!"
+        console command "/broadcast-irc &l*** &f%{_target}% &7has been &2&lreleased from DERPI!"
         wait 1 second
         send "&c*** As part of your release, you must go through the approval process again and accept the rules." to {_target}
         
@@ -124,27 +136,19 @@ command /quarryinfo <offline player>:
     permission: derpi.moderator
     trigger:
         set {_target} to arg 1
-        set {_targetUUID} to uuid of arg 1
-
-        # Try to fetch UUID from global cache if target is offline
-        if {_targetUUID} is not set:
-            set {_targetUUID} to {uuid.%{_target}%}
+        set {_targetUUID} to {uuid.%{_target}%}
         
-        # Handle unresolvable offline targets
-        if {_targetUUID} is not set:
-            if {derpi.queuequarry.%{_target}%} exists:
-                message "&7*** That player is offline. However, they are queued for quarrying when they next join."
-            else if {derpi.queuerelease.%{_target}%} exists:
-                message "&7*** That player is offline. However, they are queued for release when they next join the server."
-            else:
-                message "&7*** That player has no DERPI record"
-            exit trigger
-            
-        if {derpi.%{_targetUUID}%.quarried} is set:
+        if {derpi.queuequarry.%{_target}%} exists:
+            message "&7*** DERPI report of: &f%{_target}%"
+            message "&7• queued for quarry because &f%{derpi.queuequarry.%{_target}%}%"
+            message "&7• with penalty &f%{derpi.queuequarry.%{_target}%.offset}%"
+        else if {derpi.%{_targetUUID}%.quarried} is set:
             message "&7*** DERPI report of: &f%{_target}%"
             message "&7• quarried by &f%{derpi.%{_targetUUID}%.quarried.by}%"
             message "&7• on &f%{derpi.%{_targetUUID}%.quarried}%"
             message "&7• because &f%{derpi.%{_targetUUID}%.quarried.because}%"
+            if {derpi.queuerelease.%{_target}%} exists:
+                message "&7• queued for release when they next join the server"
         else:
             message "&7*** That player is not quarried"
             
