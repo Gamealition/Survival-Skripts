@@ -11,9 +11,9 @@ command /clearpvp <player>:
     description: Clear PVP & lasertag data for player
     permission: gamealition.admin
     trigger:
-        delete {pvp.%uuid of player%.enabled}
-        delete {laser.%uuid of player%.enabled}
-        message "&7*** Cleared PVP & laser tag state for %player%"
+        delete {pvp.%uuid of arg 1%.enabled}
+        delete {laser.%uuid of arg 1%.enabled}
+        message "&7*** Cleared PVP & laser tag state for %arg 1%"
 
 command /pvp:
     description: Toggles whether you are in PVP mode or not
