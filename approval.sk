@@ -104,15 +104,15 @@ on right click on a chest or a hopper or a trapped chest or a trapdoor or a furn
     execute console command "/approve-error %player% Can't open that!"
 
 on vehicle destroy:
-    player has permission "gamealition.group.default" or "gamealition.group.newbie"
+    attacker has permission "gamealition.group.default" or "gamealition.group.newbie"
     
     # For newbie rank, only cancel if outside resource world
-    if player has permission "gamealition.group.newbie":
-        player's world is "resource" or "resource_nether" or "resource_the_end"
+    if attacker has permission "gamealition.group.newbie":
+        attacker's world is "resource" or "resource_nether" or "resource_the_end"
         exit trigger
 
     cancel the event
-    execute console command "/approve-error %player% Can't destroy that!"
+    execute console command "/approve-error %attacker% Can't destroy that!"
 
 on damage:
     attacker is a player

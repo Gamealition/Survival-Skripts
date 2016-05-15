@@ -199,7 +199,7 @@ on rightclick on a pig:
     if {_hold} is flint'n'steel or blaze rod or blaze powder or lava bucket:
         set {_type} to "lighter"
     # 1.9 BUG: Not triggering for firework
-    if {_hold} is gunpowder or TNT or firework:
+    if {_hold} is gunpowder or TNT or firework rocket:
         set {_type} to "explode"
 
     # Apply special effects
