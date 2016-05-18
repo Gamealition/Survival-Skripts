@@ -224,6 +224,6 @@ command /login <text>:
         set {_password} to arg 1
 
         if {_password} is player's name or "password" or "passwort" or "password1" or "passwort1" or "password123" or "passwort123" or "pass" or "pw" or "pw1" or "pw123" or "hallo" or "Wurst" or "wurst" or "1234" or "12345" or "123456" or "1234567" or "12345678" or "123456789" or "login" or "register" or "test" or "sicher" or "me" or "penis" or "penis1" or "penis123" or "minecraft" or "minecraft1" or "minecraft123" or "mc" or "admin" or "server" or "yourmom" or "tester" or "account" or "creeper" or "gronkh" or "lol" or "auth" or "authme" or "qwerty" or "qwertz" or "ficken" or "ficken1" or "ficken123" or "fuck" or "fuckme" or "fuckyou":
-            execute console command "/ban %player% Your Wurst is showing. gamealition@gmail.com"
+            execute console command "/ban %player% [AUTO] Your Wurst is showing. gamealition@gmail.com"
         else:
             kick the player because "*taps with wand* you are now an OP, %player%"
