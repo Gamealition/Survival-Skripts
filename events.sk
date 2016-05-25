@@ -102,6 +102,9 @@ on login:
     set {uuid.%name of player%} to UUID of player
     set {uuid.%uuid of player%} to name of player
 
+    # 1.9 player collision fix
+    console command "/scoreboard teams join Players %player%"
+
     if player's ip contains "151.80.11." or "164.132.80." or "176.31.75." or "178.33.27." or "91.121.231.":
         wait 1 tick
         console command "/ban %player% [AUTO] McLeaks proxy user. gamealition@gmail.com"
