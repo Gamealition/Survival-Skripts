@@ -219,6 +219,21 @@ command /reload:
     trigger:
         message "&8&o*** The command you have dialed is not in service, please try again later"
 
+command /kit:
+    executable by: players
+    trigger:
+        message "*** &cThere are no kits on this server! &fHowever, you can visit the Toolshed for free player-donated tools and armor. Just go south of spawn, or ask!"
+
+command /rtp:
+    executable by: players
+    trigger:
+        message "*** &cSorry, we don't do random teleports! &fJust go any direction from spawn, or ask for help finding land!"
+
+command /wild:
+    executable by: players
+    trigger:
+        message "*** &2Looking for the wilderness? &fJust go any direction from spawn, or ask for help finding land!"
+
 command /arm-armorstands:
     description: Replaces all armor stands in inventory with ones that have arms
     executable by: players
