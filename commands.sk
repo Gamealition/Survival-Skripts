@@ -124,6 +124,24 @@ command /ride <player> <player>:
         
         make arg 1 ride arg 2
 
+command /item-destroy:
+    description: Destroy's currently held item
+    permission: gamealition.mod-high
+    executable by: players
+    trigger:
+        player is holding anything
+        message "*** Destroyed %player's held item%"
+        delete player's held item
+
+command /item-damage <number>:
+    description: Sets damage value of held item
+    permission: gamealition.mod-high
+    executable by: players
+    trigger:
+        player is holding anything
+        set data value of player's held item to arg 1
+        message "*** Set damage of %player's held item% to %arg 1%"
+
 command /item-rename <text>:
     description: Renames held item to the given text
     permission: gamealition.mod-high

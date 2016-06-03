@@ -169,7 +169,7 @@ on rightclick on a pig:
         set {_type} to "saddle"
     if {_hold} is any porkchop:
         set {_type} to "pork"  
-    if {_hold} is any beef or any chicken or any mutton or any rabbit:
+    if {_hold} is any beef or any chicken or any mutton or any rabbit meat:
         chance of 75%
         set {_type} to "meat"
     if {_hold} is any fish or any pufferfish or any clownfish or any salmon:

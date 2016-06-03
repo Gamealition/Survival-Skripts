@@ -13,9 +13,9 @@ options:
   max wrong answers    : 5
   wrong answer message : [AUTO] Too many wrong answers; gamealition@gmail.com
   # Newbie rank
-  max time newbie rank : 3 minutes
+  max time newbie rank : 90 minutes
   # Untrusted rank
-  max time untrusted rank : 6 minutes
+  max time untrusted rank : 24 hours
 
 # ### Events
 
