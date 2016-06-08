@@ -102,9 +102,6 @@ on login:
     set {uuid.%name of player%} to UUID of player
     set {uuid.%uuid of player%} to name of player
 
-    # 1.9 player collision fix
-    console command "/scoreboard teams join Players %player%"
-
     if player's ip contains "151.80.11." or "164.132.80." or "176.31.75." or "178.33.27." or "91.121.231.":
         wait 1 tick
         console command "/ban %player% [AUTO] McLeaks proxy user. gamealition@gmail.com"
@@ -112,8 +109,8 @@ on login:
 
     if {age.%uuid of player%} is not set:
         # First time players
+        wait 3 seconds
+        player is online
         set {age.%name of player%} to now
         set {age.%uuid of player%} to now
-
-        wait 3 seconds
         console command "/broadcast-irc *** Welcome to &B&LGamealition&f, new player &b%player%&f!"

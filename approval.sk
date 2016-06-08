@@ -35,7 +35,7 @@ every minute:
 
 on player join:
     player has permission "gamealition.group.default" or "gamealition.group.newbie"
-    message "*** Sending approval messages to %player%" to console
+    message "*** Sending approval join messages to %player%" to console
     set {approval.pickup.%player%} to now
     wait 5 seconds
 
@@ -136,7 +136,7 @@ command /ni-wrong <text> <player>:
         set {_dest} to arg 1
         set {_player} to arg 2
         execute console command "/mvtp %{_player}% %{_dest}%"
-        message "&c*** Wrong answer! Please try again" to {_player}
+        message "&c*** Wrong answer! Please read the signs carefully. You may be banned for too many wrong answers" to {_player}
 
         {_player} has permission "gamealition.group.default"
         add 1 to {approval.wrong.%{_player}%}
@@ -275,7 +275,7 @@ command /approve-error <player> <text=Can't do that!>:
     description: Gives newbie error to guests who try to do restricted things
     executable by: console
     trigger:
-        message "*** Sending approval message to %arg 1%" to console
+        message "*** Sending approval message to %arg 1%: ""%arg 2%""" to console
 
         if arg 1 has permission "gamealition.group.default":
             message "&2&lYou can look but not touch, %arg 1%!" to arg 1
