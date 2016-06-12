@@ -169,8 +169,6 @@ command /ni-correct <number> <text> <player>:
             set {approval.correct.%{_player}%} to 1
         else if {approval.correct.%{_player}%} is not set:
             set {approval.correct.%{_player}%} to -1
-
-        message "DEBUG CHECK: %{approval.correct.%{_player}%}%" to console
         
         if {approval.correct.%{_player}%} < {_sectionPrev}:
             delete {approval.correct.%{_player}%}
