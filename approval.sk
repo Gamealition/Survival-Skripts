@@ -94,8 +94,9 @@ on place:
     cancel the event
     execute console command "/approve-error %player% Can't place that!"
     
-on right click on a chest or a hopper or a trapped chest or a trapdoor or a furnace or an anvil:
+on right click on anything:
     player has permission "gamealition.group.default" or "gamealition.group.newbie"
+    clicked block is not a door or sign
     
     # For newbie rank, only cancel if outside resource world
     if player has permission "gamealition.group.newbie":
@@ -103,7 +104,7 @@ on right click on a chest or a hopper or a trapped chest or a trapdoor or a furn
         exit trigger
 
     cancel the event
-    execute console command "/approve-error %player% Can't open that!"
+    execute console command "/approve-error %player% Can't use that!"
 
 on vehicle destroy:
     attacker has permission "gamealition.group.default" or "gamealition.group.newbie"

@@ -21,11 +21,12 @@ on craft:
     cancel the event
     execute console command "/flatland-error %player% Can't craft that!"
     
-on right click on a chest or a hopper or a trapped chest or a trapdoor or an anvil or a furnace:
+on right click on anything:
     player is in "world_creative" or "world_chaos"
     player doesn't have permission "gamealition.flatland"
+    clicked block is not a door or sign
     cancel the event
-    execute console command "/flatland-error %player% Can't open that!"
+    execute console command "/flatland-error %player% Can't use that!"
 
 on vehicle destroy:
     attacker is in "world_creative" or "world_chaos"
