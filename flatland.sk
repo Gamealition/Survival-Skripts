@@ -56,6 +56,10 @@ command /approve-flatland <offline player>:
             message "&c*** %arg 1% is already approved for flatland worlds"
             exit trigger
 
+        if arg 1 doesn't have permission "gamealition.group.player":
+            message "&c*** %arg 1% must be fully approved for the server first (try /approve %arg 1%)"
+            exit trigger
+
         execute console command "/perms player %arg 1% addgroup flatland"
         message "*** %arg 1% can now build in flatland worlds"
 
@@ -67,6 +71,10 @@ command /unapprove-flatland <offline player>:
     permission: gamealition.mod-high
     executable by: players and console
     trigger:
+        if arg 1 doesn't have permission "gamealition.flatland":
+            message "&c*** %arg 1% isn't approved for flatland worlds"
+            exit trigger
+
         execute console command "/perms player %arg 1% removegroup flatland"
         message "*** %arg 1% can no longer build in flatland worlds"
 
