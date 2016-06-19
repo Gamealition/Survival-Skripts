@@ -55,8 +55,8 @@ on place of chest or trapped chest:
 on portal:
     player's world is "world_creative" or "world_chaos" or "world_derpi"
     cancel the event
-    console command "/mvtp %player% a:world_creative" 
-    
+    console command "/mvtp %player% a:%player's world%" 
+
 # ########################################################################################
 # # COMMAND OVERRIDES ####################################################################
 # ########################################################################################
