@@ -50,6 +50,13 @@ on place of chest or trapped chest:
     message "* &3/lwc mode persist&f and then &3/lock&f to lock many chests without needing to repeat the command"
     message "&7*** You will only see this tutorial once"
 
+# Fix for server crash when entering end portals in non-end worlds.
+# MV-NetherPortals is supposed to be handling this, but appears to have broken for 1.9
+on portal:
+    player's world is "world_creative" or "world_chaos" or "world_derpi"
+    cancel the event
+    console command "/mvtp %player% a:world_creative" 
+    
 # ########################################################################################
 # # COMMAND OVERRIDES ####################################################################
 # ########################################################################################

@@ -96,7 +96,7 @@ on place:
     
 on right click on anything:
     player has permission "gamealition.group.default" or "gamealition.group.newbie"
-    clicked block is not a door or sign
+    clicked block is not a door or sign or stone button or stone pressure plate
     
     # For newbie rank, only cancel if outside resource world
     if player has permission "gamealition.group.newbie":
