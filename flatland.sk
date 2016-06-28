@@ -4,44 +4,44 @@
 # ### Events
 
 on break:
-    player is in "world_creative" or "world_chaos"
+    player is in "world_creative" or "world_chaos" or "world_buildathon"
     player doesn't have permission "gamealition.flatland"
     cancel the event
     execute console command "/flatland-error %player% Can't break that!"
 
 on place:
-    player is in "world_creative" or "world_chaos"
+    player is in "world_creative" or "world_chaos" or "world_buildathon"
     player doesn't have permission "gamealition.flatland"
     cancel the event
     execute console command "/flatland-error %player% Can't place that!"
 
 on craft:
-    player is in "world_creative" or "world_chaos"
+    player is in "world_creative" or "world_chaos" or "world_buildathon"
     player doesn't have permission "gamealition.flatland"
     cancel the event
     execute console command "/flatland-error %player% Can't craft that!"
     
 on right click on anything:
-    player is in "world_creative" or "world_chaos"
+    player is in "world_creative" or "world_chaos" or "world_buildathon"
     player doesn't have permission "gamealition.flatland"
     clicked block is not a door or sign
     cancel the event
     execute console command "/flatland-error %player% Can't use that!"
 
 on vehicle destroy:
-    attacker is in "world_creative" or "world_chaos"
+    attacker is in "world_creative" or "world_chaos" or "world_buildathon"
     attacker doesn't have permission "gamealition.flatland"
     cancel the event
     execute console command "/flatland-error %attacker% Can't destroy that!"
 
 on bucket empty:
-    player is in "world_creative" or "world_chaos"
+    player is in "world_creative" or "world_chaos" or "world_buildathon"
     player doesn't have permission "gamealition.flatland"
     cancel the event
     execute console command "/flatland-error %player% Can't empty that!"
 
 on bucket fill:
-    player is in "world_creative" or "world_chaos"
+    player is in "world_creative" or "world_chaos" or "world_buildathon"
     player doesn't have permission "gamealition.flatland"
     cancel the event
     execute console command "/flatland-error %player% Can't bucket that!"

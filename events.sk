@@ -53,9 +53,9 @@ on place of chest or trapped chest:
 # Fix for server crash when entering end portals in non-end worlds.
 # MV-NetherPortals is supposed to be handling this, but appears to have broken for 1.9
 on portal:
-    player's world is "world_creative" or "world_chaos" or "world_derpi"
+    player's world is "world_creative" or "world_chaos" or "world_derpi" or "world_buildathon"
     cancel the event
-    console command "/mvtp %player% a:%player's world%" 
+    console command "/mvtp %player% a:%player's world%"
 
 # ########################################################################################
 # # COMMAND OVERRIDES ####################################################################
