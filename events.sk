@@ -8,7 +8,7 @@ every 8 seconds:
     remove 4 seconds from "world"'s time
 
 # Horse immunity
-on damage of horse or donkey or mule:
+on damage of horse or donkey or mule or skeleton horse:
     damage cause is suffocation
     cancel the event
 
