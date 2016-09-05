@@ -214,7 +214,7 @@ command /approve-newbie <player>:
     executable by: players and console
     trigger:
         if arg 1 has the permission "derpi.inmate":
-            message "&c*** %arg 1% is in the DERPI"
+            message "&c*** Can't approve; %arg 1% is in the DERPI"
             exit trigger
 
         if arg 1 has the permission "gamealition.group.newbie":
@@ -243,7 +243,7 @@ command /approve-untrusted <player>:
     executable by: players and console
     trigger:
         if arg 1 has the permission "derpi.inmate":
-            message "&c*** %arg 1% is in the DERPI"
+            message "&c*** Can't approve; %arg 1% is in the DERPI"
             exit trigger
 
         if arg 1 has the permission "gamealition.group.untrusted":
@@ -267,7 +267,7 @@ command /approve <offline player>:
     executable by: players and console
     trigger:
         if arg 1 has the permission "derpi.inmate":
-            message "&c*** %arg 1% is in the DERPI"
+            message "&c*** Can't approve; %arg 1% is in the DERPI"
             exit trigger
 
         if arg 1 has the permission "gamealition.group.player":

@@ -58,7 +58,7 @@ command /approve-flatland <offline player>:
             exit trigger
 
         if arg 1 doesn't have permission "gamealition.group.player":
-            message "&c*** %arg 1% must be fully approved for the server first (try /approve %arg 1%)"
+            message "&c*** %arg 1% must be fully approved for the server first (try /approve %arg 1%, then retry this command)"
             exit trigger
 
         execute console command "/perms player %arg 1% addgroup flatland"
