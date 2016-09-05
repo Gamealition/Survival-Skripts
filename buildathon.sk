@@ -1,0 +1,23 @@
+# ### Build-a-thon system by Roy Curtis
+# ### Licensed under MIT, 2016
+
+command /buildathon-ticket <player>:
+    description: Handles Build-a-thon ticket purchase
+    executable by: console
+    trigger:
+        set {_target} to arg 1
+        
+        console command "/perms player %{_target}% addgroup buildathon"
+        console command "/playsound entity.player.levelup neutral %{_target}% ~ ~ ~ 1 1 1"
+        message "&2*** You can now build in the Build-a-thon lots!" to {_target}
+        message "&2*** Be sure to read everything in your ticket!" to {_target}
+        message "*** %{_target}% bought a Build-a-thon ticket" to console
+
+command /buildathon-reset:
+    description: Clears all players from Build-a-thon region rights
+    executable by: players and console
+    permission: gamealition.mod-high
+    permission: gamealition.buildathon.host
+    trigger:
+        console command "/perms group buildathon purge -m"
+        message "*** Build-a-thon region has been cleared of players"
