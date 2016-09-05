@@ -2,6 +2,12 @@
 # # WORLD ################################################################################
 # ########################################################################################
 
+# Horse location script
+# every second:
+#     loop entities of type horse:
+#         loop-horse's name is "Persnickety"
+#         message "Persnickety found at %loop-horse's location%" to console
+
 # Prolong daytime in world by 2x
 every 8 seconds:
     time in "world" is between 06:30 and 17:30
