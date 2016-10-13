@@ -241,6 +241,32 @@ command /wild:
     trigger:
         message "*** &2Looking for the wilderness? &fJust go any direction from spawn, or ask for help finding land!"
 
+command /nearby-entities [<number=120>]:
+    executable by: players
+    trigger:
+        set {_radius} to arg 1
+
+        message "*** Searching for entities in a %{_radius}% block radius:"
+
+        loop all entities in radius {_radius} around the player:
+            add 1 to {_nearresults::%loop-entity's type%}
+
+        loop {_nearresults::*}:
+            message "%loop-index%: %loop-value%"
+
+command /entity-rundown [<number=120>]:
+    executable by: players and console
+    trigger:
+        set {_radius} to arg 1
+
+        message "*** Entities in %{_radius}% block radius around players:"
+
+        loop all players:
+            set {_runresults::%loop-player's name%} to amount of entities in radius {_radius} around loop-player
+
+        loop {_runresults::*}:
+            message "%loop-index%: %loop-value%"
+
 command /arm-armorstands:
     description: Replaces all armor stands in inventory with ones that have arms
     executable by: players
