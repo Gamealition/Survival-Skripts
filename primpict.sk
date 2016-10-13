@@ -1,13 +1,9 @@
 # ### Prim Pictionary by Roy Curtis
 # ### Licensed under MIT, 2016
 
-command /pp-timer <world> <time span>:
-    executable by: players and console
+command /pp-regen <player>:
+    executable by: console
     trigger:
-        set {_world} to arg 1
-        set {_time} to arg 2
-
-        message "*** Timer set for &a%{_time}%&f!" to all players in {_world}
-
-        wait {_time}
-        message "*** Time's up!" to all players in {_world}
+        arg 1 command "/rg select pictionary_draw"
+        arg 1 command "//regen"
+        arg 1 command "//sel"
