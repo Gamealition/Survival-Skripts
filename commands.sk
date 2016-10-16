@@ -232,6 +232,7 @@ command /kit:
         message "*** &cThere are no kits on this server! &fHowever, you can visit the Toolshed for free player-donated tools and armor. Just go south of spawn, or ask!"
 
 command /rtp:
+    aliases: /random, /randomtp
     executable by: players
     trigger:
         message "*** &cSorry, we don't do random teleports! &fJust go any direction from spawn, or ask for help finding land!"
