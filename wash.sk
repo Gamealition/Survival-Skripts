@@ -24,6 +24,10 @@ on rightclick on a sign:
             message "&c*** You cannot afford to wash this clay!"
             exit trigger
 
+        if player can't hold {@amount of non-mesa} hardened clay:
+            message "&c*** You need more space to accept hardened clay!"
+            exit trigger
+
         remove {@amount of non-mesa} of {_held} from player's inventory
         remove {@cost of non-mesa} from the player's balance
         give player {@amount of non-mesa} hardened clay
@@ -45,6 +49,10 @@ on rightclick on a sign:
 
         if player's money < {@cost of mesa}:
             message "&c*** You cannot afford to wash this clay!"
+            exit trigger
+
+        if player can't hold {@amount of mesa} hardened clay:
+            message "&c*** You need more space to accept hardened clay!"
             exit trigger
 
         remove {@amount of mesa} of {_held} from player's inventory
