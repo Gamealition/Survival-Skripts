@@ -45,7 +45,7 @@ command /links:
     aliases: /www
     executable by: players and console
     trigger:
-        message "&B&LGamealition &f&lSurvival &fofficial links:"
+        message "&B&LGamealition &f&lSurvival &flinks:"
         message "&f• &3gamealition.com &f- Official"
         message "&f• &3forums.gamealition.com &f- Forums"
         message "&f• &3irc.gamealition.com &f- IRC"
@@ -54,6 +54,7 @@ command /links:
         message "&f• &3survival.gamealition.com/features &f- Features"
         message "&f• &3survival.gamealition.com/changelog &f- Changelog"
         message "&f• &3survival.gamealition.com/bugs &f- Known issues"
+        message "&f• &3laken.pw/mcshop &f- Stitch's Shop Index &7&o(third-party)"
 
 command /modreq <text>:
     description: Files a ticket for staff to handle at current location. Alias for "/ticket new"
