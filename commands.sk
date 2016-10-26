@@ -241,6 +241,17 @@ command /wild:
     trigger:
         message "*** &2Looking for the wilderness? &fJust go any direction from spawn, or ask for help finding land!"
 
+command /vote:
+    executable by: players
+    trigger:
+        message "*** &cThere is no voting on this server! &fJust playing here should be rewarding enough!"
+
+command /tpa:
+    aliases: /tpahere, /tpaccept, /tpdeny, /tpask, /tpaall
+    executable by: players
+    trigger:
+        message "*** &cSorry, there are no player-to-player teleports! &fJust use our extensive road, rail, river and nether networks!"
+
 command /nearby-entities [<number=120>]:
     executable by: players
     trigger:
