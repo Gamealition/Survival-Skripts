@@ -84,7 +84,6 @@ command /fixtoggle:
 command //replacestair <text> <text>:
     description: Assists with replacing stairs with the correct orientation
     aliases: //replacestairs
-    permission: worldedit.region.replace
     executable by: players
     trigger:
         execute player command "//replace %arg 1%:0 %arg 2%:0"
