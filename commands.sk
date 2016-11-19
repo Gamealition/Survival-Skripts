@@ -56,12 +56,16 @@ command /links:
         message "&f• &3survival.gamealition.com/bugs &f- Known issues"
         message "&f• &3laken.pw/mcshop &f- Stitch's Shop Index &7&o(third-party)"
 
-command /modreq <text>:
+command /modreq [<text>]:
     description: Files a ticket for staff to handle at current location. Alias for "/ticket new"
     executable by: players
     permission: ticketmaster.user.basic
     trigger:
-        make player execute command "/ticket new %arg 1%"
+        if arg 1 is not set:
+            # Prevent sending "<none>" and let Ticket-Master handle error
+            make player execute command "/ticket new"
+        else:
+            make player execute command "/ticket new %arg 1%"
 
 command /broadcast-irc <text>:
     description: Broadcasts a message to both in-game and IRC (needed due to Skript/PurpleIRC bugs)
