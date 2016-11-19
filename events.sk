@@ -72,6 +72,17 @@ on portal:
     cancel the event
     console command "/mvtp %player% a:%player's world%"
 
+on right click on bed:
+    player's world is "world_creative" or "world_buildathon"
+    cancel the event
+    message "&c*** You cannot sleep in creative worlds"
+
+# Allow the dropping of anvils from mid-air
+# on player drop of anvil:
+#     block at dropped item is air
+#     delete the dropped item
+#     set block at dropped item to anvil
+
 # ########################################################################################
 # # COMMAND OVERRIDES ####################################################################
 # ########################################################################################
