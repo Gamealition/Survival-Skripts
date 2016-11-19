@@ -48,6 +48,7 @@ on player join:
     else if player has permission "gamealition.group.newbie":
         set {_remaining} to difference between {@max time newbie rank} and {approval.playtime.%player%}
         message "&2&LWelcome back, %player%! &fYou still have &a%{_remaining}%&f of playtime until you're fully approved. Meanwhile, you can gather resources in the resource world, or explore!"
+        message "To go to resource world: &b/warp resource"
 
 on pick up:
     player has permission "gamealition.group.default"
