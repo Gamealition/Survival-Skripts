@@ -1,0 +1,25 @@
+# ### Blacklist system by Roy Curtis
+# ### Licensed under MIT, 2016
+
+# ### Permission nodes
+# gamealition.lava - Can freely place lava
+# gamealition.tnt - Can freely place and ignite TNT
+
+on place of lava:
+    # Check for staff perms
+    player doesn't have permission "gamealition.moderator"
+    # Check for WorldEdit perms
+    player doesn't have permission "gamealition.group.worldedit"
+    # Check for per-player perms
+    player doesn't have permission "gamealition.lava"
+
+    # Logic
+    cancel the event
+    message "&c*** Sorry, you can't place lava without permission!"
+    message "  &cPlease ask to place lava using &3/modreq&c, e.g.:"
+    message "  &3/modreq please place lava in the stone pit here"
+
+on crafting of tnt or tnt minecart:
+    # Logic
+    message "&c*** Sorry, you can't craft or use TNT on this server!"
+    cancel the event
