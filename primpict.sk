@@ -1,9 +1,0 @@
-# ### Prim Pictionary by Roy Curtis
-# ### Licensed under MIT, 2016
-
-command /pp-regen <player>:
-    executable by: console
-    trigger:
-        arg 1 command "/rg select pictionary_draw"
-        arg 1 command "//regen"
-        arg 1 command "//sel"
