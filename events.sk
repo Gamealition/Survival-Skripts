@@ -20,7 +20,7 @@ on damage of horse or donkey or mule or skeleton horse or llama:
 
 # Wolf monitoring
 on damage of wolf or ocelot:
-    send "*** Pet damage: %damage cause%, %location of victim%, %attacker%. Nearby players:" to console
+    send "*** %victim% damage: %damage cause%, %location of victim%, %attacker%. Nearby players:" to console
     loop all players within 25 meters of location of victim:
         send "--> %loop-player%" to console
 
