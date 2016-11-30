@@ -126,6 +126,7 @@ command /ride <player> <player>:
             message "&c*** You cannot ride yourself!"
             exit trigger
         
+        teleport arg 1 to arg 2
         make arg 1 ride arg 2
 
 command /gaybrush:
