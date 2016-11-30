@@ -213,11 +213,15 @@ command /clearhistory <player>:
     permission: gamealition.mod-high
     executable by: players and console
     trigger:
-        delete {age.%name of arg 1%}
-        delete {age.%uuid of arg 1%}
-        delete {uuid.%name of arg 1%}
-        delete {uuid.%uuid of arg 1%}
-        message "&7*** Cleared history for %arg 1%"
+        set {_name} to name of arg 1
+        set {_uuid} to uuid of arg 1
+
+        delete {age.%{_name}%}
+        delete {age.%{_uuid}%}
+        delete {uuid.%{_name}%}
+        delete {uuid.%{_uuid}%}
+        delete {lwctutorial.%{_name}%}
+        message "&7*** Cleared history for %{_name}%"
 
 command /stoplag:
     aliases: /halt-activity, /stopfire, /allowfire
