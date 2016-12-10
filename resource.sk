@@ -2,9 +2,7 @@
 # ### Licensed under MIT, 2016
 
 # ### Global variables
-# resource.reset.who - player; player awaiting to reset resource
-# resource.reset.seed - number; given seed to reset with
-# resource.reset.code - number; generated code to confirm reset
+# resource.lock - boolean; set if regenerating resource
 
 # ### Configuration
 
@@ -24,7 +22,7 @@ options:
     # Lower-right corner coordinate of resource->survival portal
     portal corner 2 : 7,241,-8
 
-# ### Global functions:
+# ### Global functions
 
 function rrCheck(who: player) :: boolean:
     if {_who} is online:
@@ -45,154 +43,123 @@ function rrCommand(who: player, cmd: text):
 function rrConsoleCommand(cmd: text):
     console command {_cmd}
 
-# ### Commands:
+# ### Commands
 
-command /resource-reset <integer>:
-    description: Begins the resource world reset procedure
+command /resource-reset <integer> [<text=null>]:
+    description: Performs a resource world reset
     executable by: players
     permission: gamealition.admin
-    usage: /resource-reset <seed>
+    usage: /resource-reset <seed> [--confirm]
     trigger:
         player is op
-        set {resource.reset.who}  to player
-        set {resource.reset.seed} to arg 1
-        set {resource.reset.code} to random integer between 100000 and 999999
 
-        message "&c*** %player% requested resource reset with seed %{resource.reset.seed}%" to console
+        if {resource.lock} is set:
+            message "&c*** A reset is already in progress"
+            exit trigger
 
-        message "&c&l*** YOU ARE ABOUT TO RESET RESOURCE WORLDS!"
-        message "&c&l*** THIS PROCESS IS NOT UNDOABLE!"
-        message "Your player character will be teleported around and used to"
-        message " perform the reset. Please only proceed if it's time to reset"
-        message " resource. &cDo not move or disconnect during the process."
+        if arg 2 != "--confirm":
+            message "&c&l*** YOU ARE ABOUT TO RESET RESOURCE WORLDS!"
+            message "&c&l*** THIS PROCESS IS NOT UNDOABLE!"
+            message "Your player character will be teleported around and used to"
+            message " perform the reset. Please only proceed if it's time to reset"
+            message " resource. &cDo not move or disconnect during the process."
+            message ""
+            message "The seed you've chosen is: &c%arg 1%"
+            message "To continue, add &a--confirm &fto the command, like so:"
+            message "&a/resource-reset %arg 1% --confirm"
+
+        message "&c*** %player% triggered resource reset with seed %arg 1%" to console
+        set {resource.lock} to true
+        set {_seed}         to arg 1
+
+        message "&c*** Reset in 5 seconds; please don't move or disconnect!"
+        rrCommand(player, "/god on")
+        rrCommand(player, "/spawn")
+        wait 5 seconds
+
+        rrCheck(player) is true
+        rrLog(player, "Removing portal...")
+        rrCommand(player, "/mvp remove {@island survival portal}")
+        wait 1 second
+
+        rrCheck(player) is true
+        rrLog(player, "Regenerating resource...")
+        rrCommand(player, "/mv regen resource -s %{_seed}%")
+        rrCommand(player, "/mv confirm")
+        wait 3 second
+
+        rrCheck(player) is true
+        rrLog(player, "Regenerating resource nether...")
+        rrCommand(player, "/mv regen resource_nether -s %{_seed}%")
+        rrCommand(player, "/mv confirm")
+        wait 3 second
+
+        rrCheck(player) is true
+        rrLog(player, "Regenerating resource end...")
+        rrCommand(player, "/mv regen resource_the_end -s %{_seed}%")
+        rrCommand(player, "/mv confirm")
+        wait 3 second
+
+        rrCheck(player) is true
+        rrLog(player, "Going to resource world...")
+        rrCommand(player, "/mvtp resource")
+        wait 3 seconds
+
+        rrCheck(player) is true
+        rrLog(player, "Adjusting game rules...")
+        rrCommand(player, "/gamerule commandBlockOutput false")
+        wait 1 second
+
+        rrCheck(player) is true
+        rrLog(player, "Loading the resource spawn island...")
+        teleport the player to location (0.5, 240, 0.5)
+        set the block under the player to glass
+        rrCommand(player, "//schem load {@island schematic}")
+        wait 1 second
+
+        rrCheck(player) is true
+        rrLog(player, "Pasting the resource spawn island...")
+        rrCommand(player, "//paste")
+        wait 3 seconds
+
+        rrCheck(player) is true
+        rrLog(player, "Setting resource spawn point...")
+        teleport the player to location (0.5, 240, -9.5)
+        rrCommand(player, "/mvss")
+        rrCommand(player, "/setwarp resource")
+        wait 1 second
+
+        rrCheck(player) is true
+        rrLog(player, "Redefining resource spawn region...")
+        rrCommand(player, "//sel cuboid")
+        rrCommand(player, "//pos1 {@island corner 1}")
+        rrCommand(player, "//pos2 {@island corner 2}")
+        rrCommand(player, "/rg redefine {@island region}")
+        wait 1 second
+
+        rrCheck(player) is true
+        rrLog(player, "Creating resource->survival portal...")
+        rrCommand(player, "//pos1 {@portal corner 1}")
+        rrCommand(player, "//pos2 {@portal corner 2}")
+        rrCommand(player, "/mvp create resource2survival a:world")
+        rrCommand(player, "/mv reload")
+        wait 1 second
+
+        rrCheck(player) is true
+        rrLog(player, "Deleting PRISM history...")
+        rrConsoleCommand("/pr delete w:resource w:resource_the_end w:resource_nether t:99w")
+        wait 1 second
+
+        rrLog(player, "Resource reset finished!")
+        rrCommand(player, "/god off")
+
+        message "&c&l*** RESOURCE RESET IS NOT YET FINISHED!"
+        message "You must now do the following, manually:"
         message ""
-        message "The seed you've chosen is: &c%{resource.reset.seed}%"
-        message "To continue, please type this in chat: &a%{resource.reset.code}%"
-        message "Anything else will &cCANCEL&f the reset."
-
-on disconnect:
-    {resource.reset.code} is set
-    player is {resource.reset.who}
-    message "&c*** Requested resource reset by %{resource.reset.who}% cancelled" to console
-    delete {resource.reset.who}
-    delete {resource.reset.seed}
-    delete {resource.reset.code}
-
-on chat:
-    {resource.reset.code} is set
-    player is op
-    player is {resource.reset.who}
-    cancel the event
-
-    # Move global state to temporary state
-    set {_who}   to {resource.reset.who}
-    set {_seed}  to {resource.reset.seed}
-    set {_code}  to {resource.reset.code}
-    set {_input} to message parsed as number
-    delete {resource.reset.who}
-    delete {resource.reset.seed}
-    delete {resource.reset.code}
-
-    # Workaround Skript's poor support for conditionals...
-    if {_input} isn't set:
-        set {_input} to 0
-
-    # Cancel if wrong code given
-    if {_input} != {_code}:
-        message "&c*** Requested resource reset by %{_who}% cancelled" to console
-        message "&c*** Incorrect code given; reset cancelled"
-        exit trigger
-
-    # Else, begin the reset!
-    message "&c*** %{_who}% triggered resource reset with seed %{_seed}%" to console
-    message "&c*** Reset in 5 seconds; please don't move or disconnect!"
-    rrCommand(player, "/god on")
-    rrCommand(player, "/spawn")
-    wait 5 seconds
-
-    rrCheck(player) is true
-    rrLog(player, "Removing portal...")
-    rrCommand(player, "/mvp remove {@island survival portal}")
-    wait 1 second
-
-    rrCheck(player) is true
-    rrLog(player, "Regenerating resource...")
-    rrCommand(player, "/mv regen resource -s %{_seed}%")
-    rrCommand(player, "/mv confirm")
-    wait 3 second
-
-    rrCheck(player) is true
-    rrLog(player, "Regenerating resource nether...")
-    rrCommand(player, "/mv regen resource_nether -s %{_seed}%")
-    rrCommand(player, "/mv confirm")
-    wait 3 second
-
-    rrCheck(player) is true
-    rrLog(player, "Regenerating resource end...")
-    rrCommand(player, "/mv regen resource_the_end -s %{_seed}%")
-    rrCommand(player, "/mv confirm")
-    wait 3 second
-
-    rrCheck(player) is true
-    rrLog(player, "Going to resource world...")
-    rrCommand(player, "/mvtp resource")
-    wait 3 seconds
-
-    rrCheck(player) is true
-    rrLog(player, "Adjusting game rules...")
-    rrCommand(player, "/gamerule commandBlockOutput false")
-    wait 1 second
-
-    rrCheck(player) is true
-    rrLog(player, "Loading the resource spawn island...")
-    teleport the player to location (0.5, 240, 0.5)
-    set the block under the player to glass
-    rrCommand(player, "//schem load {@island schematic}")
-    wait 1 second
-
-    rrCheck(player) is true
-    rrLog(player, "Pasting the resource spawn island...")
-    rrCommand(player, "//paste")
-    wait 3 seconds
-
-    rrCheck(player) is true
-    rrLog(player, "Setting resource spawn point...")
-    teleport the player to location (0.5, 240, -9.5)
-    rrCommand(player, "/mvss")
-    rrCommand(player, "/setwarp resource")
-    wait 1 second
-
-    rrCheck(player) is true
-    rrLog(player, "Redefining resource spawn region...")
-    rrCommand(player, "//sel cuboid")
-    rrCommand(player, "//pos1 {@island corner 1}")
-    rrCommand(player, "//pos2 {@island corner 2}")
-    rrCommand(player, "/rg redefine {@island region}")
-    wait 1 second
-
-    rrCheck(player) is true
-    rrLog(player, "Creating resource->survival portal...")
-    rrCommand(player, "//pos1 {@portal corner 1}")
-    rrCommand(player, "//pos2 {@portal corner 2}")
-    rrCommand(player, "/mvp create resource2survival a:world")
-    rrCommand(player, "/mv reload")
-    wait 1 second
-
-    rrCheck(player) is true
-    rrLog(player, "Deleting PRISM history...")
-    rrConsoleCommand("/pr delete w:resource w:resource_the_end w:resource_nether t:99w")
-    wait 1 second
-
-    rrLog(player, "Resource reset finished!")
-    rrCommand(player, "/god off")
-
-    message "&c&l*** RESOURCE RESET IS NOT YET FINISHED!"
-    message "You must now do the following, manually:"
-    message ""
-    message "* Go to resource nether and. . ."
-    message "  * Create a portal near 0,0; destroy existing portals"
-    message "  * Set spawn at safe place using &3/mvss"
-    message "* Go to resource end and. . ."
-    message "  * Set spawn at safe place using &3/mvss"
-    message "* Announce the resource reset in chat, twitter and forums"
-    message "* Update the forums' resource biomes list and map"
+        message "* Go to resource nether and. . ."
+        message "  * Create a portal near 0,0; destroy existing portals"
+        message "  * Set spawn at safe place using &3/mvss"
+        message "* Go to resource end and. . ."
+        message "  * Set spawn at safe place using &3/mvss"
+        message "* Announce the resource reset in chat, twitter and forums"
+        message "* Update the forums' resource biomes list and map"
