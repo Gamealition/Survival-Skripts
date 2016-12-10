@@ -1,6 +1,142 @@
 # ### Build-a-thon system by Roy Curtis
 # ### Licensed under MIT, 2016
 
+# ### Global variables
+# buildathon.lock - boolean; set if generating plots
+
+# ### Configuration
+
+options:
+    # Name of Build-a-Thon world
+    world  : world_buildathon
+    height : 63
+    min x  : 40
+    max x  : 240
+    min z  : -240
+    max z  : 240
+    center : 128 0
+
+# ### Global functions
+
+function batClearRow(row: integer):
+    set {_loc1} to location ({@min x} + {_row}, {@height}, {@min z}) "{@world}"
+    set {_loc2} to location ({@min x} + {_row}, {@height}, {@max z}) "{@world}"
+    set blocks between block at {_loc1} and block at {_loc2} to stone slab
+    add 1 to {_loc1}'s y-pos and {_loc2}'s y-pos
+    set blocks between block at {_loc1} and block at {_loc2} to air
+    
+function batPlot(x: integer, z: integer, s: integer):
+    message "%{_x}%, %{_z}%, %{_s}%" to console 
+    set {_originX} to {@min x} + ( {_s} * ({_x} - 1) )
+    set {_originZ} to {@min z} + ( {_s} * ({_z} - 1) )
+
+    loop {_s} times:
+        set {_i}    to loop-number - 1
+        set {_loc1} to location ({_originX}, {@height}, {_originZ} + {_i}) "{@world}"
+        set {_loc2} to location ({_originX}, {@height}, {_originZ} + {_i}) "{@world}"
+
+        if {_i} is 0 or 1 or ({_s} - 1) or ({_s} - 2):
+            # North and south road
+            add ({_s} - 1) to {_loc2}'s x-pos
+            set blocks between block at {_loc1} and block at {_loc2} to stone slab
+        else if {_i} is 2 or ({_s} - 3):
+            # North and south borders
+            add 1 to {_loc2}'s x-pos
+            set blocks between block at {_loc1} and block at {_loc2} to stone slab
+
+            set {_loc1}'s x-pos to {_loc2}'s x-pos + 1
+            add ({_s} - 4) to {_loc2}'s x-pos
+            set blocks between block at {_loc1} and block at {_loc2} to polished granite
+
+            set {_loc1}'s x-pos to {_loc2}'s x-pos + 1
+            add 3 to {_loc2}'s x-pos
+            set blocks between block at {_loc1} and block at {_loc2} to stone slab
+        else:
+            # Middle blocks
+            add 1 to {_loc2}'s x-pos
+            set blocks between block at {_loc1} and block at {_loc2} to stone slab
+
+            set {_loc1}'s x-pos to {_loc2}'s x-pos + 1
+            set block at {_loc1} to polished granite
+
+            add 1 to {_loc1}'s x-pos
+            set {_loc2}'s x-pos to {_loc1}'s x-pos + ({_s} - 7)
+            set blocks between block at {_loc1} and block at {_loc2} to grass
+
+            set {_loc1}'s x-pos to {_loc2}'s x-pos + 1
+            set block at {_loc1} to polished granite
+
+            add 1 to {_loc1}'s x-pos
+            set {_loc2}'s x-pos to {_loc1}'s x-pos + 1
+            set blocks between block at {_loc1} and block at {_loc2} to stone slab
+
+    # Corner sign
+    set block at location ({_originX} + 2, {@height}, {_originZ} + 2) "{@world}" to redstone block 
+    set block at location ({_originX} + 2, {@height} + 1, {_originZ} + 2) "{@world}" to sign post:6
+
+# ### Generation
+
+command /buildathon-generate <integer> [<text=null>]:
+    description: Regenerates plots in the Build-a-Thon field
+    executable by: players
+    permission: gamealition.mod-high
+    permission: gamealition.buildathon.host
+    usage: /buildathon-generate <size> [--confirm]
+    trigger:
+
+        if arg 1 isn't between 8 and 64:
+            message "&c*** Plot size must be between 8 and 64"
+            exit trigger
+
+        if {buildathon.lock} is set:
+            message "&c*** A generation is already in progress"
+            exit trigger
+
+        if arg 2 != "--confirm":
+            message "&c&l*** YOU ARE ABOUT TO GENERATE BUILDATHON PLOTS!"
+            message "&c&l*** THIS PROCESS IS NOT UNDOABLE!"
+            message "The entire Build-a-Thon arena in the BAT world will be reset"
+            message " and plots of the given size generated. &cDo not continue if"
+            message " &cthere is an event in progress!"
+            message ""
+            message "The size you've chosen is: &c%arg 1%"
+            message "To continue, add &a--confirm &fto the command, like so:"
+            message "&a/buildathon-generate %arg 1% --confirm"
+            exit trigger
+
+        message "&c*** %player% triggered Build-a-Thon plot generation with size %arg 1%" to console
+        set {buildathon.lock} to true
+        set {_size}        to arg 1 + 6
+        set {_fieldWidth}  to {@max x} - {@min x}
+        set {_fieldHeight} to {@max z} - {@min z}
+        set {_plotsX}      to floor( {_fieldWidth}  / {_size} )
+        set {_plotsZ}      to floor( {_fieldHeight} / {_size} )
+
+        message "*** Clearing field..."
+        loop {_fieldWidth} times:
+            batClearRow(loop-number)
+
+        message "*** Creating plots..."
+        loop {_plotsX} times:
+            loop {_plotsZ} times:
+                message "%loop-number-1%, %loop-number-2%, %{_size}% " to console 
+                batPlot(loop-number-1, loop-number-2, {_size})
+                message "done" to console
+                wait 1 tick
+
+        message "*** Saving world..."
+        console command "/save-all"
+        wait 1 second
+
+        message "*** Triggering dynmap rerender of the area..."
+        console command "/dynmap radiusrender {@world} {@center} 256"
+        console command "/dynmap quiet"
+
+        message "&a*** Build-a-thon plot generation done!"
+        delete {buildathon.lock}
+
+# ### Other comamnds
+
 command /buildathon-ticket <player>:
     description: Handles Build-a-thon ticket purchase
     executable by: console
@@ -10,8 +146,9 @@ command /buildathon-ticket <player>:
         console command "/perms player %{_target}% addgroup buildathon"
         console command "/playsound entity.player.levelup neutral %{_target}% ~ ~ ~ 1 1 1"
         message "&2*** You can now build in the Build-a-thon lots!" to {_target}
-        message "&2*** Be sure to read everything in your ticket!" to {_target}
-        message "*** %{_target}% bought a Build-a-thon ticket" to console
+        message "&2*** Be sure to read the signs around you for information!" to {_target}
+        message "&2*** You can also do &3/motd &fto get information!" to {_target}
+        message "*** %{_target}% bought Build-a-thon entry" to console
 
 command /buildathon-reset:
     description: Clears all players from Build-a-thon region rights
