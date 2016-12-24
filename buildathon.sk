@@ -19,14 +19,24 @@ options:
 # ### Global functions
 
 function batClearRow(row: integer):
-    set {_loc1} to location ({@min x} + {_row}, {@height}, {@min z}) "{@world}"
-    set {_loc2} to location ({@min x} + {_row}, {@height}, {@max z}) "{@world}"
-    set blocks between block at {_loc1} and block at {_loc2} to stone slab
-    add 1 to {_loc1}'s y-pos and {_loc2}'s y-pos
-    set blocks between block at {_loc1} and block at {_loc2} to air
+    set {_loc1} to location ({@min x} + {_row}, 0, {@min z}) "{@world}"
+    set {_loc2} to location ({@min x} + {_row}, 0, {@max z}) "{@world}"
+
+    loop 256 times:
+        set {_i} to loop-number - 1
+
+        if {_i} = 0:
+            set blocks between block at {_loc1} and block at {_loc2} to bedrock
+        else if {_i} < {@height}:
+            set blocks between block at {_loc1} and block at {_loc2} to grass
+        else if {_i} = {@height}:
+            set blocks between block at {_loc1} and block at {_loc2} to stone slab
+        else:
+            set blocks between block at {_loc1} and block at {_loc2} to air
+
+        add 1 to {_loc1}'s y-pos and {_loc2}'s y-pos
     
 function batPlot(x: integer, z: integer, s: integer):
-    message "%{_x}%, %{_z}%, %{_s}%" to console 
     set {_originX} to {@min x} + ( {_s} * ({_x} - 1) )
     set {_originZ} to {@min z} + ( {_s} * ({_z} - 1) )
 
@@ -115,13 +125,12 @@ command /buildathon-generate <integer> [<text=null>]:
         message "*** Clearing field..."
         loop {_fieldWidth} times:
             batClearRow(loop-number)
+            wait 1 tick
 
         message "*** Creating plots..."
         loop {_plotsX} times:
             loop {_plotsZ} times:
-                message "%loop-number-1%, %loop-number-2%, %{_size}% " to console 
                 batPlot(loop-number-1, loop-number-2, {_size})
-                message "done" to console
                 wait 1 tick
 
         message "*** Saving world..."
@@ -147,7 +156,7 @@ command /buildathon-ticket <player>:
         console command "/playsound entity.player.levelup neutral %{_target}% ~ ~ ~ 1 1 1"
         message "&2*** You can now build in the Build-a-thon lots!" to {_target}
         message "&2*** Be sure to read the signs around you for information!" to {_target}
-        message "&2*** You can also do &3/motd &fto get information!" to {_target}
+        message "&2*** You can also do &3/motd &2to get information!" to {_target}
         message "*** %{_target}% bought Build-a-thon entry" to console
 
 command /buildathon-reset:
