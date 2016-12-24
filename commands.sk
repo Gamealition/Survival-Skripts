@@ -303,6 +303,21 @@ command /entity-rundown [<number=120>]:
         loop {_runresults::*}:
             message "%loop-index%: %loop-value%"
 
+        delete {_runresults::*}
+
+command /world-entities:
+    executable by: players
+    trigger:
+        message "*** Searching for entities in %player's world%:"
+
+        loop all entities in player's world:
+            add 1 to {_worldresults::%loop-entity's type%}
+
+        loop {_worldresults::*}:
+            message "%loop-index%: %loop-value%"
+
+        delete {_worldresults::*}
+
 command /arm-armorstands:
     description: Replaces all armor stands in inventory with ones that have arms
     executable by: players
