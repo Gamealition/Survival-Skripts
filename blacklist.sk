@@ -21,5 +21,15 @@ on place of lava:
 
 on crafting of tnt or tnt minecart:
     # Logic
-    message "&c*** Sorry, you can't craft or use TNT on this server!"
     cancel the event
+    message "&c*** Sorry, you can't craft or use TNT on this server!"
+
+on shoot:
+    # Conditions
+    shooter's held item is lingering_pot or splash_pot
+    shooter is a player
+    world is "world_creative" or "world_chaos" or "world_buildathon"
+    
+    # Logic
+    cancel the event
+    message "&c*** Sorry, you can't throw potions in creative worlds!" to shooter
