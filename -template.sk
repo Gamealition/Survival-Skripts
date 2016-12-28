@@ -1,0 +1,50 @@
+# ### Skript template by Roy Curtis
+# ### Licensed under MIT, 2016
+
+# This is an example of how a Skript file should be organized. There should be a blurb at
+# this position to describe the file. Then the various sections below should be included.
+# 
+# An explaination of each section:
+# ### Permission nodes - Describes what permission nodes this skript creates
+# ### Global variables - Describes the global variables this skript creates
+# ### Configuration - Contains an options block for easy configuration of the skript
+# ### Global functions - Contains global functions defined by the skript
+# ### Global events - Contains event handlers defined by the skript
+# ### Global commands - Contains commands defined by the skript
+
+# ### Permission nodes
+# a.permission.node - <description>
+
+# ### Global variables
+# a.variable - <type>; <description>
+
+# ### Configuration
+
+options:
+    # Reference using {@option name}
+    option name : option value
+
+# ### Global functions
+
+function templateFunction(value: type):
+    return value
+
+# ### Global events
+
+on event:
+    # Conditions
+
+    # Logic
+
+# ### Global commands
+
+command /commandname <arg 1> [<optional arg 2=default value>]:
+    description:   Command description
+    aliases:       /commandname2
+    usage:         /command-name <arg 1> [--arg2]
+    permission:    a.permission.node
+    executable by: players / players and console / console
+    trigger:
+        # Conditions
+
+        # Logic
