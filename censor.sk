@@ -6,7 +6,7 @@
 
 on chat:
     # Conditions
-    message contains "fuck" or "shit" or "bitch" or "nigga" or "nigger" or "cunt" or "asshole" or "assholes" or "bastard" or "dick" or "piss" or "slut"
+    message contains "fuck" or "shit" or "bitch" or "nigga" or "nigger" or "cunt" or "asshole" or "bastard" or "dick" or "piss" or "slut"
 
     if {lastmessage.%player%} is set:
         message is equal to {lastmessage.%player%}
