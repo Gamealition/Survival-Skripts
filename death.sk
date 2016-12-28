@@ -1,0 +1,44 @@
+# ### Death location tracker by Roy Curtis
+# ### Licensed under MIT, 2016
+
+# Tracks the locations and causes of players' last deaths
+
+# ### Global variables
+# deaths::* - list; list of UUIDs of tracked deaths
+# deaths::{uuid}.location - location; location of last death
+# deaths::{uuid}.cause - string; message of last death
+
+# ### Global functions
+
+
+# ### Global events
+
+on death of player:
+    set {deaths::%uuid of player%.location} to player's location
+    set {deaths::%uuid of player%.cause}    to death message
+
+on respawn:
+    # Conditions
+    {deaths::%player's uuid%.location} is set
+
+    # Logic
+    message "&7*** Do &3/death &7to get your death location"
+
+# ### Global commands
+
+command /death:
+    description:   Gets the player's last recorded death
+    executable by: players
+    trigger:
+        # Logic
+        set {_location} to {deaths::%player's uuid%.location}
+        set {_cause}    to {deaths::%player's uuid%.cause}
+
+        if {_location} is not set:
+            message "&c*** Your last death wasn't recorded"
+            exit trigger
+
+        message "*** Your last death was recorded at:"
+        message "&7• &2%{_location}% &7in &2%{_location}'s world%"
+        message "*** Death message was:"
+        message "&7• &2%{_cause}%"
