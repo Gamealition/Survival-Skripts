@@ -63,9 +63,18 @@ command /modreq [<text>]:
     trigger:
         if arg 1 is not set:
             # Prevent sending "<none>" and let Ticket-Master handle error
-            make player execute command "/ticket new"
+            player command "/ticket new"
         else:
-            make player execute command "/ticket new %arg 1%"
+            player command "/ticket new %arg 1%"
+
+command /shrug [<text>]:
+    description: Allows for shrugging
+    executable by: players
+    trigger:
+        if arg 1 is not set:
+            player command "/me ¯\_(ツ)_/¯"
+        else:
+            player command "/me %arg 1% ¯\_(ツ)_/¯"
 
 command /broadcast-irc <text>:
     description: Broadcasts a message to both in-game and IRC (needed due to Skript/PurpleIRC bugs)
