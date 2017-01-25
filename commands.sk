@@ -34,14 +34,14 @@ command /spawn:
         execute console command "/mv tp %player% a:world"
         
 command /servertime:
-    description: Get's the server's IRL time/date
+    description: Gets the server's IRL time/date
     aliases: /stime, /date
     executable by: players and console
     trigger:
         message "&7*** Current server date/time: &f%now%"
         
 command /links:
-    description: Get's the server's IRL time/date
+    description: Gets the server's IRL time/date
     aliases: /www
     executable by: players and console
     trigger:
@@ -55,6 +55,20 @@ command /links:
         message "&f• &3survival.gamealition.com/changelog &f- Changelog"
         message "&f• &3survival.gamealition.com/bugs &f- Known issues"
         message "&f• &3laken.pw/mcshop &f- Stitch's Shop Index &7&o(third-party)"
+
+command /color:
+    description: Prints a list of formatting codes
+    aliases: /colors, /formatting
+    executable by: players and console
+    trigger:
+        message "&B&LFormatting codes&r - Put these digits after &!"
+        message "&00 - Black &11 - Blue &22 - Green  &33 - Dark Cyan"
+        message "&44 - Dark Red &55 - Purple &66 - Orange &77 - Grey"
+        message "&88 - Dark Grey &99 - Blue &AA - Lime &BB - Cyan"
+        message "&CC - Red &DD - Magenta &EE - Yellow &FF - White"
+        message "L - &LBold&R K - &KMagic&R M - &MStrike&R N - &NUnderline"
+        message "O - &OItalic&R R - &RReset"
+
 
 command /modreq [<text>]:
     description: Files a ticket for staff to handle at current location. Alias for "/ticket new"
