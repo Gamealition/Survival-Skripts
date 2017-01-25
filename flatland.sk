@@ -46,10 +46,6 @@ on bucket fill:
     cancel the event
     execute console command "/flatland-error %player% Can't bucket that!"
 
-on spawn:
-    world is "world_creative"
-    cancel the event
-
 # ### Global functions
 
 command /approve-flatland <offline player>:
