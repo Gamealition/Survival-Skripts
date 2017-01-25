@@ -258,6 +258,12 @@ command /reload:
     trigger:
         message "&8&o*** The command you have dialed is not in service, please try again later"
 
+command /kill:
+    aliases: /spigot:kill, /bukkit:kill, /minecraft:kill
+    executable by: players and console
+    trigger:
+        message "&8&o*** The command you have dialed is not in service, please try again later"
+
 command /kit:
     executable by: players
     trigger:
