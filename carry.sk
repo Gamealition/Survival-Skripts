@@ -18,6 +18,7 @@ function carryNotify(passenger: player, carrier: player):
     message "*** You are now carrying &a%{_passenger}%&f!" to {_carrier}
     message "* Don't take them through low ceilings, as they'll get hurt" to {_carrier}
     message "* Don't go into deep water, else they will be ejected" to {_carrier}
+    message "* You won't be able to click anything whilst they're riding" to {_carrier}
     message "* To see better, press &3F5" to {_carrier}
     message "* To eject them: &3/eject" to {_carrier}
 
