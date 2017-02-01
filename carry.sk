@@ -1,0 +1,165 @@
+# ### Player carry by Roy Curtis
+# ### Licensed under MIT, 2017
+
+# Allows players to pick others up and carry them, with a request system
+
+# ### Global variables
+# carry.%target% - string; name of person who asked to carry this player
+
+# ### Configuration
+
+options:
+    # Max distance between players to allow carrying
+    max distance : 5
+
+# ### Global functions
+
+function carryNotify(passenger: player, carrier: player):
+    message "*** You are now carrying &a%{_passenger}%&f!" to {_carrier}
+    message "* Don't take them through low ceilings, as they'll get hurt" to {_carrier}
+    message "* Don't go into deep water, else they will be ejected" to {_carrier}
+    message "* To see better, press &3F5" to {_carrier}
+    message "* To eject them: &3/eject" to {_carrier}
+
+    message "*** You are now being carried by &a%{_carrier}%&f!" to {_passenger}
+    message "* Don't press SHIFT or sneak until you want to get off them" to {_passenger}
+
+# ### Global events
+
+on quit:
+    # Conditions
+    {carry.%player%} is set
+
+    # Logic
+    set {_carrier} to {carry.%player%} parsed as offline player
+    delete {carry.%player%}
+
+    if {_carrier} is online:
+        message "&7*** Carry request for %player% cancelled" to {_carrier}
+
+# Bugfix if passenger disconnects on carrier
+on quit:
+    # Conditions
+    player's vehicle is a player
+
+    # Logic
+    set {_carrier} to player's vehicle
+    console command "/kick %{_carrier}% Sorry! This is a bug-fix kick; please rejoin"
+
+# ### Global commands
+
+command /ride <player> <player>:
+    description:   Forcefully teleports and attaches a player onto another
+    usage:         /ride <passenger> <carrier>
+    permission:    gamealition.mod-high
+    executable by: players and console
+    trigger:
+        if arg 1 is the player:
+            arg 2 is the player
+            message "&c*** You cannot ride yourself!"
+            exit trigger
+
+        teleport arg 1 to arg 2
+        make arg 1 ride arg 2
+        carryNotify(arg 1, arg 2)
+
+command /carry <player>:
+    description:   Request to carry a player onto your head
+    usage:         /carry <who>
+    permission:    gamealition.approved
+    executable by: players
+    trigger:
+        # Conditions
+        if {carry.%arg 1%} is set:
+            message "&c*** %arg 1% already has a pending carry request"
+            exit trigger
+
+        if command sender's world != arg 1's world:
+            message "&c*** %arg 1% needs to be in the same world as you"
+            exit trigger
+
+        if distance between command sender and arg 1 > {@max distance}:
+            message "&c*** %arg 1% needs to be within {@max distance} blocks away from you"
+            exit trigger
+
+        # Logic
+        set {carry.%arg 1%} to command sender's name
+        message "*** A carry request has been sent to &a%arg 1%&f!"
+
+        message "*** &a%command sender%&f would like to carry you!" to arg 1
+        message "* To accept: &3/carry-accept" to arg 1
+        message "* To reject: &3/carry-reject" to arg 1
+
+command /eject:
+    description:   Ejects any passengers on you
+    usage:         /eject
+    executable by: players
+    trigger:
+        # Conditions
+        if player's passenger is not set:
+            message "&c*** You have no passengers to eject"
+            exit trigger
+
+        # Logic
+        set {_passenger} to player's passenger
+        force {_passenger} to dismount
+
+        message "*** You have ejected &a%{_passenger}%&f"
+
+        if {_passenger} is a player:
+            message "*** You have been ejected from &a%command sender%&f" to {_passenger}
+
+command /carry-accept:
+    description:   Accept a request to be carried by a player
+    usage:         /carry-accept
+    executable by: players
+    trigger:
+        # State
+        set {_carrier} to {carry.%command sender%} parsed as offline player
+
+        # Conditions
+        if {_carrier} is not set:
+            message "&c*** You don't have a pending carry request"
+            exit trigger
+
+        if {_carrier} is not online:
+            message "&c*** %{_carrier}% is offline; carry request deleted"
+            delete {carry.%command sender%}
+            exit trigger
+
+        if command sender's world != {_carrier}'s world:
+            message "&c*** %{_carrier}% needs to be in the same world as you"
+            exit trigger
+
+        if distance between command sender and {_carrier} > {@max distance}:
+            message "&c*** %{_carrier}% needs to be within {@max distance} blocks away from you"
+            exit trigger
+
+        # Logic
+        make command sender ride {_carrier}
+        delete {carry.%command sender%}
+        carryNotify(command sender, {_carrier})
+
+command /carry-reject:
+    description:   Reject a request to be carried by a player
+    usage:         /carry-reject
+    executable by: players
+    trigger:
+        # State
+        set {_carrier} to {carry.%command sender%} parsed as offline player
+
+        # Conditions
+        if {_carrier} is not set:
+            message "&c*** You don't have a pending carry request"
+            exit trigger
+
+        if {_carrier} is not online:
+            message "&c*** %{_carrier}% is offline; carry request deleted"
+            delete {carry.%command sender%}
+            exit trigger
+
+        # Logic
+        delete {carry.%command sender%}
+        message "&c*** %command sender% rejected your carry request" to {_carrier}
+
+        message "*** You have rejected &a%{_carrier}%&f's carry request"

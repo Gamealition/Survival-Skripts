@@ -138,19 +138,6 @@ command /dynmap-here:
     trigger:
         set {_url} to "http://survival.gamealition.com/dynmap/%player's world%/%rounded player's x-coordinate%/%rounded player's y-coordinate%/%rounded player's z-coordinate%"
         console command "/broadcast-irc *** Dynmap URL for %player%'s location: &3%{_url}%"
-        
-command /ride <player> <player>:
-    description: Allows the riding of a player
-    permission: gamealition.mod-high
-    executable by: players
-    trigger:
-        if arg 1 is the player:
-            arg 2 is the player
-            message "&c*** You cannot ride yourself!"
-            exit trigger
-        
-        teleport arg 1 to arg 2
-        make arg 1 ride arg 2
 
 command /gaybrush:
     description: Fabulous!
