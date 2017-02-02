@@ -7,20 +7,10 @@
 # ### Configuration
 
 options:
-    # Name of the resource island schematic
-    island schematic : resource_spawn
-    # Name of the resource island region
-    island region : resource_spawn
-    # Name of portal from resource to survival
-    island survival portal : resource2survival
-    # North-west-upper corner coordinate of resource island
-    island corner 1 : -9,246,-21
-    # South-east-lower corner coordinate of resource island
-    island corner 2 : 9,230,21
-    # Upper-left corner coordinate of resource->survival portal
-    portal corner 1 : 7,244,-12
-    # Lower-right corner coordinate of resource->survival portal
-    portal corner 2 : 7,241,-8
+    # Name of the resource spawn schematic
+    schematic : resource_spawn
+    # Name of the resource spawn region
+    region : resource_spawn
 
 # ### Global functions
 
@@ -28,6 +18,7 @@ function rrCheck(who: player) :: boolean:
     if {_who} is online:
         return true
     else:
+        delete {resource.lock}
         message "&c*** Resource reset interrupted; player has disconnected!" to console
         console command "/broadcast-irc *** Oops! Resource world reset got interrupted mid-process! ***"
         console command "/broadcast-irc *** Please do not attempt to visit resource until the mess is resolved! ***"
@@ -39,20 +30,20 @@ function rrLog(who: player, msg: text):
 
 function rrCommand(who: player, cmd: text):
     command {_cmd} by {_who}
+    # message "Command: %{_cmd}%" to console
 
 function rrConsoleCommand(cmd: text):
     console command {_cmd}
+   # message "Console command: %{_cmd}%" to console
 
 # ### Commands
 
 command /resource-reset <integer> [<text=null>]:
-    description: Performs a resource world reset
+    description:   Performs a resource world reset
     executable by: players
-    permission: gamealition.admin
-    usage: /resource-reset <seed> [--confirm]
+    permission:    gamealition.mod-high
+    usage:         /resource-reset <seed> [--confirm]
     trigger:
-        player is op
-
         if {resource.lock} is set:
             message "&c*** A reset is already in progress"
             exit trigger
@@ -67,99 +58,127 @@ command /resource-reset <integer> [<text=null>]:
             message "The seed you've chosen is: &c%arg 1%"
             message "To continue, add &a--confirm &fto the command, like so:"
             message "&a/resource-reset %arg 1% --confirm"
+            exit trigger
+
+        # Player preperation
 
         message "&c*** %player% triggered resource reset with seed %arg 1%" to console
         set {resource.lock} to true
         set {_seed}         to arg 1
+        set {_origin}       to location at (0, 64, 0) "resource"
+        set {_origin2}      to location at (0, 70, 0) "resource"
 
         message "&c*** Reset in 5 seconds; please don't move or disconnect!"
-        rrCommand(player, "/god on")
-        rrCommand(player, "/spawn")
+        rrConsoleCommand("/god %player% on")
+        rrConsoleCommand("/mvtp %player% a:world")
+        rrConsoleCommand("/mvconfirm")
         wait 5 seconds
 
-        rrCheck(player) is true
-        rrLog(player, "Removing portal...")
-        rrCommand(player, "/mvp remove {@island survival portal}")
-        wait 1 second
-
-        rrCheck(player) is true
-        rrLog(player, "Regenerating resource...")
-        rrCommand(player, "/mv regen resource -s %{_seed}%")
-        rrCommand(player, "/mv confirm")
-        wait 3 second
-
-        rrCheck(player) is true
-        rrLog(player, "Regenerating resource nether...")
-        rrCommand(player, "/mv regen resource_nether -s %{_seed}%")
-        rrCommand(player, "/mv confirm")
-        wait 3 second
-
-        rrCheck(player) is true
-        rrLog(player, "Regenerating resource end...")
-        rrCommand(player, "/mv regen resource_the_end -s %{_seed}%")
-        rrCommand(player, "/mv confirm")
-        wait 3 second
+        # Resource spawn backup
 
         rrCheck(player) is true
         rrLog(player, "Going to resource world...")
-        rrCommand(player, "/mvtp resource")
+        rrConsoleCommand("/mvtp %player% resource")
+        rrConsoleCommand("/mv confirm")
         wait 3 seconds
 
         rrCheck(player) is true
-        rrLog(player, "Adjusting game rules...")
-        rrCommand(player, "/gamerule commandBlockOutput false")
-        wait 1 second
+        rrLog(player, "Copying resource spawn...")
+        rrConsoleCommand("/mvtp %player% e:resource:0.5,64,0.5")
+        rrConsoleCommand("/mv confirm")
+        rrCommand(player, "//chunk")
+        rrCommand(player, "//copy")
+        wait 3 seconds
+
+        # Regeneration
 
         rrCheck(player) is true
-        rrLog(player, "Loading the resource spawn island...")
-        teleport the player to location (0.5, 240, 0.5)
-        set the block under the player to glass
-        rrCommand(player, "//schem load {@island schematic}")
-        wait 1 second
+        rrLog(player, "Regenerating resource...")
+        rrConsoleCommand("/mv regen resource -s %{_seed}%")
+        rrConsoleCommand("/mv confirm")
+        wait 3 seconds
 
         rrCheck(player) is true
-        rrLog(player, "Pasting the resource spawn island...")
+        rrLog(player, "Regenerating resource nether...")
+        rrConsoleCommand("/mv regen resource_nether -s %{_seed}%")
+        rrConsoleCommand("/mv confirm")
+        wait 3 seconds
+
+        rrCheck(player) is true
+        rrLog(player, "Regenerating resource end...")
+        rrConsoleCommand("/mv regen resource_the_end -s %{_seed}%")
+        rrConsoleCommand("/mv confirm")
+        wait 3 seconds
+
+        rrCheck(player) is true
+        rrLog(player, "Reloading Multiverse...")
+        rrConsoleCommand("/mv reload")
+        wait 3 seconds
+
+        # New world preperation
+
+        rrCheck(player) is true
+        rrLog(player, "Going to resource world...")
+        rrConsoleCommand("/mvtp %player% resource")
+        rrConsoleCommand("/mv confirm")
+        wait 3 seconds
+
+        rrCheck(player) is true
+        if player's world != "resource":
+            message "&c*** PANIC: You aren't in the expected world!"
+            message "&c*** PANIC: Player wasn't taken to expected world" to console
+            delete {resource.lock}
+            exit trigger
+
+        rrCheck(player) is true
+        rrLog(player, "Preparing resource world...")
+        rrConsoleCommand("/mvrule commandBlockOutput false resource")
+        set blocks between block at {_origin} and block at {_origin2} to air
+        set block below {_origin} to redstone block
+        wait 3 second
+
+        rrCheck(player) is true
+        rrLog(player, "Pasting the resource spawn chunk...")
+        rrConsoleCommand("/mvtp %player% e:resource:0.5,64,0.5")
+        rrConsoleCommand("/mv confirm")
         rrCommand(player, "//paste")
         wait 3 seconds
 
         rrCheck(player) is true
-        rrLog(player, "Setting resource spawn point...")
-        teleport the player to location (0.5, 240, -9.5)
-        rrCommand(player, "/mvss")
-        rrCommand(player, "/setwarp resource")
-        wait 1 second
-
-        rrCheck(player) is true
-        rrLog(player, "Redefining resource spawn region...")
-        rrCommand(player, "//sel cuboid")
-        rrCommand(player, "//pos1 {@island corner 1}")
-        rrCommand(player, "//pos2 {@island corner 2}")
-        rrCommand(player, "/rg redefine {@island region}")
-        wait 1 second
-
-        rrCheck(player) is true
-        rrLog(player, "Creating resource->survival portal...")
-        rrCommand(player, "//pos1 {@portal corner 1}")
-        rrCommand(player, "//pos2 {@portal corner 2}")
-        rrCommand(player, "/mvp create resource2survival a:world")
-        rrCommand(player, "/mv reload")
-        wait 1 second
-
-        rrCheck(player) is true
         rrLog(player, "Deleting PRISM history...")
         rrConsoleCommand("/pr delete w:resource w:resource_the_end w:resource_nether t:99w")
-        wait 1 second
+        wait 3 second
 
+        rrCheck(player) is true
+        rrLog(player, "Reloading Multiverse once more...")
+        rrConsoleCommand("/mv reload")
+        wait 3 seconds
+
+        # Finalize
+
+        delete {resource.lock}
         rrLog(player, "Resource reset finished!")
-        rrCommand(player, "/god off")
+        rrConsoleCommand("/god %player% off")
 
         message "&c&l*** RESOURCE RESET IS NOT YET FINISHED!"
         message "You must now do the following, manually:"
         message ""
-        message "* Go to resource nether and. . ."
+        message "* Do &3/mvtp resource_nether&f and. . ."
         message "  * Create a portal near 0,0; destroy existing portals"
         message "  * Set spawn at safe place using &3/mvss"
-        message "* Go to resource end and. . ."
+        message "* Do &3/mvtp resource_the_end&f and. . ."
         message "  * Set spawn at safe place using &3/mvss"
         message "* Announce the resource reset in chat, twitter and forums"
         message "* Update the forums' resource biomes list and map"
+
+command /resource-unlock:
+    description:   Disengages the resource reset lock
+    executable by: players and console
+    permission:    gamealition.mod-high
+    usage:         /resource-unlock
+    trigger:
+        if {resource.lock} is set:
+            delete {resource.lock}
+            message "&c*** Resource reset lock deleted; make sure you know what you're doing!"
+        else:
+            message "&c*** There is no resource reset lock"
