@@ -62,6 +62,7 @@ command /quarry <offline player> [<number=0>] <text>:
         add "↳ &cCommited &7by &f%command sender% &7on &f%now%&7, with money set to &f%{_offsetMoney}% &7because &f%{_reason}%" to {derpi.%{_target}%.log::*}
         
         # Handle the target...
+        execute console command "/unjail %{_target}%"
         execute console command "/perms player %{_target}% setgroup inmate"
         execute console command "/mv tp %{_target}% world_derpi"
         set {_target}'s money to {_offsetMoney}
