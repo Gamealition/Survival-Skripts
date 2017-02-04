@@ -71,6 +71,10 @@ command /carry <player>:
     executable by: players
     trigger:
         # Conditions
+        if arg 1 is the player:
+            message "&c*** You cannot carry yourself!"
+            exit trigger
+
         if {carry.%arg 1%} is set:
             message "&c*** %arg 1% already has a pending carry request"
             exit trigger
