@@ -132,12 +132,19 @@ command /dmap-enable <text> <boolean>:
         execute player command "/dmap worldset %arg 1% enabled:%arg 2%"
         execute player command "/dynmap pause none"
 
-command /dynmap-here:
-    description: Broadcasts a link to Dynmap zoomed to your location
+command /dynmap-here [<player>]:
+    description:   Broadcasts a link to Dynmap zoomed to your location
     executable by: players
+    usage:         /dynmap-here [<target>]
     trigger:
-        set {_url} to "http://survival.gamealition.com/dynmap/%player's world%/%rounded player's x-coordinate%/%rounded player's y-coordinate%/%rounded player's z-coordinate%"
-        console command "/broadcast-irc *** Dynmap URL for %player%'s location: &3%{_url}%"
+        set {_url} to "survival.gamealition.com/dynmap/%player's world%/%rounded player's x-coordinate%/%rounded player's y-coordinate%/%rounded player's z-coordinate%"
+
+        if arg 1 is set:
+            message "*** Your Dynmap location was sent to %arg 1%"
+            message "*** %player% sent you a Dynmap link:" to arg 1
+            message "&3%{_url}%" to arg 1
+        else:
+            console command "/broadcast-irc *** Dynmap URL for %player%'s location: &3http://%{_url}%"
 
 command /gaybrush:
     description: Fabulous!
