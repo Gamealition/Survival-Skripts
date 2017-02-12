@@ -172,13 +172,28 @@ command /item-damage <number>:
         message "*** Set damage of %player's held item% to %arg 1%"
 
 command /item-rename <text>:
-    description: Renames held item to given text
-    permission: gamealition.mod-high
+    description: Renames held item to the given text
     executable by: players
     trigger:
-        player is holding anything
-        set name of player's held item to colored arg 1
-        message "*** Set name of %player's held item% to ""%colored arg 1%&r"""
+        if player is holding air:
+            message "&c*** You need to hold the item you want to rename!"
+            exit trigger
+
+        set {_held} to player's held item
+        set {_name} to colored arg 1
+
+        # Take 1 level away from non-moderator players
+        if player doesn't have permission "gamealition.mod-high":
+            if player's level < 1:
+                message "&c*** You need at least 1 level to rename items!"
+                exit trigger
+
+            remove 1 from player's level
+            message "*** Renamed %{_held}% to ""%{_name}%&r"" at cost of 1 level"
+        else:
+            message "*** Renamed %{_held}% to ""%{_name}%&r"""
+
+        set name of {_held} to {_name}
 
 command /item-lore <text>:
     description: Sets lore tagline of held item
