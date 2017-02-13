@@ -65,12 +65,6 @@ command /lasertag:
             message "*** Laser tag mode is &adisabled&r. Use &3/lasertag&r again to enable."
             set {laser.%uuid of player%.enabled} to false
 
-on damage:
-    attacker is player
-    message "%attacker%, %damage cause%, %victim%" to console
-
-    
-
 on damage of player:
     attacker is player
 
