@@ -1,0 +1,27 @@
+# ### Utility functions by Roy Curtis
+# ### Licensed under MIT, 2016
+
+# Provides utility functions that don't fit anywhere else. Note that this file is prefixed
+# with an exclaimation mark, as it must run before any other scripts
+
+# ### Configuration
+
+options:
+    name color : <lime>
+
+# ### Checking functions
+
+# Returns true if given player is in moderator mode or opped
+function isStaff(who: offline player) :: boolean:
+    if {_who} has permission "gamealition.mod-high":
+        return true
+    else if {_who} is op:
+        return true
+    else:
+        return false
+
+# ### Formatting functions
+
+# Colorizes the name of the given player
+function name(who: offline player) :: text:
+    return "{@name color}%{_who}%&F"
