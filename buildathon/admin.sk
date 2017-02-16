@@ -3,10 +3,14 @@
 
 # Commands for general management of Build-a-thon events
 
+# ### Permission nodes
+# gamealition.buildathon.host - Player is a build-a-thon host
+
 # ### Global variables
 # buildathon.host - player; current build-a-thon host
 
-# Global functions
+# ### Global functions
+
 function batRemoveHost(_: number = 0):
     {buildathon.host} is set
     console command "/perms group buildathon-host remove %{buildathon.host}%"
@@ -17,6 +21,14 @@ function batSetHost(who: player):
     set {buildathon.host} to {_who}
     console command "/perms group buildathon-host add %{_who}%"
     message "*** You are now the Build-a-thon host!" to {_who}
+
+function batIsHost(who: player) :: boolean:
+    if {_who} has permission "gamealition.buildathon.host":
+        return true
+    else if isStaff({_who}) is true:
+        return true
+    else:
+        return false
 
 # ### Global commands
 
@@ -35,7 +47,7 @@ command /buildathon-host [<offline player>]:
             batSetHost(arg 1)
             message "*** %name(arg 1)% is now the Build-a-thon host"
         else:
-            message "&c*** You don't have permission to set the BAT host"
+            message "&c*** You must be staff to set the BAT host"
 
 command /buildathon-clearhost:
     description:   Clears the current Build-a-thon host

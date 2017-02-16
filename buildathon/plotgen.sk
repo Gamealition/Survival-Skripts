@@ -3,6 +3,9 @@
 
 # Handles generation of plots for Build-a-thon events
 
+# ### Permission nodes
+# gamealition.buildathon.host - Player is a build-a-thon host
+
 # ### Global variables
 # buildathon.lock - boolean; set if generating plots
 
