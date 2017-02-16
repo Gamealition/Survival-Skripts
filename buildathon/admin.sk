@@ -3,7 +3,48 @@
 
 # Commands for general management of Build-a-thon events
 
+# ### Global variables
+# buildathon.host - player; current build-a-thon host
+
+# Global functions
+function batRemoveHost(_: number = 0):
+    {buildathon.host} is set
+    console command "/perms group buildathon-host remove %{buildathon.host}%"
+    message "*** You are no longer the Build-a-thon host" to {buildathon.host}
+    delete {buildathon.host}
+
+function batSetHost(who: player):
+    set {buildathon.host} to {_who}
+    console command "/perms group buildathon-host add %{_who}%"
+    message "*** You are now the Build-a-thon host!" to {_who}
+
 # ### Global commands
+
+command /buildathon-host [<offline player>]:
+    description:   Gets or sets the current Build-a-thon host
+    executable by: players and console
+    trigger:
+        # Getter
+        if arg 1 is not set:
+            message "*** Current Build-a-thon host is %name({buildathon.host})%"
+            exit trigger
+
+        # Setter
+        if isStaff(player) is true:
+            batRemoveHost()
+            batSetHost(arg 1)
+            message "*** %name(arg 1)% is now the Build-a-thon host"
+        else:
+            message "&c*** You don't have permission to set the BAT host"
+
+command /buildathon-clearhost:
+    description:   Clears the current Build-a-thon host
+    executable by: players and console
+    permission:    gamealition.mod-high
+    permission:    gamealition.buildathon.host
+    trigger:
+        message "*** Removed %name({buildathon.host})% as Build-a-thon host"
+        batRemoveHost()
 
 command /buildathon-ticket <player>:
     description:   Handles Build-a-thon ticket purchase
