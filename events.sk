@@ -33,6 +33,12 @@ on spawn of a skeleton:
     kill the entity's vehicle
     kill the entity
 
+# Disable frost walker in overworld
+on form:
+    item is frosted ice
+    world is "world" or "world_nether" or "world_the_end"
+    cancel the event
+
 # Mob riding
 on rightclick on a creature:
     creature is not a horse
