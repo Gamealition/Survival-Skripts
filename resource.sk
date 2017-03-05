@@ -146,7 +146,9 @@ command /resource-reset <integer> [<text=null>]:
 
         rrCheck(player) is true
         rrLog(player, "Deleting PRISM history...")
-        rrConsoleCommand("/pr delete w:resource w:resource_the_end w:resource_nether t:99w")
+        rrConsoleCommand("/pr delete w:resource t:31d")
+        rrConsoleCommand("/pr delete w:resource_nether t:31d")
+        rrConsoleCommand("/pr delete w:resource_the_end t:31d")
         wait 3 second
 
         rrCheck(player) is true
