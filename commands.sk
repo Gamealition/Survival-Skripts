@@ -84,6 +84,8 @@ command /modreq [<text>]:
 command /shrug [<text>]:
     description: Allows for shrugging
     executable by: players
+    permission: gamealition.approved
+    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
     trigger:
         if arg 1 is not set:
             player command "/me ¯\_(ツ)_/¯"
@@ -101,6 +103,7 @@ command /broadcast-irc <text>:
 command /fixtoggle:
     aliases: /fixtoggles, /fixsign, /fixsigns, /fixtogglesigns, /reloadsignshop
     permission: gamealition.approved
+    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
     trigger:
         {fixtoggle.lastused} was less than a minute ago:
             message "&7*** This command has a minute cooldown. Try again later"
@@ -113,6 +116,7 @@ command //replacestair <text> <text>:
     description: Assists with replacing stairs with the correct orientation
     aliases: //replacestairs
     executable by: players
+    permission: worldedit.region.replace
     trigger:
         execute player command "//replace %arg 1%:0 %arg 2%:0"
         execute player command "//replace %arg 1%:1 %arg 2%:1"
@@ -136,6 +140,8 @@ command /dynmap-here [<player>]:
     description:   Broadcasts a link to Dynmap zoomed to your location
     executable by: players
     usage:         /dynmap-here [<target>]
+    permission: gamealition.approved
+    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
     trigger:
         set {_url} to "survival.gamealition.com/dynmap/%player's world%/%rounded player's x-coordinate%/%rounded player's y-coordinate%/%rounded player's z-coordinate%"
 
@@ -149,6 +155,7 @@ command /dynmap-here [<player>]:
 command /gaybrush:
     description: Fabulous!
     executable by: players
+    permission: worldedit.brush.cylinder
     trigger:
         player command "//none"
         player command "//br cyl 35:0,35:1,35:2,35:3,35:4,35:5,35:6,35:7,35:8,35:9,35:10,35:11,35:12,35:13,35:14,35:15 10"
@@ -174,6 +181,8 @@ command /item-damage <number>:
 command /item-rename <text>:
     description: Renames held item to the given text
     executable by: players
+    permission: gamealition.approved
+    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
     trigger:
         if player is holding air:
             message "&c*** You need to hold the item you want to rename!"
@@ -223,6 +232,8 @@ command /coffee <player=%player%>:
 command /isbanned <offline player>:
     description: Checks if a player is banned
     executable by: players and console
+    permission: gamealition.approved
+    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
     trigger:
         if arg 1 is banned:
             message "&7*** &f%arg 1%&7 is &cperma-banned"
@@ -233,6 +244,8 @@ command /isbanned <offline player>:
 command /age <offline player>:
     description: Gets the server age of a player
     executable by: players and console
+    permission: gamealition.approved
+    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
     trigger:
         message "&7*** &2%arg 1%&f has been on the server..."
         message "&7• UUID &f%{uuid.%arg 1%}%"
@@ -302,6 +315,8 @@ command /tpa:
 
 command /nearby-entities [<number=120>]:
     executable by: players
+    permission: gamealition.approved
+    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
     trigger:
         set {_radius} to arg 1
 
@@ -315,6 +330,8 @@ command /nearby-entities [<number=120>]:
 
 command /entity-rundown [<number=120>]:
     executable by: players and console
+    permission: gamealition.approved
+    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
     trigger:
         set {_radius} to arg 1
 
@@ -330,6 +347,8 @@ command /entity-rundown [<number=120>]:
 
 command /world-entities:
     executable by: players
+    permission: gamealition.approved
+    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
     trigger:
         message "*** Searching for entities in %player's world%:"
 
@@ -345,6 +364,7 @@ command /arm-armorstands:
     description: Replaces all armor stands in inventory with ones that have arms
     executable by: players
     permission: gamealition.approved
+    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
     trigger:
         set {_stands} to number of armor stand in the player's inventory
 
