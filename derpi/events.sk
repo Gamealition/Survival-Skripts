@@ -39,11 +39,11 @@ on rightclick on a sign:
             give 1 wooden pickaxe to the player
             remove 16 cobblestone from player's inventory
             message "&7*** You get a wooden pickaxe for 16 cobblestone mined"
-        else if {derpi.freepickaxe.%player%} was less than a day ago:
+        else if {derpi.freepickaxe.%player's uuid%} was less than a day ago:
             message "&c&l*** &cYou don't have 16 cobblestone and you've already claimed a free pickaxe today!"
             message "&c&l*** &cShould have managed your cobblestone better. Try again tomorrow."
         else:
-            set {derpi.freepickaxe.%player%} to now
+            set {derpi.freepickaxe.%player's uuid%} to now
             give 1 wooden pickaxe to the player
             message "&c&l*** &cYou don't have 16 cobblestone! You've been given a free pickaxe for today"
             message "&c&l*** &cManage your cobblestone better. If you can't pay for another pickaxe today, you will have to try again tomorrow!"
@@ -51,14 +51,28 @@ on rightclick on a sign:
     
 on player join:
     wait for 2 seconds
-    if {derpi.queuequarry.%player%} exists:
-        execute console command "/quarry %player% %{derpi.queuequarry.%player%.offset}% %{derpi.queuequarry.%player%}%"
-        delete {derpi.queuequarry.%player%}
-        delete {derpi.queuequarry.%player%.offset}
-    else if {derpi.queuerelease.%player%} exists:
+    set {_targetUUID} to player's UUID
+
+    # Process queued quarries
+    if {derpi.queuequarry.%{_targetUUID}%} exists:
+        set {_offset} to {derpi.queuequarry.%{_targetUUID}%.offset}
+        set {_reason} to {derpi.queuequarry.%{_targetUUID}%}
+
+        # Handle legacy entries without offsets
+        if {_offset} is not set:
+            set {_offset} to 0
+
+        execute console command "/quarry %player% %{_offset}% %{_reason}%"
+        delete {derpi.queuequarry.%{_targetUUID}%}
+        delete {derpi.queuequarry.%{_targetUUID}%.offset}
+
+    # Process queued releases
+    else if {derpi.queuerelease.%{_targetUUID}%} exists:
         execute console command "/unquarry %player%"
-        delete {derpi.queuerelease.%player%}
-    else if {derpi.%player's uuid%.quarried} is set:
+        delete {derpi.queuerelease.%{_targetUUID}%}
+
+    # Broadcast inmate statuses and perform security checks
+    else if {derpi.%{_targetUUID}%.quarried} is set:
         wait for 2 seconds
         console command "/broadcast-irc &l*** &f%player% &7is in the &c&lDERPI&7! Their balance is: &f%player's money%"
         message "You are in the &lDemeanor Eradication and Rehabilitation Penitentiary Institute &r(DERPI)"
