@@ -64,7 +64,7 @@ command /quarry <offline player> [<number=0>] <text>:
         set {derpi.%{_targetUUID}%.quarried.because} to {_reason}
         
         # Logging
-        add "↳ &cCommited &7by &f%command sender% &7on &f%now%&7, with money set to &f%{_offsetMoney}% &7because &f%{_reason}%" to {derpi.%{_targetUUID}%.log::*}
+        add "↳ &cCommited &7by &f%command sender% &7on &f%now%&7, with money set from &f%{_target}'s money% &7to &f%{_offsetMoney}% &7because &f%{_reason}%" to {derpi.%{_targetUUID}%.log::*}
         
         # Handle the target...
         execute console command "/unjail %{_target}%"
