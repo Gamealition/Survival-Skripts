@@ -85,6 +85,7 @@ on right click on bed:
 
 # Allow the dropping of anvils from mid-air
 # on player drop of anvil:
+#     world is "world_creative"
 #     block at dropped item is air
 #     delete the dropped item
 #     set block at dropped item to anvil
