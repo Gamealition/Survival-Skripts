@@ -1,0 +1,44 @@
+# ### April fools 2017 script by Roy Curtis
+# ### Licensed under MIT, 2017
+
+# ### References
+# fools2017.join.%player% - boolean; whether player has been taken to the fools world
+
+# ### Commands
+command /reset-fools2017 <offline player>:
+    description: Reset April Fools 2017 for a player (debugging purposes)
+    permission: gamealition.mod-high
+    executable by: players and console
+    trigger:
+        delete {fools2017.join.%arg 1%}
+        message "*** April Fools 2017 reset for %arg 1%"
+
+# ### Events
+on join:
+    # Conditions
+    {fools2017.join.%player%} is not set
+    player does not have permission "derpi.inmate"
+    player has permission "gamealition.approved"
+
+    # Logic
+    wait 1 second
+    set {fools2017.join.%player%} to true
+    console command "/mv tp %player% a:world_chaos"
+    console command "/playsound entity.wither.spawn neutral %player% ~ ~ ~ 1 1 1"
+
+# April fools 2017
+command /reboot:
+    description: Reboots players back to the past
+    permission: gamealition.approved
+    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
+    executable by: players
+    trigger:
+        player does not have permission "derpi.inmate"
+        execute console command "/mv tp %player% a:world_chaos"
+
+command /bcast <text>:
+    description: Temp bcast
+    permission: gamealition.moderator
+    executable by: players and console
+    trigger:
+        broadcast colored arg 1

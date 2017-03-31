@@ -115,7 +115,7 @@ on command:
 
 on command "op":
     player doesn't have permission "gamealition.admin"
-    kick the player because "*taps with wand* you are now an OP, %player%"
+    console command "/kick %player% *taps with wand* you are now an OP, %player%"
     cancel the event
 
 # ########################################################################################
