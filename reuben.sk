@@ -7,6 +7,7 @@ on load:
     set {reuben.last} to now
 
     # Normal responses
+    clear {reuben::normal::*}
     add "oinks despondently" to {reuben::normal::*}
     add "gives you a curious look" to {reuben::normal::*}
     add "carefully considers life" to {reuben::normal::*}
@@ -16,21 +17,25 @@ on load:
     add "looks around nervously for British prime ministers" to {reuben::normal::*}
 
     # Thundering
+    clear {reuben::thunder::*}
     add "shivers nervously" to {reuben::thunder::*}
     add "cowers in the mud" to {reuben::thunder::*}
     add "startles" to {reuben::thunder::*}
 
     # Flying
+    clear {reuben::flying::*}
     add "is jealous" to {reuben::flying::*}
     add "hops in a pathetic attempt to fly" to {reuben::flying::*}
     add "stares at you in disbelief" to {reuben::flying::*}
     add "oinks begrudgingly" to {reuben::flying::*}
 
     # Wearing leather
+    clear {reuben::leather::*}
     add "frowns at your choice of clothing" to {reuben::leather::*}
     add "attempts to moo at you condescendingly" to {reuben::leather::*}
 
     # Poisoned
+    clear {reuben::poison::*}
     add "eyes you wearily" to {reuben::poison::*}
     add "shies away from you" to {reuben::poison::*}
     add "hopes you are not contagious" to {reuben::poison::*}
@@ -41,81 +46,93 @@ on load:
     # add "is blinded by your bright 'personality'" to {reuben::burning::*}
 
     # Holding leash
+    clear {reuben::lead::*}
     add "snaps at the leash" to {reuben::lead::*}
     add "shies away from the leash" to {reuben::lead::*}
     add "exercises self-restraint" to {reuben::lead::*}
     add "isn't into that" to {reuben::lead::*}
 
     # Holding saddle
+    clear {reuben::saddle::*}
     add "dashes from under the saddle" to {reuben::saddle::*}
     add "tries to neigh at you sarcastically" to {reuben::saddle::*}
     add "squeals and bucks the saddle off" to {reuben::saddle::*}
 
     # Holding pork
+    clear {reuben::pork::*}
     add "frowns at your choice of food" to {reuben::pork::*}
     add "mourns his tasty bretheren" to {reuben::pork::*}
     add "hopes you hold human flesh" to {reuben::pork::*}
     add "disapproves of your offering" to {reuben::pork::*}
 
     # Holding other meat
+    clear {reuben::meat::*}
     add "looks away from your offering" to {reuben::meat::*}
     add "prefers something palatable" to {reuben::meat::*}
     add "looks uninterested" to {reuben::meat::*}
 
     # Holding veggies
+    clear {reuben::veggie::*}
     add "appreciates your good taste" to {reuben::veggie::*}
     add "feels healthy" to {reuben::veggie::*}
     add "om-noms happily" to {reuben::veggie::*}
 
     # Holding carrot
+    clear {reuben::carrot::*}
     add "appreciates your offering" to {reuben::carrot::*}
     add "feels warm and fuzzy inside" to {reuben::carrot::*}
     add "has a sudden urge to cuddle your leg aggressively" to {reuben::carrot::*}
 
     # Holding carrot on a stick
+    clear {reuben::carrotstick::*}
     add "attempts to follow" to {reuben::carrotstick::*}
     add "gives you a bitter stare" to {reuben::carrotstick::*}
     add "thinks it's bad luck to go fishing for pigs" to {reuben::carrotstick::*}
 
     # Holding apple
+    clear {reuben::apple::*}
     add "appreciates the apple, but will not heal your warts" to {reuben::apple::*}
     add "finds your taste in food pretentious" to {reuben::apple::*}
     add "dislikes rich foods" to {reuben::apple::*}
 
     # Holding wheat
+    clear {reuben::wheat::*}
     add "senses a storm brewing" to {reuben::wheat::*}
     add "feels positively bovine" to {reuben::wheat::*}
 
     # Holding weapon
+    clear {reuben::weapon::*}
     add "thinks you can do better than that" to {reuben::weapon::*}
     add "eyes your weapon wearily" to {reuben::weapon::*}
     add "frowns at your blade" to {reuben::weapon::*}
     add "feels a little triggered" to {reuben::weapon::*}
 
     # Holding fiery stuff
+    clear {reuben::lighter::*}
     add "squeals painfully" to {reuben::lighter::*}
     add "did not appreciate that" to {reuben::lighter::*}
     add "does not go well with hot sauce" to {reuben::lighter::*}
     add "emits a sudden bacony waft" to {reuben::lighter::*}
 
     # Holding explosive stuff
+    clear {reuben::explode::*}
     add "experiences a critical acceleration of anti-gravity" to {reuben::explode::*}
     add "yelps explosively" to {reuben::explode::*}
     add "goes flying" to {reuben::explode::*}
 
-    # Attack responses
+    # Melee attack responses
+    clear {reuben::attacked::*}
     add "does not respond to your aggression" to {reuben::attacked::*}
     add "dodges your attack" to {reuben::attacked::*}
     add "snaps at you" to {reuben::attacked::*}
     add "bites your ankle" to {reuben::attacked::*}
+
+    # Projectile attack responses
+    clear {reuben::attacked-proj::*}
     add "ducks, oinks quackingly" to {reuben::attacked-proj::*}
     add "sausage-rolls out of the way" to {reuben::attacked-proj::*}
     add "dives into the mud" to {reuben::attacked-proj::*}
     add "yelps despondently" to {reuben::attacked-proj::*}
-
-on unload:
-    clear {reuben::*}
-    clear {reuben.last}
 
 on damage of a pig:
     # Conditions
