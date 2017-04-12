@@ -287,6 +287,7 @@ command /kill:
         message "&8&o*** The command you have dialed is not in service, please try again later"
 
 command /kit:
+    aliases: /kits
     executable by: players
     trigger:
         message "*** &cThere are no kits on this server! &fHowever, you can visit the Toolshed for free player-donated tools and armor. Just go south of spawn, or ask!"
