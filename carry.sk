@@ -118,6 +118,7 @@ command /carry-accept:
     description:   Accept a request to be carried by a player
     usage:         /carry-accept
     executable by: players
+    aliases:       /carryyes
     trigger:
         # State
         set {_carrier} to {carry.%command sender%} parsed as offline player
@@ -149,6 +150,7 @@ command /carry-reject:
     description:   Reject a request to be carried by a player
     usage:         /carry-reject
     executable by: players
+    aliases:       /carryno
     trigger:
         # State
         set {_carrier} to {carry.%command sender%} parsed as offline player
