@@ -41,7 +41,7 @@ command /servertime:
         message "&7*** Current server date/time: &f%now%"
         
 command /links:
-    description: Gets the server's IRL time/date
+    description: Shows a list of useful Gamealition websites
     aliases: /www
     executable by: players and console
     trigger:
