@@ -241,7 +241,7 @@ command /isbanned <offline player>:
         else:
             message "&7*** &f%arg 1%&7 is not banned"
 
-command /age <offline player>:
+command /age [<offline player = %player%>]:
     description: Gets the server age of a player
     executable by: players and console
     permission: gamealition.approved
