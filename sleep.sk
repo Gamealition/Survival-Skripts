@@ -1,10 +1,40 @@
 # ### Sleep voting by Roy Curtis
 # ### Licensed under MIT, 2015
 
+# ### Global variables
+# sleep.%world% - number; amount of players for tracking
+
 # ### Configuration
+
 options:
   sleep percent : 25
   wake message  : Wakey wakey, eggs and bakey!
+
+# ### Global functions
+
+function sleepCalculate(world: world):
+    set {_players}  to number of players in {_world}
+    set {_sleepers} to 0
+
+    loop all players in {_world}:
+        loop-player is sleeping
+        add 1 to {_sleepers}
+
+    # Don't bother if nobody is sleeping
+    if {_sleepers} is 0:
+        exit trigger
+
+    set {_perc} to ({_sleepers} / {_players}) * 100
+
+    broadcast "*** &a%rounded {_perc}%%%&f of players in &a%{_world}%&f are sleeping ({@sleep percent}%% required)" to {_world}
+
+    if {_perc} is greater than or equal to {@sleep percent}:
+        set {sleep.handling} to true
+        wait 20 ticks
+        delete {sleep.handling}
+        set time in {_world} to 6:00
+        set weather in {_world} to clear
+        broadcast "&6*** {@wake message} It is now morning in %{_world}%" to {_world}
 
 # ### Events
 
@@ -13,7 +43,7 @@ on bed enter:
         exit trigger
 
     wait 1 tick
-    execute console command "/calculatesleepvote %world%"
+    sleepCalculate(world)
 
 on bed leave:
     if {sleep.handling} is set:
@@ -21,34 +51,4 @@ on bed leave:
 
     time in world is not between 6:00 and 18:00
     wait 1 tick
-    execute console command "/calculatesleepvote %world%"
-
-# ### Functions
-
-command /calculatesleepvote <world>:
-    description: Internally used by Skript to calculate sleep voting
-    executable by: console
-    trigger:
-        set {_world} to arg 1
-        set {_players} to number of players in {_world}
-        set {_sleepers} to 0
-
-        loop all players in {_world}:
-            loop-player is sleeping
-            add 1 to {_sleepers}
-
-        # Don't bother if nobody is sleeping
-        if {_sleepers} is 0:
-            exit trigger
-
-        set {_perc} to ({_sleepers} / {_players}) * 100
-
-        broadcast "*** &a%rounded {_perc}%%%&f of players in &a%{_world}%&f are sleeping ({@sleep percent}%% required)" to {_world}
-
-        if {_perc} is greater than or equal to {@sleep percent}:
-            set {sleep.handling} to true
-            wait 20 ticks
-            delete {sleep.handling}
-            set time in {_world} to 6:00
-            set weather in {_world} to clear
-            broadcast "&6*** {@wake message} It is now morning in %{_world}%" to {_world}
+    sleepCalculate(world)
