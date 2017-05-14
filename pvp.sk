@@ -91,6 +91,10 @@ on damage of player:
             execute console command "/playsound entity.villager.hurt neutral %victim% ~ ~ ~ 1 1 1"
             execute console command "/playsound entity.player.levelup neutral %attacker% ~ ~ ~ 1 1 1"
 
+        # Bugfix for fire arrows
+        if projectile is on fire:
+            extinguish the victim
+        
         cancel the event
         exit trigger
     
