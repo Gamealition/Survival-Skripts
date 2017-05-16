@@ -1,0 +1,98 @@
+# ### Sign clipboard and editor by Roy Curtis
+# ### With help from tim740 and Duerto
+# ### Licensed under MIT, 2017
+
+# Allows players to copy and paste signs, and admins to edit signs. Limits paste to blank
+# signs only, as extra security. Based off of CraftBook's sign editor
+
+# ### Global variables
+# sign.%player%.%line% - string; Player's sign editor clipboard
+
+# ### Configuration
+
+options:
+    # Sign editing wand
+    wand : flint
+
+# ### Global functions
+
+function signPaste(sign: block, who: player):
+    set line 1 of {_sign} to colored {sign.%{_who}%.1}
+    set line 2 of {_sign} to colored {sign.%{_who}%.2}
+    set line 3 of {_sign} to colored {sign.%{_who}%.3}
+    set line 4 of {_sign} to colored {sign.%{_who}%.4}
+    message "*** Your clipboard has been pasted onto the sign" to {_who}
+
+# ### Global events
+
+# Handle sign wand copying
+on right click on sign:
+    # Conditions
+    player is holding {@wand}
+
+    # Logic
+    cancel the event
+    set {sign.%player%.1} to line 1
+    set {sign.%player%.2} to line 2
+    set {sign.%player%.3} to line 3
+    set {sign.%player%.4} to line 4
+    message "*** That sign's text has been copied onto your clipboard, use"
+    message " &3/sign&f to view or edit your clipboard."
+
+# Handle sign wand pasting
+on left click on sign:
+    # Conditions
+    player is holding {@wand}
+
+    # Logic
+    cancel the event
+    if {sign.%player%.1} is not set:
+        message "*** Your clipboard is empty; right-click a sign with {@wand} to copy"
+    # Checks if sign is empty. Other ways of doing this don't work...
+    else if "%line 1%%line 2%%line 3%%line 4%" is "":
+        signPaste(clicked block, player)
+    else if player is op:
+        signPaste(clicked block, player)
+    else:
+        message "&c*** Sorry, you may only paste onto blank signs"
+
+# Clears clipboard on quit
+on quit:
+    # Conditions
+    {sign.%player%.1} is set
+
+    # Logic
+    delete {sign.%player%.1}
+    delete {sign.%player%.2}
+    delete {sign.%player%.3}
+    delete {sign.%player%.4}
+
+# ### Global commands
+
+command /sign [edit <number> [<text>]]:
+    description:   Looks at or edits current sign clipboard
+    usage:         /sign [edit <line-number> <text>]
+    permission:    gamealition.approved
+    executable by: players
+    trigger:
+        # Conditions
+        if {sign.%player%.1} is not set:
+            message "*** Your clipboard is empty; right-click a sign with {@wand} to copy"
+            exit trigger
+
+        # Clipboard check mode
+        if arg 1 is not set:
+            message "*** Your current sign clipboard:"
+            message colored "> %{sign.%player%.1}%"
+            message colored "> %{sign.%player%.2}%"
+            message colored "> %{sign.%player%.3}%"
+            message colored "> %{sign.%player%.4}%"
+            exit trigger
+
+        # Clipboard edit mode
+        if arg 2 is set:
+            set {sign.%player%.%arg 1%} to arg 2
+            message "*** Line %arg 1% of clipboard set to: %colored arg 2%"
+        else:
+            set {sign.%player%.%arg 1%} to ""
+            message "*** Line %arg 1% of clipboard set to blank line"
