@@ -118,6 +118,11 @@ on command "op":
     console command "/kick %player% *taps with wand* you are now an OP, %player%"
     cancel the event
 
+# Workaround for DiscordSRV's lack of /me support
+on command "me":
+    player has permission "essentials.me"
+    console command "/discord bcast _%player% %arguments%_"
+
 # ########################################################################################
 # # SERVER ###############################################################################
 # ########################################################################################
