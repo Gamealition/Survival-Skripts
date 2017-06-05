@@ -93,12 +93,12 @@ command /shrug [<text>]:
             player command "/me %arg 1% ¯\_(ツ)_/¯"
 
 command /broadcast-irc <text>:
-    description: Broadcasts a message to both in-game and IRC (needed due to Skript/PurpleIRC bugs)
+    description: Broadcasts a message to both in-game and Discord
     executable by: players and console
     permission: gamealition.mod-high
     trigger:
         broadcast colored arg 1
-        console command "/irc send GamealitionMC ##Gamealition %colored arg 1%"
+        console command "/discord bcast %colored arg 1%"
 
 command /fixtoggle:
     aliases: /fixtoggles, /fixsign, /fixsigns, /fixtogglesigns, /reloadsignshop
