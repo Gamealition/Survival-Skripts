@@ -48,7 +48,6 @@ command /links:
         message "&B&LGamealition &f&lSurvival &flinks:"
         message "&f• &3gamealition.com &f- Official"
         message "&f• &3forums.gamealition.com &f- Forums"
-        message "&f• &3irc.gamealition.com &f- IRC"
         message "&f• &3discord.gamealition.com &f- Discord"
         message "&f• &3survival.gamealition.com/rules &f- Rules"
         message "&f• &3survival.gamealition.com/dynmap &f- Dynmap"
