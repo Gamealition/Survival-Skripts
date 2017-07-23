@@ -54,7 +54,7 @@ command /links:
         message "&f• &3survival.gamealition.com/features &f- Features"
         message "&f• &3survival.gamealition.com/changelog &f- Changelog"
         message "&f• &3survival.gamealition.com/bugs &f- Known issues"
-        message "&f• &3stitchhasaglitch.com/mcshopdex &f- Stitch's Shop Index &7&o(third-party)"
+        message "&f• &3stitchhasaglitch.com/mcshopdex &f- Stitch's Shop Index"
 
 command /color:
     description: Prints a list of formatting codes
