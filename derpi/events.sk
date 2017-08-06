@@ -5,7 +5,7 @@
 # ########################################################################################
         
 on rightclick on a sign:
-    world of the clicked block is "world_derpi"
+    world is "world_derpi"
     {derpi.%player's uuid%.quarried} is set
         
     if line 2 of the clicked block contains "[Freedom]":

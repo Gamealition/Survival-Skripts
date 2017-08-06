@@ -209,7 +209,8 @@ command /item-lore <text>:
     executable by: players
     trigger:
         player is holding anything
-        set 1st line of (player's held item)'s lore to colored arg 1
+        set {_held} to player's held item
+        set 1st line of {_held}'s lore to colored arg 1
         message "*** Set 1st lore line of %player's held item% to ""%colored arg 1%&r"""
 
 # Courtesy of http://heads.freshcoal.com/maincollection.php

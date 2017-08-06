@@ -86,8 +86,9 @@ on damage of player:
         else if projectile exists:
             delete the projectile
             play ender signal on the victim
+            set {_wep} to attacker's weapon
             message "*** You hit &a%victim%&f!" to attacker
-            message "*** &c%attacker%&f hit you with &c%type of attacker's weapon%&f!" to victim
+            message "*** &c%attacker%&f hit you with &c%type of {_wep}%&f!" to victim
             execute console command "/playsound entity.villager.hurt neutral %victim% ~ ~ ~ 1 1 1"
             execute console command "/playsound entity.player.levelup neutral %attacker% ~ ~ ~ 1 1 1"
 
