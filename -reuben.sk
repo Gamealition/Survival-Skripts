@@ -136,7 +136,7 @@ on load:
 
 on damage of a pig:
     # Conditions
-    victim's name is "Reuben"
+    pig's name is "Reuben"
     cancel the event
     {reuben.last} was more than 1 second ago
     attacker is a player
