@@ -313,52 +313,53 @@ command /tpa:
     trigger:
         message "*** &cSorry, there are no player-to-player teleports! &fJust use our extensive road, rail, river and nether networks!"
 
-command /nearby-entities [<number=120>]:
-    executable by: players
-    permission: gamealition.approved
-    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
-    trigger:
-        set {_radius} to arg 1
-
-        message "*** Searching for entities in a %{_radius}% block radius:"
-
-        loop all entities in radius {_radius} around the player:
-            add 1 to {_nearresults::%loop-entity's type%}
-
-        loop {_nearresults::*}:
-            message "%loop-index%: %loop-value%"
-
-command /entity-rundown [<number=120>]:
-    executable by: players and console
-    permission: gamealition.approved
-    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
-    trigger:
-        set {_radius} to arg 1
-
-        message "*** Entities in %{_radius}% block radius around players:"
-
-        loop all players:
-            set {_runresults::%loop-player's name%} to amount of entities in radius {_radius} around loop-player
-
-        loop {_runresults::*}:
-            message "%loop-index%: %loop-value%"
-
-        delete {_runresults::*}
-
-command /world-entities:
-    executable by: players
-    permission: gamealition.approved
-    permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
-    trigger:
-        message "*** Searching for entities in %player's world%:"
-
-        loop all entities in player's world:
-            add 1 to {_worldresults::%loop-entity's type%}
-
-        loop {_worldresults::*}:
-            message "%loop-index%: %loop-value%"
-
-        delete {_worldresults::*}
+# ## BROKEN AS OF SKRIPT DEV30B
+# command /nearby-entities [<number=120>]:
+#     executable by: players
+#     permission: gamealition.approved
+#     permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
+#     trigger:
+#         set {_radius} to arg 1
+# 
+#         message "*** Searching for entities in a %{_radius}% block radius:"
+# 
+#         loop all entities in radius {_radius} around the player:
+#             add 1 to {_nearresults::%loop-entity's type%}
+# 
+#         loop {_nearresults::*}:
+#             message "%loop-index%: %loop-value%"
+# 
+# command /entity-rundown [<number=120>]:
+#     executable by: players and console
+#     permission: gamealition.approved
+#     permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
+#     trigger:
+#         set {_radius} to arg 1
+# 
+#         message "*** Entities in %{_radius}% block radius around players:"
+# 
+#         loop all players:
+#             set {_runresults::%loop-player's name%} to amount of entities in radius {_radius} around loop-player
+# 
+#         loop {_runresults::*}:
+#             message "%loop-index%: %loop-value%"
+# 
+#         delete {_runresults::*}
+# 
+# command /world-entities:
+#     executable by: players
+#     permission: gamealition.approved
+#     permission message: &c*** Can't do that until approved! Try &3/approve-me &cfirst.
+#     trigger:
+#         message "*** Searching for entities in %player's world%:"
+# 
+#         loop all entities in player's world:
+#             add 1 to {_worldresults::%loop-entity's type%}
+# 
+#         loop {_worldresults::*}:
+#             message "%loop-index%: %loop-value%"
+# 
+#         delete {_worldresults::*}
 
 command /arm-armorstands:
     description: Replaces all armor stands in inventory with ones that have arms
