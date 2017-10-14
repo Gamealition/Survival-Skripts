@@ -132,6 +132,7 @@ command /unquarry <offline player>:
         delete {derpi.%{_targetUUID}%.quarried.by}
         delete {derpi.%{_targetUUID}%.quarried.because}
         delete {derpi.freepickaxe.%{_targetUUID}%}
+        set {approval.playtime.%{_target}%} to 0 seconds
                     
         execute console command "/perms player %{_target}% setgroup default"
         execute console command "/mvtp %{_target}% a:newbie_part1"
