@@ -93,7 +93,7 @@ command /quarry <offline player> [<number=0>] <text>:
 
 command /unquarry <offline player>:
     description: Removes a player from the DERPI quarry
-    usage: /quarry <who>
+    usage: /unquarry <who>
     permission: derpi.moderator
     trigger:
         set {_target} to arg 1
